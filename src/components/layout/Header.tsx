@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -22,13 +23,15 @@ export function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-line/60 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" className="group flex items-baseline gap-1.5">
-          <span className="font-display text-xl tracking-tight text-ink">
-            Stand
-          </span>
-          <span className="font-display text-xl italic tracking-tight text-gold-metal">
-            Demo
-          </span>
+        <Link href="/" aria-label={stand.nome} className="flex items-center">
+          <Image
+            src="/logo/imperio-mark.png"
+            alt={stand.nome}
+            width={1130}
+            height={596}
+            priority
+            className="h-10 w-auto"
+          />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex" aria-label="Principal">

@@ -22,7 +22,7 @@ const bodoni = Bodoni_Moda({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://standdemo.example.com"),
+  metadataBase: new URL("https://imperioautoconcept.pt"),
   title: {
     default: "Imperio Auto Concept — Viaturas Premium",
     template: "%s | Imperio Auto Concept",

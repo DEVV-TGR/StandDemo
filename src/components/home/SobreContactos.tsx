@@ -64,14 +64,24 @@ export function SobreContactos() {
               ))}
             </ul>
 
-            <a
-              href={stand.mapsUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-7 inline-flex border border-gold/40 px-5 py-2.5 text-sm text-champagne transition-colors hover:border-gold hover:text-gold-bright"
-            >
-              Abrir no Google Maps ↗
-            </a>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <a
+                href={stand.mapsUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex border border-gold/40 px-5 py-2.5 text-sm text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+              >
+                Abrir no Google Maps ↗
+              </a>
+              <a
+                href={stand.instagram}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex border border-gold/40 px-5 py-2.5 text-sm text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+              >
+                Instagram ↗
+              </a>
+            </div>
           </div>
         </Reveal>
       </div>
