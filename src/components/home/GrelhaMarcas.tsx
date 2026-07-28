@@ -16,7 +16,7 @@ export function GrelhaMarcas() {
           </h2>
         </Reveal>
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2">
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {marcas.map((m, i) => {
             const total = viaturas.filter((v) => v.marcaSlug === m.slug).length;
             return (

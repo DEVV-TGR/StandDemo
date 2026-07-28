@@ -1,6 +1,6 @@
 export type Combustivel = "Gasolina" | "Diesel" | "Híbrido" | "Elétrico";
 export type Transmissao = "Automática" | "Manual";
-export type Segmento = "Coupé" | "SUV" | "Carrinha" | "Berlina" | "Cabrio";
+export type Segmento = "Coupé" | "SUV" | "Carrinha" | "Berlina" | "Cabrio" | "Citadino";
 export type EstadoVenda = "disponivel" | "reservado" | "vendido";
 
 export interface ExtrasCategoria {
