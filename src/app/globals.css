@@ -7,11 +7,11 @@
   --raised: oklch(0.21 0.012 85);
   --line: oklch(0.27 0.016 85);
 
-  /* dourados */
-  --gold: oklch(0.76 0.128 92);
-  --gold-bright: oklch(0.83 0.118 94);
-  --gold-deep: oklch(0.6 0.115 90);
-  --champagne: oklch(0.92 0.045 95);
+  /* dourados — metálico quente (âmbar/bronze), não amarelo-limão */
+  --gold: oklch(0.74 0.116 84);
+  --gold-bright: oklch(0.86 0.094 90);
+  --gold-deep: oklch(0.56 0.105 72);
+  --champagne: oklch(0.91 0.042 92);
 
   /* texto */
   --ink: oklch(0.96 0.012 95);
@@ -71,6 +71,24 @@ body {
   font-size: clamp(1.75rem, 3vw, 2.5rem);
   line-height: 1.08;
   letter-spacing: -0.01em;
+}
+
+/* dourado metálico: reflexo champanhe→ouro→bronze no próprio texto.
+   dá sensação de folha de ouro em vez de tinta chapada; usar só em texto grande. */
+.text-gold-metal {
+  background-image: linear-gradient(
+    100deg,
+    var(--gold-deep) 0%,
+    var(--gold) 26%,
+    var(--champagne) 44%,
+    var(--gold-bright) 52%,
+    var(--gold) 68%,
+    var(--gold-deep) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 /* linha fina dourada, assinatura visual do site */

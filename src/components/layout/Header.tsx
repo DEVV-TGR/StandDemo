@@ -26,7 +26,7 @@ export function Header() {
           <span className="font-display text-xl tracking-tight text-ink">
             Stand
           </span>
-          <span className="font-display text-xl italic tracking-tight text-gold transition-colors group-hover:text-gold-bright">
+          <span className="font-display text-xl italic tracking-tight text-gold-metal">
             Demo
           </span>
         </Link>

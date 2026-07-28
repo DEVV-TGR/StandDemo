@@ -28,7 +28,7 @@ export function Hero() {
             <h1 className="mt-4 font-display h-hero text-ink">
               Que viatura
               <br />
-              <span className="italic text-gold">procura?</span>
+              <span className="italic text-gold-metal">procura?</span>
             </h1>
           </Reveal>
           <Reveal delay={0.2}>
