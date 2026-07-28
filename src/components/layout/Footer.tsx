@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { stand } from "@/data/stand";
 
@@ -7,10 +8,14 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <p className="font-display text-2xl text-ink">
-              Stand<span className="italic text-gold">Demo</span>
-            </p>
-            <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted">
+            <Image
+              src="/logo/imperio-mark.png"
+              alt={stand.nome}
+              width={1130}
+              height={596}
+              className="h-14 w-auto"
+            />
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
               {stand.slogan}
             </p>
           </div>
@@ -54,12 +59,18 @@ export function Footer() {
               </li>
               <li>
                 <a
+                  href={`tel:+351${stand.telemovel.replaceAll(" ", "")}`}
+                  className="transition-colors hover:text-ink"
+                >
+                  {stand.telemovel}
+                </a>
+                {" · "}
+                <a
                   href={`tel:+351${stand.telefone.replaceAll(" ", "")}`}
                   className="transition-colors hover:text-ink"
                 >
                   {stand.telefone}
-                </a>{" "}
-                <span className="text-xs">({stand.telefoneNota})</span>
+                </a>
               </li>
               <li>
                 <a
@@ -69,6 +80,16 @@ export function Footer() {
                   {stand.email}
                 </a>
               </li>
+              <li>
+                <a
+                  href={stand.instagram}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition-colors hover:text-ink"
+                >
+                  Instagram ↗
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -76,7 +97,6 @@ export function Footer() {
         <div className="hairline mt-12" />
         <p className="mt-6 text-center text-xs text-muted">
           © {new Date().getFullYear()} {stand.nome} — site de demonstração.
-          Viaturas e dados fictícios.
         </p>
       </div>
     </footer>
