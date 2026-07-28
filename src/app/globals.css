@@ -7,11 +7,13 @@
   --raised: oklch(0.21 0.012 85);
   --line: oklch(0.27 0.016 85);
 
-  /* dourados — metálico quente (âmbar/bronze), não amarelo-limão */
-  --gold: oklch(0.74 0.116 84);
-  --gold-bright: oklch(0.86 0.094 90);
-  --gold-deep: oklch(0.56 0.105 72);
-  --champagne: oklch(0.91 0.042 92);
+  /* dourados — metálico quente (âmbar/bronze), não amarelo-limão.
+     hue baixado para ~76 (âmbar) e chroma reduzido: o amarelo-marcador
+     vem de chroma+claridade altos; um ouro real é mais quente e mais "sujo". */
+  --gold: oklch(0.70 0.093 76);
+  --gold-bright: oklch(0.83 0.086 82);
+  --gold-deep: oklch(0.5 0.082 66);
+  --champagne: oklch(0.88 0.036 84);
 
   /* texto */
   --ink: oklch(0.96 0.012 95);
@@ -89,6 +91,23 @@ body {
   background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
+}
+
+/* preenchimento metálico para superfícies douradas grandes (CTAs).
+   reflexo diagonal bronze→ouro→champanhe→ouro→bronze = folha de ouro, não chapa. */
+.gold-metal-fill {
+  background-image: linear-gradient(
+    140deg,
+    var(--gold-deep) 0%,
+    var(--gold) 28%,
+    var(--gold-bright) 50%,
+    var(--gold) 72%,
+    var(--gold-deep) 100%
+  );
+  transition: filter 0.2s ease;
+}
+.gold-metal-fill:hover {
+  filter: brightness(1.08);
 }
 
 /* linha fina dourada, assinatura visual do site */
