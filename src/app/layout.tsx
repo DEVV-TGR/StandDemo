@@ -24,13 +24,13 @@ const bodoni = Bodoni_Moda({
 export const metadata: Metadata = {
   metadataBase: new URL("https://standdemo.example.com"),
   title: {
-    default: "StandDemo — Viaturas Premium",
-    template: "%s | StandDemo",
+    default: "Imperio Auto Concept — Viaturas Premium",
+    template: "%s | Imperio Auto Concept",
   },
   description:
     "Stand de automóveis premium. Viaturas usadas e seminovas selecionadas a dedo, com garantia e histórico documentado. Pesquise por marca, modelo, preço e muito mais.",
   openGraph: {
-    siteName: "StandDemo",
+    siteName: "Imperio Auto Concept",
     locale: "pt_PT",
     type: "website",
   },

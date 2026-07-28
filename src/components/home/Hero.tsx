@@ -6,7 +6,7 @@ export function Hero() {
   return (
     <section className="grain relative flex min-h-[92svh] items-center overflow-hidden">
       <Image
-        src="/cars/audi-rs6-avant/01.jpg"
+        src="/cars/porsche-macan/01.jpg"
         alt=""
         fill
         priority
