@@ -1,6 +1,5 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { LogoAnel } from "@/components/ui/LogoAnel";
@@ -49,23 +48,18 @@ export function TransicaoRota() {
     return () => window.clearTimeout(temporizador);
   }, [visivel, pathname]);
 
+  if (!visivel) return null;
+
+  /* Sem fade: aparece e sai de uma vez. Com fade-in via-se, por instantes, um
+     frame da página de destino por baixo do overlay ainda translúcido. */
   return (
-    <AnimatePresence>
-      {visivel && (
-        <motion.div
-          key="transicao"
-          role="status"
-          aria-live="polite"
-          className="fixed inset-0 z-[100] grid place-items-center bg-background"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.14, ease: "linear" }}
-        >
-          <LogoAnel tamanho="pequeno" />
-          <span className="sr-only">A carregar página</span>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <div
+      role="status"
+      aria-live="polite"
+      className="fixed inset-0 z-[100] grid place-items-center bg-background"
+    >
+      <LogoAnel tamanho="pequeno" />
+      <span className="sr-only">A carregar página</span>
+    </div>
   );
 }
