@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { LogoAnel } from "@/components/ui/LogoAnel";
 
-const MINIMO_MS = 500; // curto: marca a transição sem travar a navegação
+const MINIMO_MS = 600; // curto: marca a transição sem travar a navegação
 const LIMITE_MS = 3000; // rede de segurança se a rota nunca chegar
 
 /** Ecrã breve entre páginas, disparado por src/instrumentation-client.ts. */
@@ -18,9 +18,15 @@ export function TransicaoRota() {
   useEffect(() => {
     const aoIniciar = (evento: Event) => {
       const url = (evento as CustomEvent<{ url?: string }>).detail?.url;
-      destino.current = url
+      const caminho = url
         ? new URL(url, window.location.origin).pathname
         : null;
+
+      // mesma página (ex.: "/#contactos" estando em "/") — é só descer,
+      // deixa-se a animação de scroll fazer o seu trabalho
+      if (caminho !== null && caminho === window.location.pathname) return;
+
+      destino.current = caminho;
       inicio.current = performance.now();
       setVisivel(true);
     };
@@ -50,11 +56,11 @@ export function TransicaoRota() {
           key="transicao"
           role="status"
           aria-live="polite"
-          className="fixed inset-0 z-[100] grid place-items-center bg-background/95 backdrop-blur-md"
+          className="fixed inset-0 z-[100] grid place-items-center bg-background"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 0.14, ease: "linear" }}
         >
           <LogoAnel tamanho="pequeno" />
           <span className="sr-only">A carregar página</span>
