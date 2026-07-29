@@ -25,10 +25,10 @@ export function Header() {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" aria-label={stand.nome} className="flex items-center">
           <Image
-            src="/logo/imperio-mark.png"
+            src="/logo/imperio-mark-sm.png"
             alt={stand.nome}
-            width={1130}
-            height={596}
+            width={440}
+            height={232}
             priority
             className="h-10 w-auto"
           />

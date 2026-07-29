@@ -3,6 +3,8 @@ import { Bodoni_Moda, Geist, Geist_Mono } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CtaFlutuante } from "@/components/layout/CtaFlutuante";
+import { Preloader } from "@/components/ui/Preloader";
+import { TransicaoRota } from "@/components/ui/TransicaoRota";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -51,6 +53,8 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <CtaFlutuante />
+        <TransicaoRota />
+        <Preloader />
       </body>
     </html>
   );

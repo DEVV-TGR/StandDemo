@@ -9,10 +9,10 @@ export function Footer() {
         <div className="grid gap-10 md:grid-cols-3">
           <div>
             <Image
-              src="/logo/imperio-mark.png"
+              src="/logo/imperio-mark-sm.png"
               alt={stand.nome}
-              width={1130}
-              height={596}
+              width={440}
+              height={232}
               className="h-14 w-auto"
             />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted">
