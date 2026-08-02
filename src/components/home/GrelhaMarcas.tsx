@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
-import { viaturas } from "@/data/viaturas";
 import { getMarcas } from "@/lib/derivados";
 import { urlViaturasPorMarca } from "@/lib/slug";
+import type { Viatura } from "@/lib/types";
 
-export function GrelhaMarcas() {
-  const marcas = getMarcas();
+export function GrelhaMarcas({ viaturas }: { viaturas: Viatura[] }) {
+  const marcas = getMarcas(viaturas);
 
   return (
     <section className="border-y border-line/60 bg-surface">

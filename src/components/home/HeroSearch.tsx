@@ -3,10 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Contador } from "@/components/ui/Contador";
-import { viaturas } from "@/data/viaturas";
 import { getCombustiveis, getMarcas, getModelos } from "@/lib/derivados";
 import { filtrarViaturas, serializeFiltros } from "@/lib/filtros";
-import type { Combustivel } from "@/lib/types";
+import type { Combustivel, Viatura } from "@/lib/types";
 
 const selectClasses =
   "w-full appearance-none border border-line bg-surface/80 px-4 py-3 pr-10 text-sm text-ink outline-none transition-colors focus:border-gold [&>option]:bg-surface";
@@ -36,13 +35,18 @@ function Campo({
   );
 }
 
-export function HeroSearch() {
+export function HeroSearch({ viaturas }: { viaturas: Viatura[] }) {
   const router = useRouter();
   const [marca, setMarca] = useState("");
   const [modelo, setModelo] = useState("");
   const [combustivel, setCombustivel] = useState("");
 
-  const modelos = useMemo(() => getModelos(marca || undefined), [marca]);
+  const marcas = useMemo(() => getMarcas(viaturas), [viaturas]);
+  const combustiveis = useMemo(() => getCombustiveis(viaturas), [viaturas]);
+  const modelos = useMemo(
+    () => getModelos(viaturas, marca || undefined),
+    [viaturas, marca],
+  );
 
   const filtros = {
     marca: marca || undefined,
@@ -69,7 +73,7 @@ export function HeroSearch() {
             }}
           >
             <option value="">Todas</option>
-            {getMarcas().map((m) => (
+            {marcas.map((m) => (
               <option key={m.slug} value={m.slug}>
                 {m.nome}
               </option>
@@ -99,7 +103,7 @@ export function HeroSearch() {
             onChange={(e) => setCombustivel(e.target.value)}
           >
             <option value="">Todos</option>
-            {getCombustiveis().map((c) => (
+            {combustiveis.map((c) => (
               <option key={c} value={c}>
                 {c}
               </option>

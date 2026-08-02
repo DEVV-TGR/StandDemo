@@ -6,29 +6,21 @@ import { Gallery } from "@/components/car/Gallery";
 import { SpecsTable } from "@/components/car/SpecsTable";
 import { StickyCard } from "@/components/car/StickyCard";
 import { Sugestoes } from "@/components/car/Sugestoes";
-import { viaturas } from "@/data/viaturas";
 import { formatarKm, formatarPreco } from "@/lib/format";
+import { getSugestoes, getViatura } from "@/lib/viaturas";
 
-export async function generateStaticParams() {
-  return viaturas.map((v) => ({
-    marca: v.marcaSlug,
-    modelo: v.modeloSlug,
-    id: v.id,
-  }));
-}
-
-function encontrarViatura(marca: string, modelo: string, id: string) {
-  return viaturas.find(
-    (v) => v.id === id && v.marcaSlug === marca && v.modeloSlug === modelo,
-  );
-}
+// Renderização dinâmica: novas viaturas ficam disponíveis de imediato após serem
+// criadas no /admin (sem depender de páginas geradas no build).
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({
   params,
 }: PageProps<"/carros/[marca]/[modelo]/[id]">): Promise<Metadata> {
   const { marca, modelo, id } = await params;
-  const v = encontrarViatura(marca, modelo, id);
-  if (!v) return { title: "Viatura não encontrada" };
+  const v = await getViatura(id);
+  if (!v || v.marcaSlug !== marca || v.modeloSlug !== modelo) {
+    return { title: "Viatura não encontrada" };
+  }
 
   const titulo = `${v.marca} ${v.modelo} ${v.versao} — ${v.registoAno}`;
   const descricao = `${v.marca} ${v.modelo} ${v.versao}, ${v.registoAno}, ${formatarKm(
@@ -43,7 +35,7 @@ export async function generateMetadata({
     openGraph: {
       title: titulo,
       description: descricao,
-      images: [{ url: v.fotos[0] }],
+      images: v.fotos[0] ? [{ url: v.fotos[0] }] : undefined,
     },
   };
 }
@@ -52,8 +44,10 @@ export default async function ViaturaPage({
   params,
 }: PageProps<"/carros/[marca]/[modelo]/[id]">) {
   const { marca, modelo, id } = await params;
-  const v = encontrarViatura(marca, modelo, id);
-  if (!v) notFound();
+  const v = await getViatura(id);
+  if (!v || v.marcaSlug !== marca || v.modeloSlug !== modelo) notFound();
+
+  const sugestoes = await getSugestoes(v.id);
 
   return (
     <>
@@ -99,7 +93,7 @@ export default async function ViaturaPage({
         </div>
       </div>
 
-      <Sugestoes atual={v} />
+      <Sugestoes sugestoes={sugestoes} />
     </>
   );
 }

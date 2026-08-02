@@ -1,10 +1,9 @@
 import { CarCard } from "@/components/car/CarCard";
 import { Reveal } from "@/components/ui/Reveal";
-import { viaturas } from "@/data/viaturas";
 import type { Viatura } from "@/lib/types";
 
-export function Sugestoes({ atual }: { atual: Viatura }) {
-  const outras = viaturas.filter((v) => v.id !== atual.id).slice(0, 3);
+export function Sugestoes({ sugestoes }: { sugestoes: Viatura[] }) {
+  const outras = sugestoes;
   if (outras.length === 0) return null;
 
   return (
