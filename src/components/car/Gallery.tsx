@@ -13,7 +13,7 @@ export function Gallery({ fotos, alt }: { fotos: string[]; alt: string }) {
       <button
         type="button"
         onClick={() => setLightbox(true)}
-        className="group relative block aspect-[16/10] w-full overflow-hidden border border-line/60 bg-surface"
+        className="group relative block aspect-[16/10] w-full overflow-hidden rounded-2xl border border-line/60 bg-surface"
         aria-label="Abrir galeria em ecrã inteiro"
       >
         <Image
@@ -24,7 +24,7 @@ export function Gallery({ fotos, alt }: { fotos: string[]; alt: string }) {
           sizes="(max-width: 1024px) 100vw, 66vw"
           className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
         />
-        <span className="absolute bottom-3 right-3 bg-background/70 px-3 py-1.5 text-xs tracking-[0.15em] text-champagne backdrop-blur">
+        <span className="absolute bottom-3 right-3 rounded-full bg-background/70 px-3 py-1.5 text-xs tracking-[0.15em] text-champagne backdrop-blur">
           {fotos.length} Fotos ⤢
         </span>
       </button>
@@ -36,7 +36,7 @@ export function Gallery({ fotos, alt }: { fotos: string[]; alt: string }) {
             type="button"
             onClick={() => setAtiva(i)}
             aria-label={`Ver foto ${i + 1}`}
-            className={`relative aspect-[4/3] overflow-hidden border transition-all duration-200 ${
+            className={`relative aspect-[4/3] overflow-hidden rounded-lg border transition-all duration-200 ${
               i === ativa
                 ? "border-gold"
                 : "border-line/60 opacity-60 hover:opacity-100"

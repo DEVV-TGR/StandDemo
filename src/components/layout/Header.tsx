@@ -52,7 +52,7 @@ export function Header() {
           })}
           <a
             href={`tel:+351${stand.telemovel.replaceAll(" ", "")}`}
-            className="border border-gold/40 px-4 py-2 text-sm tracking-wide text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+            className="rounded-full border border-gold/40 px-5 py-2 text-sm tracking-wide text-champagne transition-colors hover:border-gold hover:text-gold-bright"
           >
             Fale connosco
           </a>

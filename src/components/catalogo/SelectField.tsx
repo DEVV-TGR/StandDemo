@@ -20,7 +20,7 @@ export function SelectField({
       </span>
       <span className="relative block">
         <select
-          className="w-full appearance-none border border-line bg-surface/80 px-4 py-3 pr-10 text-sm text-ink outline-none transition-colors focus:border-gold [&>option]:bg-surface"
+          className="w-full appearance-none rounded-xl border border-line bg-surface/80 px-4 py-3 pr-10 text-sm text-ink outline-none transition-colors focus:border-gold [&>option]:bg-surface"
           value={valor}
           onChange={(e) => onChange(e.target.value)}
         >

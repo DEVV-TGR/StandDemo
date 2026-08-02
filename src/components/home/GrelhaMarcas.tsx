@@ -23,7 +23,7 @@ export function GrelhaMarcas({ viaturas }: { viaturas: Viatura[] }) {
               <Reveal key={m.slug} delay={i * 0.08}>
                 <Link
                   href={urlViaturasPorMarca(m.slug)}
-                  className="group flex items-center justify-between border border-line/60 bg-background px-8 py-10 transition-colors duration-300 hover:border-gold/50"
+                  className="group flex items-center justify-between rounded-2xl border border-line/60 bg-background px-8 py-10 transition-colors duration-300 hover:border-gold/50"
                 >
                   <div>
                     <span className="font-display text-4xl text-ink transition-colors group-hover:text-gold-bright">

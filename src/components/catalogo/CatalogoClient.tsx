@@ -48,7 +48,7 @@ export function CatalogoClient({
     <div className="grid gap-10 lg:grid-cols-[280px_1fr]">
       {/* filtros — sidebar em desktop, drawer em mobile */}
       <aside className="hidden lg:block">
-        <div className="sticky top-24 border border-line/60 bg-surface p-6">
+        <div className="sticky top-24 rounded-2xl border border-line/60 bg-surface p-6">
           <FiltersPanel
             viaturas={viaturas}
             filtros={filtros}
@@ -63,7 +63,7 @@ export function CatalogoClient({
         <button
           type="button"
           onClick={() => setPainelAberto(true)}
-          className="w-full border border-gold/40 px-6 py-3 text-sm tracking-wide text-champagne transition-colors hover:border-gold"
+          className="w-full rounded-full border border-gold/40 px-6 py-3 text-sm tracking-wide text-champagne transition-colors hover:border-gold"
         >
           Pesquisa detalhada · {resultados.length}{" "}
           {resultados.length === 1 ? "resultado" : "resultados"}
@@ -77,14 +77,14 @@ export function CatalogoClient({
               onClick={() => setPainelAberto(false)}
               className="absolute inset-0 bg-background/70 backdrop-blur-sm"
             />
-            <div className="absolute inset-y-0 right-0 w-[88%] max-w-sm overflow-y-auto border-l border-line bg-surface p-6 shadow-2xl shadow-black/60">
+            <div className="absolute inset-y-0 right-0 w-[88%] max-w-sm overflow-y-auto rounded-l-2xl border-l border-line bg-surface p-6 shadow-2xl shadow-black/60">
               <div className="mb-6 flex items-center justify-between">
                 <p className="font-display text-xl text-ink">Filtros</p>
                 <button
                   type="button"
                   onClick={() => setPainelAberto(false)}
                   aria-label="Fechar"
-                  className="flex h-9 w-9 items-center justify-center border border-line text-muted transition-colors hover:border-gold hover:text-gold"
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-muted transition-colors hover:border-gold hover:text-gold"
                 >
                   ✕
                 </button>
@@ -99,7 +99,7 @@ export function CatalogoClient({
               <button
                 type="button"
                 onClick={() => setPainelAberto(false)}
-                className="mt-8 w-full bg-gold px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-gold-bright"
+                className="mt-8 w-full rounded-full bg-gold px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-gold-bright"
               >
                 Ver resultados
               </button>
@@ -126,7 +126,7 @@ export function CatalogoClient({
         </div>
 
         {resultados.length === 0 ? (
-          <div className="border border-line/60 bg-surface px-8 py-20 text-center">
+          <div className="rounded-2xl border border-line/60 bg-surface px-8 py-20 text-center">
             <p className="font-display h-sub text-ink">
               Sem resultados <span className="italic text-gold">para já</span>
             </p>
@@ -137,7 +137,7 @@ export function CatalogoClient({
             <button
               type="button"
               onClick={limpar}
-              className="mt-6 border border-gold/40 px-6 py-3 text-sm text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+              className="mt-6 rounded-full border border-gold/40 px-6 py-3 text-sm text-champagne transition-colors hover:border-gold hover:text-gold-bright"
             >
               Limpar parâmetros
             </button>

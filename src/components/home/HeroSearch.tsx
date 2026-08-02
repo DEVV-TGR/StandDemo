@@ -8,7 +8,7 @@ import { filtrarViaturas, serializeFiltros } from "@/lib/filtros";
 import type { Combustivel, Viatura } from "@/lib/types";
 
 const selectClasses =
-  "w-full appearance-none border border-line bg-surface/80 px-4 py-3 pr-10 text-sm text-ink outline-none transition-colors focus:border-gold [&>option]:bg-surface";
+  "w-full appearance-none rounded-xl border border-line bg-surface/80 px-4 py-3 pr-10 text-sm text-ink outline-none transition-colors focus:border-gold [&>option]:bg-surface";
 
 function Campo({
   rotulo,
@@ -61,7 +61,7 @@ export function HeroSearch({ viaturas }: { viaturas: Viatura[] }) {
   };
 
   return (
-    <div className="border border-line/70 bg-background/60 p-6 backdrop-blur-xl sm:p-8">
+    <div className="rounded-2xl border border-line/70 bg-background/60 p-6 backdrop-blur-xl sm:p-8">
       <div className="grid gap-4 sm:grid-cols-3">
         <Campo rotulo="Marca">
           <select
@@ -115,7 +115,7 @@ export function HeroSearch({ viaturas }: { viaturas: Viatura[] }) {
       <button
         type="button"
         onClick={pesquisar}
-        className="gold-metal-fill mt-5 w-full px-6 py-3.5 text-sm font-medium tracking-wide text-background"
+        className="gold-metal-fill mt-5 w-full rounded-full px-6 py-3.5 text-sm font-medium tracking-wide text-background"
       >
         Ver <Contador valor={resultados} />{" "}
         {resultados === 1 ? "resultado" : "resultados"}
