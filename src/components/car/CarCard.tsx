@@ -19,8 +19,10 @@ export function CarCard({
   viatura: Viatura;
   prioridade?: boolean;
 }) {
-  const [foto, setFoto] = useState(0);
   const total = viatura.fotos.length;
+  // miniatura abre na 2ª foto (índice 1); a página dedicada é que mostra a 1ª
+  const inicial = total > 1 ? 1 : 0;
+  const [foto, setFoto] = useState(inicial);
   const vendido = viatura.estadoVenda === "vendido";
 
   const mudar = (delta: number) => {
@@ -37,7 +39,7 @@ export function CarCard({
             alt={`${viatura.marca} ${viatura.modelo} — foto ${foto + 1}`}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            priority={prioridade && foto === 0}
+            priority={prioridade && foto === inicial}
             className={`object-cover transition-transform duration-500 group-hover:scale-[1.03] ${
               vendido ? "opacity-60 saturate-50" : ""
             }`}
