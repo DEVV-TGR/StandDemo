@@ -1,4 +1,4 @@
-import { CarCard } from "@/components/car/CarCard";
+import { DestaquesCarrossel } from "@/components/home/DestaquesCarrossel";
 import { BotaoLink } from "@/components/ui/Botao";
 import { Reveal } from "@/components/ui/Reveal";
 import { getDestaques } from "@/lib/derivados";
@@ -28,13 +28,7 @@ export function Destaques() {
         </div>
       </Reveal>
 
-      <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {destaques.map((v, i) => (
-          <Reveal key={v.id} delay={i * 0.08}>
-            <CarCard viatura={v} />
-          </Reveal>
-        ))}
-      </div>
+      <DestaquesCarrossel destaques={destaques} />
 
       <div className="mt-8 text-center sm:hidden">
         <BotaoLink href="/viaturas" variante="contorno">
