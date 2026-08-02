@@ -13,22 +13,20 @@ import {
 } from "@/lib/derivados";
 import type { Filtros } from "@/lib/filtros";
 import { formatarKm, formatarPreco } from "@/lib/format";
-import type { Combustivel, Segmento, Transmissao, Viatura } from "@/lib/types";
+import type { Combustivel, Segmento, Transmissao } from "@/lib/types";
 
 export function FiltersPanel({
-  viaturas,
   filtros,
   onChange,
   resultados,
   onLimpar,
 }: {
-  viaturas: Viatura[];
   filtros: Filtros;
   onChange: (f: Filtros) => void;
   resultados: number;
   onLimpar: () => void;
 }) {
-  const intervalos = getIntervalos(viaturas);
+  const intervalos = getIntervalos();
   const temFiltros = Object.entries(filtros).some(
     ([chave, valor]) => chave !== "ordenar" && valor !== undefined,
   );
@@ -39,10 +37,7 @@ export function FiltersPanel({
         rotulo="Marca"
         valor={filtros.marca ?? ""}
         todos="Todas"
-        opcoes={getMarcas(viaturas).map((m) => ({
-          valor: m.slug,
-          rotulo: m.nome,
-        }))}
+        opcoes={getMarcas().map((m) => ({ valor: m.slug, rotulo: m.nome }))}
         onChange={(v) =>
           onChange({ ...filtros, marca: v || undefined, modelo: undefined })
         }
@@ -50,7 +45,7 @@ export function FiltersPanel({
       <SelectField
         rotulo="Modelo"
         valor={filtros.modelo ?? ""}
-        opcoes={getModelos(viaturas, filtros.marca).map((m) => ({
+        opcoes={getModelos(filtros.marca).map((m) => ({
           valor: m.slug,
           rotulo: m.nome,
         }))}
@@ -59,7 +54,7 @@ export function FiltersPanel({
       <SelectField
         rotulo="Combustível"
         valor={filtros.combustivel ?? ""}
-        opcoes={getCombustiveis(viaturas).map((c) => ({ valor: c, rotulo: c }))}
+        opcoes={getCombustiveis().map((c) => ({ valor: c, rotulo: c }))}
         onChange={(v) =>
           onChange({
             ...filtros,
@@ -71,7 +66,7 @@ export function FiltersPanel({
         rotulo="Transmissão"
         valor={filtros.transmissao ?? ""}
         todos="Todas"
-        opcoes={getTransmissoes(viaturas).map((t) => ({ valor: t, rotulo: t }))}
+        opcoes={getTransmissoes().map((t) => ({ valor: t, rotulo: t }))}
         onChange={(v) =>
           onChange({
             ...filtros,
@@ -82,7 +77,7 @@ export function FiltersPanel({
       <SelectField
         rotulo="Segmento"
         valor={filtros.segmento ?? ""}
-        opcoes={getSegmentos(viaturas).map((s) => ({ valor: s, rotulo: s }))}
+        opcoes={getSegmentos().map((s) => ({ valor: s, rotulo: s }))}
         onChange={(v) =>
           onChange({
             ...filtros,

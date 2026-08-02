@@ -4,19 +4,17 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { CarCard } from "@/components/car/CarCard";
 import { FiltersPanel } from "@/components/catalogo/FiltersPanel";
 import { SortSelect } from "@/components/catalogo/SortSelect";
+import { viaturas } from "@/data/viaturas";
 import {
   filtrarViaturas,
   ordenarViaturas,
   serializeFiltros,
   type Filtros,
 } from "@/lib/filtros";
-import type { Viatura } from "@/lib/types";
 
 export function CatalogoClient({
-  viaturas,
   filtrosIniciais,
 }: {
-  viaturas: Viatura[];
   filtrosIniciais: Filtros;
 }) {
   const [filtros, setFiltros] = useState<Filtros>(filtrosIniciais);
@@ -39,7 +37,7 @@ export function CatalogoClient({
 
   const resultados = useMemo(
     () => ordenarViaturas(filtrarViaturas(viaturas, filtros), filtros.ordenar),
-    [viaturas, filtros],
+    [filtros],
   );
 
   const limpar = () => setFiltros({ ordenar: filtros.ordenar });
@@ -50,7 +48,6 @@ export function CatalogoClient({
       <aside className="hidden lg:block">
         <div className="sticky top-24 rounded-2xl border border-line/60 bg-surface p-6">
           <FiltersPanel
-            viaturas={viaturas}
             filtros={filtros}
             onChange={setFiltros}
             resultados={resultados.length}
@@ -90,7 +87,6 @@ export function CatalogoClient({
                 </button>
               </div>
               <FiltersPanel
-                viaturas={viaturas}
                 filtros={filtros}
                 onChange={setFiltros}
                 resultados={resultados.length}

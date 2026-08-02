@@ -1,12 +1,5 @@
-import type {
-  Combustivel,
-  Segmento,
-  Transmissao,
-  Viatura,
-} from "@/lib/types";
-
-// Funções puras: derivam opções/intervalos de uma lista de viaturas passada
-// como argumento (a lista vem da base de dados, obtida no servidor).
+import { viaturas } from "@/data/viaturas";
+import type { Combustivel, Segmento, Transmissao } from "@/lib/types";
 
 export interface Marca {
   nome: string;
@@ -19,20 +12,17 @@ export interface ModeloOpcao {
   marcaSlug: string;
 }
 
-export function getMarcas(lista: Viatura[]): Marca[] {
+export function getMarcas(): Marca[] {
   const mapa = new Map<string, Marca>();
-  for (const v of lista) {
+  for (const v of viaturas) {
     mapa.set(v.marcaSlug, { nome: v.marca, slug: v.marcaSlug });
   }
   return [...mapa.values()].sort((a, b) => a.nome.localeCompare(b.nome, "pt"));
 }
 
-export function getModelos(
-  lista: Viatura[],
-  marcaSlug?: string,
-): ModeloOpcao[] {
+export function getModelos(marcaSlug?: string): ModeloOpcao[] {
   const mapa = new Map<string, ModeloOpcao>();
-  for (const v of lista) {
+  for (const v of viaturas) {
     if (marcaSlug && v.marcaSlug !== marcaSlug) continue;
     mapa.set(v.modeloSlug, {
       nome: v.modelo,
@@ -43,20 +33,20 @@ export function getModelos(
   return [...mapa.values()].sort((a, b) => a.nome.localeCompare(b.nome, "pt"));
 }
 
-export function getCombustiveis(lista: Viatura[]): Combustivel[] {
-  return [...new Set(lista.map((v) => v.combustivel))].sort((a, b) =>
+export function getCombustiveis(): Combustivel[] {
+  return [...new Set(viaturas.map((v) => v.combustivel))].sort((a, b) =>
     a.localeCompare(b, "pt"),
   );
 }
 
-export function getTransmissoes(lista: Viatura[]): Transmissao[] {
-  return [...new Set(lista.map((v) => v.transmissao))].sort((a, b) =>
+export function getTransmissoes(): Transmissao[] {
+  return [...new Set(viaturas.map((v) => v.transmissao))].sort((a, b) =>
     a.localeCompare(b, "pt"),
   );
 }
 
-export function getSegmentos(lista: Viatura[]): Segmento[] {
-  return [...new Set(lista.map((v) => v.segmento))].sort((a, b) =>
+export function getSegmentos(): Segmento[] {
+  return [...new Set(viaturas.map((v) => v.segmento))].sort((a, b) =>
     a.localeCompare(b, "pt"),
   );
 }
@@ -76,31 +66,17 @@ function arredondarIntervalo(
   return [min, max];
 }
 
-// Intervalos por defeito quando o stock está vazio (evita Math.min de [] = Infinity).
-const INTERVALOS_VAZIO: Intervalos = {
-  preco: [0, 100000],
-  ano: [2000, 2026],
-  km: [0, 300000],
-};
-
-export function getIntervalos(lista: Viatura[]): Intervalos {
-  if (lista.length === 0) return INTERVALOS_VAZIO;
+export function getIntervalos(): Intervalos {
   return {
-    preco: arredondarIntervalo(
-      lista.map((v) => v.preco),
-      1000,
-    ),
+    preco: arredondarIntervalo(viaturas.map((v) => v.preco), 1000),
     ano: [
-      Math.min(...lista.map((v) => v.registoAno)),
-      Math.max(...lista.map((v) => v.registoAno)),
+      Math.min(...viaturas.map((v) => v.registoAno)),
+      Math.max(...viaturas.map((v) => v.registoAno)),
     ],
-    km: arredondarIntervalo(
-      lista.map((v) => v.quilometros),
-      5000,
-    ),
+    km: arredondarIntervalo(viaturas.map((v) => v.quilometros), 5000),
   };
 }
 
-export function getDestaques(lista: Viatura[]): Viatura[] {
-  return lista.filter((v) => v.destaque);
+export function getDestaques() {
+  return viaturas.filter((v) => v.destaque);
 }
