@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Reveal } from "@/components/ui/Reveal";
 import { viaturas } from "@/data/viaturas";
 import { getMarcas } from "@/lib/derivados";
+import { logoMarca } from "@/lib/marcas";
 import { urlViaturasPorMarca } from "@/lib/slug";
 
 export function GrelhaMarcas() {
@@ -19,17 +20,27 @@ export function GrelhaMarcas() {
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {marcas.map((m, i) => {
             const total = viaturas.filter((v) => v.marcaSlug === m.slug).length;
+            const logo = logoMarca(m.slug);
             return (
               <Reveal key={m.slug} delay={i * 0.08}>
                 <Link
                   href={urlViaturasPorMarca(m.slug)}
-                  className="group flex items-center justify-between rounded-2xl border border-line/60 bg-background px-8 py-10 transition-colors duration-300 hover:border-gold/50"
+                  className="group flex items-center justify-between gap-4 rounded-2xl border border-line/60 bg-background px-8 py-10 transition-colors duration-300 hover:border-gold/50"
                 >
-                  <div>
-                    <span className="font-display text-4xl text-ink transition-colors group-hover:text-gold-bright">
-                      {m.nome}
-                    </span>
-                    <p className="mt-2 text-sm text-muted">
+                  <div className="min-w-0">
+                    {logo ? (
+                      // eslint-disable-next-line @next/next/no-img-element -- logótipo estático em /public (mistura de svg/webp)
+                      <img
+                        src={logo}
+                        alt={m.nome}
+                        className="h-11 w-auto max-w-[170px] object-contain object-left opacity-85 transition-opacity duration-300 group-hover:opacity-100"
+                      />
+                    ) : (
+                      <span className="font-display text-4xl text-ink transition-colors group-hover:text-gold-bright">
+                        {m.nome}
+                      </span>
+                    )}
+                    <p className="mt-3 text-sm text-muted">
                       {total} {total === 1 ? "viatura" : "viaturas"} em stock
                     </p>
                   </div>

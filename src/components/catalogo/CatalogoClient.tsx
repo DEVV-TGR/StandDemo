@@ -199,15 +199,21 @@ export function CatalogoClient({
         )}
 
         {painelAberto && (
-          <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal>
+          <div
+            className="fixed inset-0 z-50 flex items-start justify-center p-4 lg:hidden"
+            role="dialog"
+            aria-modal
+          >
+            {/* fundo esbatido — a página continua visível por trás */}
             <button
               type="button"
               aria-label="Fechar filtros"
               onClick={() => setPainelAberto(false)}
-              className="absolute inset-0 bg-background/70 backdrop-blur-sm"
+              className="absolute inset-0 bg-background/50 backdrop-blur-sm"
             />
-            <div className="absolute inset-y-0 right-0 w-[88%] max-w-sm overflow-y-auto rounded-l-2xl border-l border-line bg-surface p-6 shadow-2xl shadow-black/60">
-              <div className="mb-6 flex items-center justify-between">
+            {/* modal centrado horizontalmente */}
+            <div className="relative z-10 mt-12 flex max-h-[82vh] w-full max-w-md flex-col overflow-hidden rounded-2xl border border-line bg-surface shadow-2xl shadow-black/60">
+              <div className="flex shrink-0 items-center justify-between border-b border-line/60 px-6 py-4">
                 <p className="font-display text-xl text-ink">Filtros</p>
                 <button
                   type="button"
@@ -218,19 +224,23 @@ export function CatalogoClient({
                   ✕
                 </button>
               </div>
-              <FiltersPanel
-                filtros={filtros}
-                onChange={setFiltros}
-                resultados={resultados.length}
-                onLimpar={limpar}
-              />
-              <button
-                type="button"
-                onClick={() => setPainelAberto(false)}
-                className="mt-8 w-full rounded-full bg-gold px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-gold-bright"
-              >
-                Ver resultados
-              </button>
+              <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
+                <FiltersPanel
+                  filtros={filtros}
+                  onChange={setFiltros}
+                  resultados={resultados.length}
+                  onLimpar={limpar}
+                />
+              </div>
+              <div className="shrink-0 border-t border-line/60 p-4">
+                <button
+                  type="button"
+                  onClick={() => setPainelAberto(false)}
+                  className="w-full rounded-full bg-gold px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-gold-bright"
+                >
+                  Ver resultados
+                </button>
+              </div>
             </div>
           </div>
         )}
