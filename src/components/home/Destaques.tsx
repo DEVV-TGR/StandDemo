@@ -1,12 +1,10 @@
-import { CarCard } from "@/components/car/CarCard";
+import { DestaquesCarrossel } from "@/components/home/DestaquesCarrossel";
 import { BotaoLink } from "@/components/ui/Botao";
 import { Reveal } from "@/components/ui/Reveal";
 import { getDestaques } from "@/lib/derivados";
-import type { Viatura } from "@/lib/types";
 
-export function Destaques({ viaturas }: { viaturas: Viatura[] }) {
-  const destaques = getDestaques(viaturas);
-  if (destaques.length === 0) return null;
+export function Destaques() {
+  const destaques = getDestaques();
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
@@ -30,13 +28,7 @@ export function Destaques({ viaturas }: { viaturas: Viatura[] }) {
         </div>
       </Reveal>
 
-      <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {destaques.map((v, i) => (
-          <Reveal key={v.id} delay={i * 0.08}>
-            <CarCard viatura={v} />
-          </Reveal>
-        ))}
-      </div>
+      <DestaquesCarrossel destaques={destaques} />
 
       <div className="mt-8 text-center sm:hidden">
         <BotaoLink href="/viaturas" variante="contorno">

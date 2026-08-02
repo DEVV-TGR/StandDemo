@@ -3,9 +3,10 @@
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { Contador } from "@/components/ui/Contador";
+import { viaturas } from "@/data/viaturas";
 import { getCombustiveis, getMarcas, getModelos } from "@/lib/derivados";
 import { filtrarViaturas, serializeFiltros } from "@/lib/filtros";
-import type { Combustivel, Viatura } from "@/lib/types";
+import type { Combustivel } from "@/lib/types";
 
 const selectClasses =
   "w-full appearance-none rounded-xl border border-line bg-surface/80 px-4 py-3 pr-10 text-sm text-ink outline-none transition-colors focus:border-gold [&>option]:bg-surface";
@@ -35,18 +36,13 @@ function Campo({
   );
 }
 
-export function HeroSearch({ viaturas }: { viaturas: Viatura[] }) {
+export function HeroSearch() {
   const router = useRouter();
   const [marca, setMarca] = useState("");
   const [modelo, setModelo] = useState("");
   const [combustivel, setCombustivel] = useState("");
 
-  const marcas = useMemo(() => getMarcas(viaturas), [viaturas]);
-  const combustiveis = useMemo(() => getCombustiveis(viaturas), [viaturas]);
-  const modelos = useMemo(
-    () => getModelos(viaturas, marca || undefined),
-    [viaturas, marca],
-  );
+  const modelos = useMemo(() => getModelos(marca || undefined), [marca]);
 
   const filtros = {
     marca: marca || undefined,
@@ -73,7 +69,7 @@ export function HeroSearch({ viaturas }: { viaturas: Viatura[] }) {
             }}
           >
             <option value="">Todas</option>
-            {marcas.map((m) => (
+            {getMarcas().map((m) => (
               <option key={m.slug} value={m.slug}>
                 {m.nome}
               </option>
@@ -103,7 +99,7 @@ export function HeroSearch({ viaturas }: { viaturas: Viatura[] }) {
             onChange={(e) => setCombustivel(e.target.value)}
           >
             <option value="">Todos</option>
-            {combustiveis.map((c) => (
+            {getCombustiveis().map((c) => (
               <option key={c} value={c}>
                 {c}
               </option>
