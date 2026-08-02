@@ -56,7 +56,7 @@ export function Lightbox({
               type="button"
               onClick={onFechar}
               aria-label="Fechar galeria"
-              className="flex h-10 w-10 items-center justify-center border border-line text-ink transition-colors hover:border-gold hover:text-gold"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink transition-colors hover:border-gold hover:text-gold"
             >
               ✕
             </button>
@@ -92,7 +92,7 @@ export function Lightbox({
               type="button"
               aria-label="Foto anterior"
               onClick={() => onNavegar((indice - 1 + fotos.length) % fotos.length)}
-              className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-line bg-background/70 text-xl text-ink backdrop-blur transition-colors hover:border-gold hover:text-gold"
+              className="absolute left-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-background/70 text-xl text-ink backdrop-blur transition-colors hover:border-gold hover:text-gold"
             >
               ‹
             </button>
@@ -100,7 +100,7 @@ export function Lightbox({
               type="button"
               aria-label="Foto seguinte"
               onClick={() => onNavegar((indice + 1) % fotos.length)}
-              className="absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center border border-line bg-background/70 text-xl text-ink backdrop-blur transition-colors hover:border-gold hover:text-gold"
+              className="absolute right-3 top-1/2 z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-line bg-background/70 text-xl text-ink backdrop-blur transition-colors hover:border-gold hover:text-gold"
             >
               ›
             </button>
@@ -113,7 +113,7 @@ export function Lightbox({
                 type="button"
                 onClick={() => onNavegar(i)}
                 aria-label={`Ir para a foto ${i + 1}`}
-                className={`relative h-14 w-20 shrink-0 overflow-hidden border transition-colors ${
+                className={`relative h-14 w-20 shrink-0 overflow-hidden rounded-lg border transition-colors ${
                   i === indice ? "border-gold" : "border-line opacity-60 hover:opacity-100"
                 }`}
               >

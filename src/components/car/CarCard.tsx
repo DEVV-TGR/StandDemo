@@ -28,7 +28,7 @@ export function CarCard({
   };
 
   return (
-    <article className="group relative border border-line/60 bg-surface transition-colors duration-300 hover:border-gold/50">
+    <article className="group relative overflow-hidden rounded-2xl border border-line/60 bg-surface transition-colors duration-300 hover:border-gold/50">
       <div className="relative aspect-[4/3] overflow-hidden">
         <BadgeEstado viatura={viatura} />
         <Link href={urlViatura(viatura)} tabIndex={-1} aria-hidden>
@@ -50,7 +50,7 @@ export function CarCard({
               type="button"
               aria-label="Foto anterior"
               onClick={() => mudar(-1)}
-              className="absolute left-2 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center bg-background/60 text-ink backdrop-blur transition-opacity duration-200 hover:bg-background/85 focus-visible:opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
+              className="absolute left-2 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-background/60 text-ink backdrop-blur transition-opacity duration-200 hover:bg-background/85 focus-visible:opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
             >
               ‹
             </button>
@@ -58,7 +58,7 @@ export function CarCard({
               type="button"
               aria-label="Foto seguinte"
               onClick={() => mudar(1)}
-              className="absolute right-2 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center bg-background/60 text-ink backdrop-blur transition-opacity duration-200 hover:bg-background/85 focus-visible:opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
+              className="absolute right-2 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-background/60 text-ink backdrop-blur transition-opacity duration-200 hover:bg-background/85 focus-visible:opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
             >
               ›
             </button>
@@ -66,7 +66,7 @@ export function CarCard({
               {viatura.fotos.map((_, i) => (
                 <span
                   key={i}
-                  className={`h-1 w-4 transition-colors duration-200 ${
+                  className={`h-1 w-4 rounded-full transition-colors duration-200 ${
                     i === foto ? "bg-gold" : "bg-ink/30"
                   }`}
                 />

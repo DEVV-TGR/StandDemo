@@ -26,7 +26,7 @@ export function StickyCard({ viatura }: { viatura: Viatura }) {
   };
 
   return (
-    <div className="border border-line/60 bg-surface p-7 lg:sticky lg:top-24">
+    <div className="rounded-2xl border border-line/60 bg-surface p-7 lg:sticky lg:top-24">
       <p className="text-xs uppercase tracking-[0.2em] text-muted">
         {formatarRegisto(viatura.registoMes, viatura.registoAno)} ·{" "}
         {formatarKm(viatura.quilometros)}
@@ -40,7 +40,7 @@ export function StickyCard({ viatura }: { viatura: Viatura }) {
         </p>
       )}
       {viatura.estadoVenda === "reservado" && (
-        <p className="mt-2 inline-block bg-gold px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.15em] text-background">
+        <p className="mt-2 inline-block rounded-full bg-gold px-3 py-1 text-[11px] font-medium uppercase tracking-[0.15em] text-background">
           Reservado
         </p>
       )}
@@ -50,7 +50,7 @@ export function StickyCard({ viatura }: { viatura: Viatura }) {
       <div className="space-y-3">
         <a
           href={`tel:+351${stand.telemovel.replaceAll(" ", "")}`}
-          className="block w-full bg-gold px-6 py-3.5 text-center text-sm font-medium tracking-wide text-background transition-colors hover:bg-gold-bright"
+          className="block w-full rounded-full bg-gold px-6 py-3.5 text-center text-sm font-medium tracking-wide text-background transition-colors hover:bg-gold-bright"
         >
           Ligar {stand.telemovel}
         </a>
@@ -58,7 +58,7 @@ export function StickyCard({ viatura }: { viatura: Viatura }) {
           href={`mailto:${stand.email}?subject=${encodeURIComponent(
             `Interesse: ${viatura.marca} ${viatura.modelo} (${viatura.id})`,
           )}`}
-          className="block w-full border border-gold/40 px-6 py-3.5 text-center text-sm tracking-wide text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+          className="block w-full rounded-full border border-gold/40 px-6 py-3.5 text-center text-sm tracking-wide text-champagne transition-colors hover:border-gold hover:text-gold-bright"
         >
           Pedir contacto
         </a>
