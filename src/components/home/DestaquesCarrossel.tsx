@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { classeVendido } from "@/components/car/BadgeEstado";
 import { formatarNumero, formatarPreco, formatarRegisto } from "@/lib/format";
 import { urlViatura } from "@/lib/slug";
 import type { Viatura } from "@/lib/types";
@@ -55,7 +54,7 @@ function IconeKm() {
 function Badge({ viatura }: { viatura: Viatura }) {
   const t =
     viatura.estadoVenda === "vendido"
-      ? { txt: "Vendido", cls: classeVendido(viatura.varianteVendido) }
+      ? { txt: "Vendido", cls: "red-metal-fill text-ink" }
       : viatura.estadoVenda === "reservado"
         ? { txt: "Reservado", cls: "gold-metal-fill text-background" }
         : viatura.ivaDedutivel
