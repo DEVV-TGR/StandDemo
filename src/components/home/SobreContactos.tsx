@@ -2,9 +2,11 @@ import { Reveal } from "@/components/ui/Reveal";
 import { stand } from "@/data/stand";
 
 const enderecoCompleto = `${stand.morada}, ${stand.codigoPostal}`;
+// Morada exata (sem o nome do stand) para o Google geocodificar o ponto certo
+// e colocar o pin; nome no negócio pode desviar o resultado.
 const mapaEmbed = `https://www.google.com/maps?q=${encodeURIComponent(
-  `${stand.nome}, ${enderecoCompleto}`,
-)}&hl=pt&z=15&output=embed`;
+  enderecoCompleto,
+)}&hl=pt&z=16&output=embed`;
 
 export function SobreContactos() {
   return (
