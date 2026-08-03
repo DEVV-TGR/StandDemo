@@ -54,7 +54,7 @@ function IconeKm() {
 function Badge({ viatura }: { viatura: Viatura }) {
   const t =
     viatura.estadoVenda === "vendido"
-      ? { txt: "Vendido", cls: "bg-background/85 text-muted" }
+      ? { txt: "Vendido", cls: "red-metal-fill text-ink" }
       : viatura.estadoVenda === "reservado"
         ? { txt: "Reservado", cls: "gold-metal-fill text-background" }
         : viatura.ivaDedutivel
@@ -66,7 +66,7 @@ function Badge({ viatura }: { viatura: Viatura }) {
   if (!t) return null;
   return (
     <span
-      className={`absolute left-1/2 top-4 z-10 -translate-x-1/2 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] backdrop-blur ${t.cls}`}
+      className={`absolute left-4 top-4 z-10 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] backdrop-blur ${t.cls}`}
     >
       {t.txt}
     </span>

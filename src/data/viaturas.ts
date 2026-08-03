@@ -440,7 +440,7 @@ export const viaturas: Viatura[] = [
       },
     ],
     destaque: false,
-    estadoVenda: "disponivel",
+    estadoVenda: "vendido",
     ivaDedutivel: false,
     descricao:
       "MINI Cooper D 3 Portas com 110 cv e caixa manual — o citadino com estilo e baixos consumos. Em Pepper White, com som Harman Kardon, ar condicionado e jantes de liga leve. Económico e divertido de conduzir.",
