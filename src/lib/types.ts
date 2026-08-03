@@ -3,6 +3,10 @@ export type Transmissao = "Automática" | "Manual";
 export type Segmento = "Coupé" | "SUV" | "Carrinha" | "Berlina" | "Cabrio" | "Citadino";
 export type EstadoVenda = "disponivel" | "reservado" | "vendido";
 
+/* estilo do badge "Vendido" — demo para o cliente escolher a cor.
+   ausente = verde liso (predefinição). */
+export type VarianteVendido = "verde" | "vermelho" | "verde-metal" | "vermelho-metal";
+
 export interface ExtrasCategoria {
   categoria: string;
   itens: string[];
@@ -40,6 +44,7 @@ export interface Viatura {
   extras: ExtrasCategoria[];
   destaque: boolean;
   estadoVenda: EstadoVenda;
+  varianteVendido?: VarianteVendido;
   ivaDedutivel: boolean;
   descricao: string;
 }

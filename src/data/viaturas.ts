@@ -149,7 +149,8 @@ export const viaturas: Viatura[] = [
       },
     ],
     destaque: true,
-    estadoVenda: "disponivel",
+    estadoVenda: "vendido",
+    varianteVendido: "vermelho",
     ivaDedutivel: false,
     descricao:
       "Mercedes-Benz CLA 250 Sport com 218 cv, caixa automática e Pack AMG. Berlina-coupé em Branco Pérola, com jantes AMG de 19'', escape desportivo e interior em alcântara. Muito bem equipada.",
@@ -222,7 +223,8 @@ export const viaturas: Viatura[] = [
       },
     ],
     destaque: true,
-    estadoVenda: "disponivel",
+    estadoVenda: "vendido",
+    varianteVendido: "verde-metal",
     ivaDedutivel: false,
     descricao:
       "Jaguar XE 2.0d Portfolio com 180 cv, caixa automática de 8 velocidades e tração traseira. Berlina elegante em Cinzento Pérola, com interior em pele, som Meridian e teto de abrir. Nível de equipamento Portfolio.",
@@ -295,7 +297,8 @@ export const viaturas: Viatura[] = [
       },
     ],
     destaque: false,
-    estadoVenda: "disponivel",
+    estadoVenda: "vendido",
+    varianteVendido: "vermelho-metal",
     ivaDedutivel: false,
     descricao:
       "Mercedes-Benz CLA 220 d OrangeArt Edition — edição limitada com Pack AMG e detalhes laranja exclusivos. 177 cv, caixa automática de dupla embraiagem, faróis Bi-Xénon e interior desportivo em pele/alcântara.",

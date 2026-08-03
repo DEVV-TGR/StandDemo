@@ -15,8 +15,14 @@
   --gold-deep: oklch(0.5 0.082 66);
   --champagne: oklch(0.88 0.036 84);
 
-  /* verde de estado "vendido" — esmeralda dessaturada para não gritar no tema escuro */
+  /* estados "vendido" — verde e vermelho, liso e metálico.
+     dessaturados o suficiente para não gritar no tema escuro. */
   --green: oklch(0.62 0.13 150);
+  --green-deep: oklch(0.45 0.1 150);
+  --green-bright: oklch(0.78 0.14 150);
+  --red: oklch(0.55 0.19 27);
+  --red-deep: oklch(0.42 0.16 27);
+  --red-bright: oklch(0.68 0.2 27);
 
   /* texto */
   --ink: oklch(0.96 0.012 95);
@@ -33,6 +39,7 @@
   --color-gold-deep: var(--gold-deep);
   --color-champagne: var(--champagne);
   --color-green: var(--green);
+  --color-red: var(--red);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --font-sans: var(--font-geist-sans);
@@ -111,6 +118,36 @@ body {
   transition: filter 0.2s ease;
 }
 .gold-metal-fill:hover {
+  filter: brightness(1.08);
+}
+
+/* variantes metálicas para o badge "vendido" (mesmo reflexo diagonal do ouro) */
+.green-metal-fill {
+  background-image: linear-gradient(
+    140deg,
+    var(--green-deep) 0%,
+    var(--green) 28%,
+    var(--green-bright) 50%,
+    var(--green) 72%,
+    var(--green-deep) 100%
+  );
+  transition: filter 0.2s ease;
+}
+.green-metal-fill:hover {
+  filter: brightness(1.08);
+}
+.red-metal-fill {
+  background-image: linear-gradient(
+    140deg,
+    var(--red-deep) 0%,
+    var(--red) 28%,
+    var(--red-bright) 50%,
+    var(--red) 72%,
+    var(--red-deep) 100%
+  );
+  transition: filter 0.2s ease;
+}
+.red-metal-fill:hover {
   filter: brightness(1.08);
 }
 
