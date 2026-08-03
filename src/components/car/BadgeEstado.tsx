@@ -9,7 +9,7 @@ export function BadgeEstado({ viatura }: { viatura: Viatura }) {
         </span>
       )}
       {viatura.estadoVenda === "reservado" && (
-        <span className="rounded-full bg-gold px-3 py-1 text-[11px] font-medium uppercase tracking-[0.15em] text-background">
+        <span className="gold-metal-fill rounded-full px-3 py-1 text-[11px] font-medium uppercase tracking-[0.15em] text-background shadow-[0_2px_10px_-2px_rgba(0,0,0,0.5)]">
           Reservado
         </span>
       )}
