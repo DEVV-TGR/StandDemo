@@ -76,7 +76,7 @@ export const viaturas: Viatura[] = [
       },
     ],
     destaque: true,
-    estadoVenda: "reservado",
+    estadoVenda: "disponivel",
     ivaDedutivel: false,
     descricao:
       "Porsche Macan S 3.0 V6 Turbo Diesel com 258 cv e tração integral. SUV desportivo em Preto Metalizado, interior em alcântara com bancos de memória, navegação e Apple CarPlay. Unidade cuidada, com histórico de manutenção.",
