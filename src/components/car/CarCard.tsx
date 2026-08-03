@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { BadgeEstado } from "@/components/car/BadgeEstado";
 import {
   formatarKm,
@@ -29,15 +29,60 @@ export function CarCard({
     setFoto((f) => (f + delta + total) % total);
   };
 
+  // arrasto/deslize horizontal para mudar de foto (além das setas)
+  const inicioX = useRef(0);
+  const moveu = useRef(false);
+  const ativoPonteiro = useRef(false);
+  const LIMIAR_MOVE = 6; // px acima do qual é arrasto (e não clique)
+  const LIMIAR_SWIPE = 40; // px para trocar de foto
+
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (total <= 1) return;
+    ativoPonteiro.current = true;
+    moveu.current = false;
+    inicioX.current = e.clientX;
+    e.currentTarget.setPointerCapture(e.pointerId);
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    if (!ativoPonteiro.current) return;
+    if (Math.abs(e.clientX - inicioX.current) > LIMIAR_MOVE) moveu.current = true;
+  };
+  const terminarArrasto = (e: React.PointerEvent) => {
+    if (!ativoPonteiro.current) return;
+    ativoPonteiro.current = false;
+    const dx = e.clientX - inicioX.current;
+    if (Math.abs(dx) > LIMIAR_SWIPE) mudar(dx < 0 ? 1 : -1);
+  };
+
   return (
     <article className="group relative overflow-hidden rounded-2xl border border-line/60 bg-surface transition-colors duration-300 hover:border-gold/50">
-      <div className="relative aspect-[4/3] overflow-hidden">
+      <div
+        className={`relative aspect-[4/3] overflow-hidden ${
+          total > 1 ? "cursor-grab touch-pan-y select-none active:cursor-grabbing" : ""
+        }`}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={terminarArrasto}
+        onPointerCancel={terminarArrasto}
+      >
         <BadgeEstado viatura={viatura} />
-        <Link href={urlViatura(viatura)} tabIndex={-1} aria-hidden>
+        <Link
+          href={urlViatura(viatura)}
+          tabIndex={-1}
+          aria-hidden
+          draggable={false}
+          onClickCapture={(e) => {
+            if (moveu.current) {
+              e.preventDefault();
+              e.stopPropagation();
+            }
+          }}
+        >
           <Image
             src={viatura.fotos[foto]}
             alt={`${viatura.marca} ${viatura.modelo} — foto ${foto + 1}`}
             fill
+            draggable={false}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             priority={prioridade && foto === inicial}
             className={`object-cover transition-transform duration-500 group-hover:scale-[1.03] ${
