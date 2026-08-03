@@ -4,7 +4,7 @@ export function BadgeEstado({ viatura }: { viatura: Viatura }) {
   return (
     <div className="pointer-events-none absolute left-3 top-3 z-10 flex flex-col items-start gap-1.5">
       {viatura.estadoVenda === "vendido" && (
-        <span className="rounded-full bg-background/85 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.15em] text-muted backdrop-blur">
+        <span className="rounded-full bg-green px-3 py-1 text-[11px] font-medium uppercase tracking-[0.15em] text-background shadow-[0_2px_10px_-2px_var(--green)]">
           Vendido
         </span>
       )}

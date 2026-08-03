@@ -76,7 +76,7 @@ export const viaturas: Viatura[] = [
       },
     ],
     destaque: true,
-    estadoVenda: "disponivel",
+    estadoVenda: "reservado",
     ivaDedutivel: false,
     descricao:
       "Porsche Macan S 3.0 V6 Turbo Diesel com 258 cv e tração integral. SUV desportivo em Preto Metalizado, interior em alcântara com bancos de memória, navegação e Apple CarPlay. Unidade cuidada, com histórico de manutenção.",
@@ -440,7 +440,7 @@ export const viaturas: Viatura[] = [
       },
     ],
     destaque: false,
-    estadoVenda: "disponivel",
+    estadoVenda: "vendido",
     ivaDedutivel: false,
     descricao:
       "MINI Cooper D 3 Portas com 110 cv e caixa manual — o citadino com estilo e baixos consumos. Em Pepper White, com som Harman Kardon, ar condicionado e jantes de liga leve. Económico e divertido de conduzir.",

@@ -15,6 +15,9 @@
   --gold-deep: oklch(0.5 0.082 66);
   --champagne: oklch(0.88 0.036 84);
 
+  /* verde de estado "vendido" — esmeralda dessaturada para não gritar no tema escuro */
+  --green: oklch(0.62 0.13 150);
+
   /* texto */
   --ink: oklch(0.96 0.012 95);
   --muted: oklch(0.7 0.022 95);
@@ -29,6 +32,7 @@
   --color-gold-bright: var(--gold-bright);
   --color-gold-deep: var(--gold-deep);
   --color-champagne: var(--champagne);
+  --color-green: var(--green);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --font-sans: var(--font-geist-sans);
