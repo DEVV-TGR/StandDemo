@@ -111,7 +111,7 @@ export function HeroSearch() {
       <button
         type="button"
         onClick={pesquisar}
-        className="gold-metal-fill mt-5 w-full rounded-full px-6 py-3.5 text-sm font-medium tracking-wide text-background"
+        className="gold-metal-fill press mt-5 w-full rounded-full px-6 py-3.5 text-sm font-medium tracking-wide text-background"
       >
         Ver <Contador valor={resultados} />{" "}
         {resultados === 1 ? "resultado" : "resultados"}

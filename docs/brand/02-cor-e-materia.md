@@ -23,7 +23,7 @@ Repare na progressão de temperatura: os dois fundos mais escuros são **neutros
 
 | Token | Valor | Papel | Utility |
 |---|---|---|---|
-| `--gold` | `oklch(0.70 0.093 76)` | Dourado primário: CTAs, bordas ativas, ícones | `text-gold` `bg-gold` |
+| `--gold` | `oklch(0.70 0.093 76)` | Dourado primário: bordas ativas, ícones, indicadores | `text-gold` `bg-gold` |
 | `--gold-bright` | `oklch(0.83 0.086 82)` | Hover e realce | `hover:text-gold-bright` |
 | `--gold-deep` | `oklch(0.5 0.082 66)` | Separadores, glifos, extremos de gradiente | `text-gold-deep` |
 | `--champagne` | `oklch(0.88 0.036 84)` | Texto dourado suave, botões de contorno | `text-champagne` |
@@ -80,7 +80,9 @@ Três utilities dão a sensação de **folha de ouro** em vez de tinta chapada. 
 
 Regra do próprio ficheiro: **usar só em texto grande.** Tem exatamente **1 uso** em todo o projeto — a palavra "procura?" no heading do hero (`Hero.tsx:31`). Manter assim: a escassez é o que lhe dá peso.
 
-**`.gold-metal-fill`** — preenchimento de superfície, gradiente diagonal a 140°, mais `filter: brightness(1.08)` no hover. Usa-se em CTAs de destaque e no badge "Reservado".
+**`.gold-metal-fill`** — preenchimento de superfície, gradiente diagonal a 140°, mais `filter: brightness(1.08)` no hover. É o preenchimento de **todos os CTAs dourados** — o botão do hero, o "Fale agora", o "Ligar" do detalhe, o "Ver resultados" dos filtros e a variante `dourado` do `Botao` — e ainda do badge "Reservado".
+
+Um botão dourado usa gradiente, não cor chapada. O `bg-gold` fica reservado a superfícies pequenas onde um gradiente não se leria: badges, pontos de paginação, contadores e o trilho dos sliders.
 
 **`.red-metal-fill`** — o mesmo reflexo diagonal, em vermelho, só para o badge "Vendido".
 

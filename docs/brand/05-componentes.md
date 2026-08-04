@@ -16,15 +16,17 @@ type Variante = "dourado" | "contorno" | "fantasma";
 
 Base partilhada:
 ```
-inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm tracking-wide
-transition-colors duration-200 cursor-pointer select-none
+press inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm tracking-wide
+cursor-pointer select-none
 ```
 
 | Variante | Classes | Uso |
 |---|---|---|
-| `dourado` (default) | `bg-gold text-background hover:bg-gold-bright active:bg-gold-deep font-medium` | Ação primária |
+| `dourado` (default) | `gold-metal-fill text-background font-medium` | Ação primária |
 | `contorno` | `border border-gold/40 text-champagne hover:border-gold hover:text-gold-bright` | Ação secundária |
 | `fantasma` | `text-muted hover:text-gold-bright` | Ação terciária |
+
+A `.press` trata da transição toda — cor, brilho e escala ao premir. Por isso a base **não** leva `transition-colors`: seriam duas declarações a colidir. Ver [06 — Movimento](06-movimento.md).
 
 Assinatura: `ComponentProps<typeof Link> & { variante?: Variante; children: ReactNode }`. O `className` é concatenado por template string.
 

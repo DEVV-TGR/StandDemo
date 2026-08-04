@@ -165,7 +165,7 @@ export function DestaquesCarrossel({ destaques }: { destaques: Viatura[] }) {
           type="button"
           aria-label="Anterior"
           onClick={() => setActivo((a) => a - 1)}
-          className="absolute left-1 top-[38%] z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center text-4xl font-thin text-ink/70 transition-colors hover:text-gold-bright sm:left-4"
+          className="press absolute left-1 top-[38%] z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center text-4xl font-thin text-ink/70 hover:text-gold-bright sm:left-4"
         >
           ‹
         </button>
@@ -173,7 +173,7 @@ export function DestaquesCarrossel({ destaques }: { destaques: Viatura[] }) {
           type="button"
           aria-label="Seguinte"
           onClick={() => setActivo((a) => a + 1)}
-          className="absolute right-1 top-[38%] z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center text-4xl font-thin text-ink/70 transition-colors hover:text-gold-bright sm:right-4"
+          className="press absolute right-1 top-[38%] z-20 flex h-12 w-12 -translate-y-1/2 items-center justify-center text-4xl font-thin text-ink/70 hover:text-gold-bright sm:right-4"
         >
           ›
         </button>
@@ -289,7 +289,7 @@ export function DestaquesCarrossel({ destaques }: { destaques: Viatura[] }) {
                       href={href}
                       aria-label="Ver detalhes"
                       draggable={false}
-                      className="absolute bottom-5 right-5 flex h-9 w-14 items-center justify-center rounded-full bg-raised text-lg text-muted transition-colors hover:bg-gold hover:text-background"
+                      className="press absolute bottom-5 right-5 flex h-9 w-14 items-center justify-center rounded-full bg-raised text-lg text-muted hover:bg-gold hover:text-background"
                     >
                       →
                     </Link>

@@ -155,7 +155,7 @@ export function CatalogoClient({
           <button
             type="button"
             onClick={() => setPainelAberto(true)}
-            className="inline-flex items-center gap-2 rounded-full border border-gold/40 px-5 py-2.5 text-sm tracking-wide text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+            className="press inline-flex items-center gap-2 rounded-full border border-gold/40 px-5 py-2.5 text-sm tracking-wide text-champagne hover:border-gold hover:text-gold-bright"
           >
             <IconeFiltros />
             Filtros
@@ -179,7 +179,7 @@ export function CatalogoClient({
                 key={c.id}
                 type="button"
                 onClick={() => removerChip(c.patch)}
-                className="inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-gold/40 bg-gold/10 px-3 py-1.5 text-xs text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+                className="press inline-flex shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-gold/40 bg-gold/10 px-3 py-1.5 text-xs text-champagne hover:border-gold hover:text-gold-bright"
                 aria-label={`Remover filtro ${c.rotulo}`}
               >
                 {c.rotulo}
@@ -236,7 +236,7 @@ export function CatalogoClient({
                 <button
                   type="button"
                   onClick={() => setPainelAberto(false)}
-                  className="w-full rounded-full bg-gold px-6 py-3 text-sm font-medium text-background transition-colors hover:bg-gold-bright"
+                  className="gold-metal-fill press w-full rounded-full px-6 py-3 text-sm font-medium text-background"
                 >
                   Ver resultados
                 </button>
@@ -275,7 +275,7 @@ export function CatalogoClient({
             <button
               type="button"
               onClick={limpar}
-              className="mt-6 rounded-full border border-gold/40 px-6 py-3 text-sm text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+              className="press mt-6 rounded-full border border-gold/40 px-6 py-3 text-sm text-champagne hover:border-gold hover:text-gold-bright"
             >
               Limpar parâmetros
             </button>

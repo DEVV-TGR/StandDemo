@@ -78,7 +78,7 @@ export function SobreContactos() {
                 href={stand.mapsUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex rounded-full border border-gold/40 px-5 py-2.5 text-sm text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+                className="press inline-flex rounded-full border border-gold/40 px-5 py-2.5 text-sm text-champagne hover:border-gold hover:text-gold-bright"
               >
                 Abrir no Google Maps ↗
               </a>
@@ -86,7 +86,7 @@ export function SobreContactos() {
                 href={stand.whatsapp}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex rounded-full border border-gold/40 px-5 py-2.5 text-sm text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+                className="press inline-flex rounded-full border border-gold/40 px-5 py-2.5 text-sm text-champagne hover:border-gold hover:text-gold-bright"
               >
                 WhatsApp ↗
               </a>
@@ -94,7 +94,7 @@ export function SobreContactos() {
                 href={stand.instagram}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex rounded-full border border-gold/40 px-5 py-2.5 text-sm text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+                className="press inline-flex rounded-full border border-gold/40 px-5 py-2.5 text-sm text-champagne hover:border-gold hover:text-gold-bright"
               >
                 Instagram ↗
               </a>
@@ -102,7 +102,7 @@ export function SobreContactos() {
                 href={stand.facebook}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex rounded-full border border-gold/40 px-5 py-2.5 text-sm text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+                className="press inline-flex rounded-full border border-gold/40 px-5 py-2.5 text-sm text-champagne hover:border-gold hover:text-gold-bright"
               >
                 Facebook ↗
               </a>
