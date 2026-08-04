@@ -127,7 +127,7 @@ Ao mexer em filtros: manter o padrão. `router.push` a cada alteração destrói
 - **Escrever código Next.js sem consultar `node_modules/next/dist/docs/`.**
 - **Criar `tailwind.config.ts`.** O tema vive no `globals.css`.
 - **Instalar `clsx`, `cva`, `tailwind-merge`, `zod` ou uma biblioteca de componentes.**
-- **`useEffect` para carregar dados** — os dados são estáticos e importam-se diretamente.
+- **`useEffect` para carregar dados** — os dados são estáticos e importam-se diretamente. (Com o painel de gestão a regra mantém-se: a leitura passa a ser assíncrona em server components, nunca em `useEffect`. Ver [`docs/admin/01`](../admin/01-arquitetura.md).)
 - **`router.push()` numa mudança de filtro** — `window.history.replaceState`.
 - **Marcar um componente `"use client"`** sem estado, efeito ou evento.
 - **Escrever comentários em inglês** ou traduzir os que existem.

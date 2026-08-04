@@ -39,6 +39,10 @@ O resumo executivo. Cada uma está desenvolvida no documento respetivo.
 9. **Conteúdo em PT-PT**, formatado por `Intl` com locale `pt-PT`. Pluralização é manual e obrigatória.
 10. **Sem bibliotecas de utilidade de classes.** Não há `clsx`, `cva` nem `tailwind-merge` — composição por template strings.
 
+## Painel de gestão
+
+Está planeado um painel em `/admin` para o cliente gerir os anúncios sem código, a entrar depois do lançamento. A especificação vive em [`docs/admin/`](../admin/README.md) — arquitetura, infraestrutura, autenticação, segurança e UX. O painel herda os tokens e as fontes daqui, mas não a linguagem editorial.
+
 ## Relação com `AGENTS.md`
 
 O [`AGENTS.md`](../../AGENTS.md) na raiz é o ponto de entrada curto: identidade do projeto, stack, skills e a regra do Next.js 16. Todo o detalhe de design e convenções vive aqui.
