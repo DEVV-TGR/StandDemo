@@ -110,7 +110,6 @@ body {
     var(--gold) 72%,
     var(--gold-deep) 100%
   );
-  transition: filter 0.2s ease;
 }
 .gold-metal-fill:hover {
   filter: brightness(1.08);
@@ -126,10 +125,29 @@ body {
     var(--red) 72%,
     var(--red-deep) 100%
   );
-  transition: filter 0.2s ease;
 }
 .red-metal-fill:hover {
   filter: brightness(1.08);
+}
+
+/* resposta ao premir — botões e controlos.
+   usa a propriedade `scale` nativa (não `transform`) de propósito: metade dos
+   controlos estão centrados com -translate-y-1/2, e um transform sobreporia
+   esse translate, fazendo as setas saltar ao serem premidas.
+   declara todas as propriedades numa só transição para não colidir com o
+   transition-colors do Tailwind nem com o brilho do metálico. */
+.press {
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    filter 0.2s ease,
+    opacity 0.2s ease,
+    translate 0.3s ease,
+    scale 0.1s ease;
+}
+.press:active {
+  scale: 0.97;
 }
 
 /* linha fina dourada, assinatura visual do site */
@@ -214,5 +232,9 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  /* sem a anulação, o botão continuava a encolher — só que de repente */
+  .press:active {
+    scale: 1;
   }
 }

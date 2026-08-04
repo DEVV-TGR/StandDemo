@@ -97,7 +97,7 @@ export function CarCard({
               type="button"
               aria-label="Foto anterior"
               onClick={() => mudar(-1)}
-              className="absolute left-2 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-background/60 text-ink backdrop-blur transition-opacity duration-200 hover:bg-background/85 focus-visible:opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
+              className="press absolute left-2 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-background/60 text-ink backdrop-blur hover:bg-background/85 focus-visible:opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
             >
               ‹
             </button>
@@ -105,7 +105,7 @@ export function CarCard({
               type="button"
               aria-label="Foto seguinte"
               onClick={() => mudar(1)}
-              className="absolute right-2 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-background/60 text-ink backdrop-blur transition-opacity duration-200 hover:bg-background/85 focus-visible:opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
+              className="press absolute right-2 top-1/2 z-10 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-background/60 text-ink backdrop-blur hover:bg-background/85 focus-visible:opacity-100 lg:opacity-0 lg:group-hover:opacity-100"
             >
               ›
             </button>

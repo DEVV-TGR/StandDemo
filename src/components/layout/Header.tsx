@@ -52,7 +52,7 @@ export function Header() {
           })}
           <a
             href={`tel:+351${stand.telemovel.replaceAll(" ", "")}`}
-            className="rounded-full border border-gold/40 px-5 py-2 text-sm tracking-wide text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+            className="press rounded-full border border-gold/40 px-5 py-2 text-sm tracking-wide text-champagne hover:border-gold hover:text-gold-bright"
           >
             Fale connosco
           </a>
@@ -63,7 +63,7 @@ export function Header() {
           onClick={() => setAberto((a) => !a)}
           aria-expanded={aberto}
           aria-label={aberto ? "Fechar menu" : "Abrir menu"}
-          className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
+          className="press flex h-10 w-10 flex-col items-center justify-center gap-1.5 md:hidden"
         >
           <span
             className={`h-px w-6 bg-ink transition-transform ${aberto ? "translate-y-[3.5px] rotate-45" : ""}`}

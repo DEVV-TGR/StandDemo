@@ -36,7 +36,7 @@ export function Gallery({ fotos, alt }: { fotos: string[]; alt: string }) {
             type="button"
             onClick={() => setAtiva(i)}
             aria-label={`Ver foto ${i + 1}`}
-            className={`relative aspect-[4/3] overflow-hidden rounded-lg border transition-all duration-200 ${
+            className={`press relative aspect-[4/3] overflow-hidden rounded-lg border ${
               i === ativa
                 ? "border-gold"
                 : "border-line/60 opacity-60 hover:opacity-100"

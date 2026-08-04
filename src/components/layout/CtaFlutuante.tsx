@@ -22,7 +22,7 @@ export function CtaFlutuante() {
       aria-label="Falar connosco no WhatsApp"
       aria-hidden={!visivel}
       tabIndex={visivel ? 0 : -1}
-      className={`fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full bg-gold px-5 py-3 text-sm font-medium text-background shadow-lg shadow-black/40 transition-all duration-300 hover:bg-gold-bright ${
+      className={`gold-metal-fill press fixed bottom-6 right-6 z-40 flex items-center gap-2 rounded-full px-5 py-3 text-sm font-medium text-background shadow-lg shadow-black/40 ${
         visivel ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-4 opacity-0"
       }`}
     >

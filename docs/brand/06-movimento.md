@@ -54,6 +54,30 @@ transition={{ duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] }}
 
 Regra: **quanto maior a coisa que se move, mais lenta.** Cor muda em 200ms; uma foto inteira leva 500ms.
 
+## Resposta ao premir — `.press`
+
+Botões e controlos encolhem **3%** ao serem premidos. Em telemóvel não há hover, portanto sem isto carregar num botão não produz retorno nenhum até a página mudar.
+
+A utility vive em `globals.css` e trata da transição toda:
+
+```css
+.press {
+  transition: color .2s ease, background-color .2s ease, border-color .2s ease,
+              filter .2s ease, opacity .2s ease, translate .3s ease, scale .1s ease;
+}
+.press:active { scale: 0.97; }
+```
+
+**Usa a propriedade `scale` nativa, não `transform`.** Não é detalhe de estilo — é o que evita um defeito. Seis controlos com `.press` estão centrados por `-translate-y-1/2`, que o Tailwind v4 gera como `translate: …` (também nativa). Se a escala viesse de `transform: scale()`, sobreporia esse `translate` e **as setas saltariam para baixo ao serem premidas**.
+
+**Declara todas as propriedades numa só transição** pela mesma razão: um elemento só admite uma declaração de `transition`, e uma segunda — vinda do `transition-colors` do Tailwind ou do brilho do `.gold-metal-fill` — anularia silenciosamente a outra. Por isso, ao aplicar `.press`, **remove-se o `transition-colors`** do elemento.
+
+**Leva `.press`:** CTAs dourados, botões de contorno, setas de navegação, chips de filtro, miniaturas da galeria e do lightbox, botões de fechar, hamburger do menu.
+
+**Não leva:** links do menu e do rodapé, títulos de cards, o `CarCard` inteiro, cards de marca. Encolher texto ao clicar lê-se como falha de renderização.
+
+Em movimento reduzido o efeito é anulado por completo (`.press:active { scale: 1 }`) — o kill-switch global só tornaria o encolhimento instantâneo, não o eliminaria.
+
 ## Gestos
 
 Três implementações, com limiares que interessam.
@@ -120,8 +144,10 @@ O padrão: `initial={reduzido ? false : {…}}` (Reveal), `animate={reduzido ? u
 
 ## Nunca
 
-- **`whileHover` / `whileTap`.** Não existem no projeto — hover é CSS.
-- **`active:scale-*`.** 0 usos. Os botões respondem por cor, não por escala.
+- **`whileHover` / `whileTap`.** Não existem no projeto — hover e premir são CSS.
+- **Escalar com `transform` num elemento posicionado com `translate`.** Usar a propriedade `scale`.
+- **Deixar `transition-colors` num elemento com `.press`** — as duas declarações colidem.
+- **Pôr `.press` em links de texto ou títulos.**
 - **Animar `top`, `left`, `width` ou `height`.** Só `transform` e `opacity` (e `filter` no coverflow).
 - **Entrada em scroll sem `once: true`.**
 - **Um componente `motion` novo sem `useReducedMotion()`.**

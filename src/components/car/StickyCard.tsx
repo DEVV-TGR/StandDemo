@@ -50,7 +50,7 @@ export function StickyCard({ viatura }: { viatura: Viatura }) {
       <div className="space-y-3">
         <a
           href={`tel:+351${stand.telemovel.replaceAll(" ", "")}`}
-          className="block w-full rounded-full bg-gold px-6 py-3.5 text-center text-sm font-medium tracking-wide text-background transition-colors hover:bg-gold-bright"
+          className="gold-metal-fill press block w-full rounded-full px-6 py-3.5 text-center text-sm font-medium tracking-wide text-background"
         >
           Ligar {stand.telemovel}
         </a>
@@ -60,7 +60,7 @@ export function StickyCard({ viatura }: { viatura: Viatura }) {
           )}`}
           target="_blank"
           rel="noreferrer"
-          className="block w-full rounded-full border border-gold/40 px-6 py-3.5 text-center text-sm tracking-wide text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+          className="press block w-full rounded-full border border-gold/40 px-6 py-3.5 text-center text-sm tracking-wide text-champagne hover:border-gold hover:text-gold-bright"
         >
           Falar no WhatsApp
         </a>
@@ -68,7 +68,7 @@ export function StickyCard({ viatura }: { viatura: Viatura }) {
           href={`mailto:${stand.email}?subject=${encodeURIComponent(
             `Interesse: ${viatura.marca} ${viatura.modelo} (${viatura.id})`,
           )}`}
-          className="block w-full rounded-full border border-gold/40 px-6 py-3.5 text-center text-sm tracking-wide text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+          className="press block w-full rounded-full border border-gold/40 px-6 py-3.5 text-center text-sm tracking-wide text-champagne hover:border-gold hover:text-gold-bright"
         >
           Pedir contacto
         </a>
@@ -78,14 +78,14 @@ export function StickyCard({ viatura }: { viatura: Viatura }) {
         <button
           type="button"
           onClick={partilhar}
-          className="transition-colors hover:text-gold-bright"
+          className="press hover:text-gold-bright"
         >
           {copiado ? "Ligação copiada ✓" : "Partilhar"}
         </button>
         <button
           type="button"
           onClick={() => window.print()}
-          className="transition-colors hover:text-gold-bright"
+          className="press hover:text-gold-bright"
         >
           Imprimir
         </button>
