@@ -12,6 +12,8 @@ A tensão central do projeto: **qualidade visual de nível profissional, âmbito
 
 Sem backend. Sem base de dados. Sem autenticação. Os dados são mock em TypeScript.
 
+> **Para o lançamento.** Está planeado um painel de gestão em `/admin`, para o cliente gerir os anúncios sem código — com base de dados e autenticação. Entra depois de o site estar no ar. A especificação vive em [`docs/admin/`](../admin/README.md); até lá, o que está acima é a realidade.
+
 ## As três páginas
 
 | Rota | Ficheiro | O que tem |

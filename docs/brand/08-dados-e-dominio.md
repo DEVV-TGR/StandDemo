@@ -4,6 +4,8 @@
 > **Fonte de verdade** — `src/lib/types.ts`, `src/data/viaturas.ts`, `src/lib/{derivados,filtros,format,slug,marcas}.ts`.
 > **Ler antes de** — acrescentar uma viatura, um campo ou um filtro.
 
+> Quando o painel de gestão entrar, `src/data/viaturas.ts` deixa de ser a fonte dos dados e passa a ter dois papéis: alimentar o seed inicial e servir de recurso quando não há base de dados configurada. O tipo `Viatura` e tudo o resto neste documento mantêm-se. Ver [`docs/admin/01`](../admin/01-arquitetura.md).
+
 ## O tipo `Viatura`
 
 Trinta campos. **Todos obrigatórios — nenhum opcional.** É a decisão estrutural mais importante do modelo: garante que nenhuma viatura aparece no site com ficha incompleta, e dispensa verificações defensivas na UI.
@@ -132,6 +134,8 @@ urlViaturasPorMarca(slug)  // /viaturas?marca={slug}
 ```
 
 **Não há função de slugificação.** Os slugs estão escritos à mão nos dados (`marcaSlug: "mercedes-benz"`, `modeloSlug: "cla-220-d"`). É deliberado: gerar slugs em runtime tornaria os URLs reféns da pontuação do nome.
+
+> **Com o painel de gestão, isto muda.** O cliente escreve a marca num formulário, logo o slug passa a ser gerado — mas **ao gravar**, e guardado na base. A regra de não gerar na leitura mantém-se. Ver [`docs/admin/01`](../admin/01-arquitetura.md).
 
 ### `src/lib/marcas.ts`
 
