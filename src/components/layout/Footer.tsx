@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { agencia } from "@/data/agencia";
 import { stand } from "@/data/stand";
 
 export function Footer() {
@@ -113,9 +114,25 @@ export function Footer() {
         </div>
 
         <div className="hairline mt-12" />
-        <p className="mt-6 text-center text-xs text-muted">
-          © {new Date().getFullYear()} {stand.nome} — site de demonstração.
-        </p>
+        <div className="mt-6 flex flex-col items-center justify-center gap-1 text-xs text-muted sm:flex-row sm:gap-2.5">
+          <p>
+            © {new Date().getFullYear()} {stand.nome}
+          </p>
+          <span aria-hidden className="hidden text-gold-deep sm:inline">
+            ·
+          </span>
+          <p>
+            Desenvolvido por{" "}
+            <a
+              href={agencia.url}
+              target="_blank"
+              rel="noreferrer"
+              className="text-champagne transition-colors hover:text-gold-bright"
+            >
+              {agencia.nome} ↗
+            </a>
+          </p>
+        </div>
       </div>
     </footer>
   );

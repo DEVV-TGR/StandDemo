@@ -89,6 +89,20 @@ Convenções internas:
 - **Horários** usam `·` como separador de períodos e travessão `–` (meia-risca) nas horas: `09:30 – 13:00 · 14:30 – 19:00`.
 - **`sobre`** é um array de parágrafos, não uma string com `\n`.
 
+## Crédito da agência
+
+`src/data/agencia.ts` guarda quem desenvolveu o site (`nome`, `url`). Está separado do `stand.ts` de propósito: **os dados do stand mudam de cliente para cliente, o crédito não** — viaja com o molde quando este servir outro cliente.
+
+Aparece uma vez, no fecho do rodapé, a seguir ao copyright do cliente:
+
+```
+© 2026 Imperio Auto Concept · Desenvolvido por DevPlus ↗
+```
+
+Numa linha em ecrãs largos, empilhado em telemóvel. O separador `·` é `text-gold-deep`, como nos metadados das viaturas, e some no empilhamento. O link segue o padrão dos externos: `target="_blank" rel="noreferrer"` e a seta `↗`.
+
+O copyright é sempre do **cliente** — é ele o dono do site. O crédito é uma assinatura discreta, não uma segunda marca.
+
 ## Metadata
 
 Definida em `src/app/layout.tsx` e por página. O template de título é `"%s | Imperio Auto Concept"`. A página de detalhe gera título e descrição por viatura em `generateMetadata`, incluindo a primeira foto no Open Graph.
