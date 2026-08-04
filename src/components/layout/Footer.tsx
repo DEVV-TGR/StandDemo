@@ -80,7 +80,16 @@ export function Footer() {
                   {stand.email}
                 </a>
               </li>
-              <li>
+              <li className="flex flex-wrap gap-x-3 gap-y-1 pt-1">
+                <a
+                  href={stand.whatsapp}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition-colors hover:text-ink"
+                >
+                  WhatsApp ↗
+                </a>
+                <span className="text-gold-deep">·</span>
                 <a
                   href={stand.instagram}
                   target="_blank"
@@ -88,6 +97,15 @@ export function Footer() {
                   className="transition-colors hover:text-ink"
                 >
                   Instagram ↗
+                </a>
+                <span className="text-gold-deep">·</span>
+                <a
+                  href={stand.facebook}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="transition-colors hover:text-ink"
+                >
+                  Facebook ↗
                 </a>
               </li>
             </ul>

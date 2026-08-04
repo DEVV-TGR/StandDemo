@@ -55,6 +55,16 @@ export function StickyCard({ viatura }: { viatura: Viatura }) {
           Ligar {stand.telemovel}
         </a>
         <a
+          href={`${stand.whatsapp}?text=${encodeURIComponent(
+            `Olá! Tenho interesse na viatura ${viatura.marca} ${viatura.modelo} ${viatura.versao} (ref. ${viatura.id}).`,
+          )}`}
+          target="_blank"
+          rel="noreferrer"
+          className="block w-full rounded-full border border-gold/40 px-6 py-3.5 text-center text-sm tracking-wide text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+        >
+          Falar no WhatsApp
+        </a>
+        <a
           href={`mailto:${stand.email}?subject=${encodeURIComponent(
             `Interesse: ${viatura.marca} ${viatura.modelo} (${viatura.id})`,
           )}`}
