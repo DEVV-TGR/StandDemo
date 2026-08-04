@@ -83,12 +83,28 @@ export function SobreContactos() {
                 Abrir no Google Maps ↗
               </a>
               <a
+                href={stand.whatsapp}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex rounded-full border border-gold/40 px-5 py-2.5 text-sm text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+              >
+                WhatsApp ↗
+              </a>
+              <a
                 href={stand.instagram}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex rounded-full border border-gold/40 px-5 py-2.5 text-sm text-champagne transition-colors hover:border-gold hover:text-gold-bright"
               >
                 Instagram ↗
+              </a>
+              <a
+                href={stand.facebook}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex rounded-full border border-gold/40 px-5 py-2.5 text-sm text-champagne transition-colors hover:border-gold hover:text-gold-bright"
+              >
+                Facebook ↗
               </a>
             </div>
           </div>
