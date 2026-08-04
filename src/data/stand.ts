@@ -9,6 +9,9 @@ export const stand = {
   telemovelNota: "Chamada para a rede móvel nacional",
   email: "imperioautoconcept@gmail.com",
   instagram: "https://www.instagram.com/imperioautoconcept/",
+  facebook: "https://www.facebook.com/share/1HGa2Uc1eW/?mibextid=wwXIfr",
+  // WhatsApp: abre direto a conversa (+351 933 927 443)
+  whatsapp: "https://wa.me/351933927443",
   mapsUrl: "https://maps.google.com/?q=Rua+do+Freixo+1680+Porto",
   horarios: [
     { dias: "Segunda a Sexta", horas: "09:30 – 13:00 · 14:30 – 19:00" },
