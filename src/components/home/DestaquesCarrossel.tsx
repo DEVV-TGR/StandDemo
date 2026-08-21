@@ -232,8 +232,9 @@ export function DestaquesCarrossel({ destaques }: { destaques: Viatura[] }) {
                       aria-label={`${v.marca} ${v.modelo}`}
                       draggable={false}
                     >
+                      {/* miniatura mostra a 2ª foto; a página dedicada é que abre na 1ª */}
                       <Image
-                        src={v.fotos[0]}
+                        src={v.fotos[v.fotos.length > 1 ? 1 : 0]}
                         alt={`${v.marca} ${v.modelo}`}
                         fill
                         draggable={false}
