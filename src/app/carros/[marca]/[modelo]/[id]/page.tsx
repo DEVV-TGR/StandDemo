@@ -6,8 +6,10 @@ import { Gallery } from "@/components/car/Gallery";
 import { SpecsTable } from "@/components/car/SpecsTable";
 import { StickyCard } from "@/components/car/StickyCard";
 import { Sugestoes } from "@/components/car/Sugestoes";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { viaturas } from "@/data/viaturas";
 import { formatarKm, formatarPreco } from "@/lib/format";
+import { dadosPercurso, dadosViatura } from "@/lib/jsonld";
 import { openGraphRota, seoDescricao, seoTitulo } from "@/lib/seo";
 import { urlViatura } from "@/lib/slug";
 
@@ -82,6 +84,9 @@ export default async function ViaturaPage({
 
   return (
     <>
+      <JsonLd dados={dadosViatura(v)} />
+      <JsonLd dados={dadosPercurso(v)} />
+
       <div className="mx-auto max-w-6xl px-4 pb-20 pt-24 sm:px-6">
         <nav aria-label="Percurso" className="mb-6 text-xs text-muted">
           <Link href="/viaturas" className="transition-colors hover:text-gold-bright">

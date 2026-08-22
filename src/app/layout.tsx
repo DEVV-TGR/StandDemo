@@ -3,9 +3,11 @@ import { Bodoni_Moda, Geist, Geist_Mono } from "next/font/google";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { CtaFlutuante } from "@/components/layout/CtaFlutuante";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { Preloader } from "@/components/ui/Preloader";
 import { TransicaoRota } from "@/components/ui/TransicaoRota";
 import { SUFIXO_TITULO } from "@/lib/seo";
+import { dadosStand } from "@/lib/jsonld";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
@@ -56,6 +58,9 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${bodoni.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        {/* Uma vez, no layout: as outras páginas referenciam a organização
+            pelo @id em vez de repetirem o bloco. */}
+        <JsonLd dados={dadosStand()} />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
