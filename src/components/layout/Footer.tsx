@@ -41,11 +41,28 @@ export function Footer() {
               </li>
               <li>
                 <Link
-                  href="/#contactos"
+                  href="/contactos"
                   className="text-muted transition-colors hover:text-ink"
                 >
                   Contactos
                 </Link>
+              </li>
+              <li>
+                {/* Obrigação legal: Decreto-Lei n.º 156/2005, alterado pelo
+                    Decreto-Lei n.º 74/2017 — quem tem presença na Internet
+                    divulga o acesso à plataforma em local visível.
+                    TODO: substituir o texto pelo logótipo oficial, obtido em
+                    livroreclamacoes.pt (não recriar), e confirmar com o
+                    cliente que a empresa está registada na plataforma — o
+                    link sem registo prévio não cumpre a obrigação. */}
+                <a
+                  href="https://www.livroreclamacoes.pt/inicio"
+                  target="_blank"
+                  rel="noopener"
+                  className="text-muted transition-colors hover:text-ink"
+                >
+                  Livro de Reclamações ↗
+                </a>
               </li>
             </ul>
           </div>
@@ -113,6 +130,9 @@ export function Footer() {
           </div>
         </div>
 
+        {/* A Política de Privacidade entra aqui assim que o texto estiver
+            validado — a página existe em /privacidade, ainda como rascunho e
+            com noindex. Ver o cabeçalho de src/app/privacidade/page.tsx. */}
         <div className="hairline mt-12" />
         <div className="mt-6 flex flex-col items-center justify-center gap-1 text-xs text-muted sm:flex-row sm:gap-2.5">
           <p>
