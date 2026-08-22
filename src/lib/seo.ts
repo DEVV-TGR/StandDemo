@@ -42,6 +42,20 @@ export function seoDescricao(texto: string): string {
 }
 
 /**
+ * Imagem de partilha por omissão — a gerada por app/opengraph-image.tsx.
+ *
+ * Tem de ser passada explicitamente: o merge shallow do Next faz com que uma
+ * página que declare `openGraph` perca também as imagens herdadas do
+ * segmento pai. Foi assim que /viaturas ficou sem og:image.
+ */
+export const OG_IMAGEM_PADRAO = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: `${SITE_NAME} — stand de carros usados premium no Porto`,
+} as const;
+
+/**
  * Bloco `openGraph` completo para uma rota.
  *
  * O merge de metadata do Next é *shallow*: uma página que declare `openGraph`
@@ -49,7 +63,7 @@ export function seoDescricao(texto: string): string {
  * Por isso este helper devolve sempre o bloco todo — e por isso nenhuma
  * página deve escrever `openGraph` à mão.
  *
- * `imagens` omitido deixa o `app/opengraph-image.tsx` da raiz assumir.
+ * `imagens` omitido cai na imagem gerada da raiz.
  */
 export function openGraphRota({
   caminho,
@@ -69,6 +83,6 @@ export function openGraphRota({
     url: caminho,
     title: titulo,
     description: descricao,
-    ...(imagens ? { images: imagens } : {}),
+    images: imagens ?? [OG_IMAGEM_PADRAO],
   };
 }

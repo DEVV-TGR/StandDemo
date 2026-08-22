@@ -2,10 +2,15 @@ import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { enderecoLinha } from "@/data/stand";
-import { SITE_NAME } from "@/lib/site";
+import { OG_IMAGEM_PADRAO } from "@/lib/seo";
 
-export const alt = `${SITE_NAME} — stand de carros usados premium no Porto`;
-export const size = { width: 1200, height: 630 };
+// alt e dimensões vêm da mesma constante que as páginas referenciam, para não
+// haver duas versões da mesma verdade
+export const alt = OG_IMAGEM_PADRAO.alt;
+export const size = {
+  width: OG_IMAGEM_PADRAO.width,
+  height: OG_IMAGEM_PADRAO.height,
+};
 export const contentType = "image/png";
 
 /**
