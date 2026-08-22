@@ -44,7 +44,7 @@ export function Gallery({ fotos, alt }: { fotos: string[]; alt: string }) {
           >
             <Image
               src={f}
-              alt=""
+              alt={`${alt} — miniatura ${i + 1}`}
               fill
               sizes="(max-width: 640px) 25vw, 120px"
               className="object-cover"
