@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { stand } from "@/data/stand";
+import { enderecoLinha } from "@/data/stand";
 import { SITE_NAME } from "@/lib/site";
 
 export const alt = `${SITE_NAME} — stand de carros usados premium no Porto`;
@@ -97,7 +97,7 @@ export default async function Image() {
             }}
           >
             <div style={{ display: "flex" }}>
-              {stand.morada}, {stand.codigoPostal}
+              {enderecoLinha}
             </div>
             <div style={{ display: "flex", color: "#e3d6bd" }}>
               imperioautoconcept.com

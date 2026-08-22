@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { stand } from "@/data/stand";
+import { stand, telHref } from "@/data/stand";
 import { formatarKm, formatarPreco, formatarRegisto } from "@/lib/format";
 import type { Viatura } from "@/lib/types";
 
@@ -49,7 +49,7 @@ export function StickyCard({ viatura }: { viatura: Viatura }) {
 
       <div className="space-y-3">
         <a
-          href={`tel:+351${stand.telemovel.replaceAll(" ", "")}`}
+          href={telHref(stand.telemovel)}
           className="gold-metal-fill press block w-full rounded-full px-6 py-3.5 text-center text-sm font-medium tracking-wide text-background"
         >
           Ligar {stand.telemovel}

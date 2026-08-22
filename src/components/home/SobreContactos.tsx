@@ -1,11 +1,10 @@
 import { Reveal } from "@/components/ui/Reveal";
-import { stand } from "@/data/stand";
+import { enderecoLinha, horasTexto, stand, telHref } from "@/data/stand";
 
-const enderecoCompleto = `${stand.morada}, ${stand.codigoPostal}`;
 // Morada exata (sem o nome do stand) para o Google geocodificar o ponto certo
 // e colocar o pin; nome no negócio pode desviar o resultado.
 const mapaEmbed = `https://www.google.com/maps?q=${encodeURIComponent(
-  enderecoCompleto,
+  enderecoLinha,
 )}&hl=pt&z=16&output=embed`;
 
 export function SobreContactos() {
@@ -36,12 +35,12 @@ export function SobreContactos() {
               Onde estamos
             </p>
             <p className="mt-4 font-display text-2xl text-ink">{stand.nome}</p>
-            <p className="mt-1 text-sm text-muted">{enderecoCompleto}</p>
+            <p className="mt-1 text-sm text-muted">{enderecoLinha}</p>
 
             <div className="mt-5 space-y-1 text-sm">
               <p>
                 <a
-                  href={`tel:+351${stand.telefone.replaceAll(" ", "")}`}
+                  href={telHref(stand.telefone)}
                   className="text-champagne transition-colors hover:text-gold-bright"
                 >
                   {stand.telefone}
@@ -50,7 +49,7 @@ export function SobreContactos() {
               </p>
               <p>
                 <a
-                  href={`tel:+351${stand.telemovel.replaceAll(" ", "")}`}
+                  href={telHref(stand.telemovel)}
                   className="text-champagne transition-colors hover:text-gold-bright"
                 >
                   {stand.telemovel}
@@ -67,7 +66,7 @@ export function SobreContactos() {
                 {stand.horarios.map((h) => (
                   <li key={h.dias} className="flex justify-between gap-4">
                     <span>{h.dias}</span>
-                    <span className="text-ink">{h.horas}</span>
+                    <span className="text-ink">{horasTexto(h)}</span>
                   </li>
                 ))}
               </ul>

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { agencia } from "@/data/agencia";
-import { stand } from "@/data/stand";
+import { enderecoLinha, stand, telHref } from "@/data/stand";
 
 export function Footer() {
   return (
@@ -56,18 +56,18 @@ export function Footer() {
             </p>
             <ul className="mt-4 space-y-2 text-sm text-muted">
               <li>
-                {stand.morada}, {stand.codigoPostal}
+                {enderecoLinha}
               </li>
               <li>
                 <a
-                  href={`tel:+351${stand.telemovel.replaceAll(" ", "")}`}
+                  href={telHref(stand.telemovel)}
                   className="transition-colors hover:text-ink"
                 >
                   {stand.telemovel}
                 </a>
                 {" · "}
                 <a
-                  href={`tel:+351${stand.telefone.replaceAll(" ", "")}`}
+                  href={telHref(stand.telefone)}
                   className="transition-colors hover:text-ink"
                 >
                   {stand.telefone}
