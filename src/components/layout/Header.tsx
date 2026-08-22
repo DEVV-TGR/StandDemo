@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { stand, telHref } from "@/data/stand";
 
 const ligacoes = [
@@ -15,10 +15,6 @@ const ligacoes = [
 export function Header() {
   const pathname = usePathname();
   const [aberto, setAberto] = useState(false);
-
-  useEffect(() => {
-    setAberto(false);
-  }, [pathname]);
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-line/60 bg-background/70 backdrop-blur-xl">
@@ -84,6 +80,7 @@ export function Header() {
               <li key={l.href}>
                 <Link
                   href={l.href}
+                  onClick={() => setAberto(false)}
                   className="font-display text-2xl text-ink transition-colors hover:text-gold"
                 >
                   {l.rotulo}
@@ -93,6 +90,7 @@ export function Header() {
             <li>
               <a
                 href={telHref(stand.telemovel)}
+                onClick={() => setAberto(false)}
                 className="text-sm tracking-wide text-gold"
               >
                 Fale connosco — {stand.telemovel}
