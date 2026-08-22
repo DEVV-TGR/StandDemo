@@ -119,7 +119,7 @@ export function Lightbox({
               >
                 <Image
                   src={f}
-                  alt=""
+                  alt={`${alt} — miniatura ${i + 1}`}
                   fill
                   sizes="80px"
                   className="object-cover"

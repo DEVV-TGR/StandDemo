@@ -30,6 +30,7 @@ Consoante o que se vai tocar:
 | Texto visível, números, datas | [07 — Voz e conteúdo](docs/brand/07-voz-e-conteudo.md) |
 | Dados, filtros, viaturas | [08 — Dados e domínio](docs/brand/08-dados-e-dominio.md) |
 | Rotas, estado, convenções | [09 — Código e arquitetura](docs/brand/09-codigo-e-arquitetura.md) |
+| Metadata, indexação, dados estruturados | [SEO — estado e convenções](docs/seo.md) |
 
 Âmbito da demo e o que fica de fora: [01 — Produto e âmbito](docs/brand/01-produto-e-ambito.md).
 

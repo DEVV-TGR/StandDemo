@@ -4,12 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { stand } from "@/data/stand";
+import { stand, telHref } from "@/data/stand";
 
 const ligacoes = [
   { href: "/", rotulo: "Início" },
   { href: "/viaturas", rotulo: "Viaturas" },
-  { href: "/#contactos", rotulo: "Contactos" },
+  { href: "/contactos", rotulo: "Contactos" },
 ];
 
 export function Header() {
@@ -51,7 +51,7 @@ export function Header() {
             );
           })}
           <a
-            href={`tel:+351${stand.telemovel.replaceAll(" ", "")}`}
+            href={telHref(stand.telemovel)}
             className="press rounded-full border border-gold/40 px-5 py-2 text-sm tracking-wide text-champagne hover:border-gold hover:text-gold-bright"
           >
             Fale connosco
@@ -92,7 +92,7 @@ export function Header() {
             ))}
             <li>
               <a
-                href={`tel:+351${stand.telemovel.replaceAll(" ", "")}`}
+                href={telHref(stand.telemovel)}
                 className="text-sm tracking-wide text-gold"
               >
                 Fale connosco — {stand.telemovel}

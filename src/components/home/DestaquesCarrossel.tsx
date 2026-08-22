@@ -216,6 +216,12 @@ export function DestaquesCarrossel({ destaques }: { destaques: Viatura[] }) {
                 }`}
               >
                 <article
+                  // O loop sem costura obriga a triplicar a lista, o que punha
+                  // cada viatura três vezes na árvore de acessibilidade e no
+                  // percurso de teclado. `inert` tira as cópias de ambas sem
+                  // lhes tocar visualmente. Fica aqui, e não no div acima, para
+                  // o clique que centra o card continuar a chegar.
+                  inert={!central}
                   className={central ? "" : "pointer-events-none"}
                   onClickCapture={(e) => {
                     if (moveu.current) {

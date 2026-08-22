@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { HeroSearch } from "@/components/home/HeroSearch";
 import { Reveal } from "@/components/ui/Reveal";
+import { SITE_NAME } from "@/lib/site";
 
 export function Hero() {
   return (
@@ -19,17 +20,24 @@ export function Hero() {
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-16 pt-28 sm:px-6">
         <div className="max-w-2xl">
+          {/* O H1 visível é uma pergunta: bom em UX, nulo em semântica — não diz
+              o nome do negócio, a categoria nem a localidade. O H1 real fica
+              acessível a leitores de ecrã e ao Google; a pergunta desce a <p>
+              sem perder um grama de peso visual. */}
+          <h1 className="sr-only">
+            {SITE_NAME} — stand de carros usados e seminovos premium no Porto
+          </h1>
           <Reveal>
             <p className="text-xs uppercase tracking-[0.3em] text-gold">
               Stand de automóveis premium
             </p>
           </Reveal>
           <Reveal delay={0.1}>
-            <h1 className="mt-4 font-display h-hero text-ink">
+            <p className="mt-4 font-display h-hero text-ink">
               Que viatura
               <br />
               <span className="italic text-gold-metal">procura?</span>
-            </h1>
+            </p>
           </Reveal>
           <Reveal delay={0.2}>
             <p className="mt-5 max-w-md text-base leading-relaxed text-muted">

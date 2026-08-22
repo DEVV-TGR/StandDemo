@@ -6,8 +6,12 @@ import { Gallery } from "@/components/car/Gallery";
 import { SpecsTable } from "@/components/car/SpecsTable";
 import { StickyCard } from "@/components/car/StickyCard";
 import { Sugestoes } from "@/components/car/Sugestoes";
+import { JsonLd } from "@/components/seo/JsonLd";
 import { viaturas } from "@/data/viaturas";
 import { formatarKm, formatarPreco } from "@/lib/format";
+import { dadosPercurso, dadosViatura } from "@/lib/jsonld";
+import { openGraphRota, seoDescricao, seoTitulo } from "@/lib/seo";
+import { urlViatura } from "@/lib/slug";
 
 export async function generateStaticParams() {
   return viaturas.map((v) => ({
@@ -28,23 +32,46 @@ export async function generateMetadata({
 }: PageProps<"/carros/[marca]/[modelo]/[id]">): Promise<Metadata> {
   const { marca, modelo, id } = await params;
   const v = encontrarViatura(marca, modelo, id);
-  if (!v) return { title: "Viatura não encontrada" };
+  if (!v) return { title: "Viatura não encontrada", robots: { index: false } };
 
-  const titulo = `${v.marca} ${v.modelo} ${v.versao} — ${v.registoAno}`;
-  const descricao = `${v.marca} ${v.modelo} ${v.versao}, ${v.registoAno}, ${formatarKm(
+  // O `seoTitulo` corta pelo espaço mais próximo do limite, contando já com o
+  // sufixo da marca — sem isto, um "CLA 220 d 4Matic OrangeArt Edition" dá um
+  // title de 75 caracteres que o Google trunca a meio da versão.
+  const titulo = seoTitulo(
+    `${v.marca} ${v.modelo} ${v.versao} ${v.registoAno}`,
+  );
+  const ficha = `${v.marca} ${v.modelo} ${v.versao} de ${v.registoAno}, ${formatarKm(
     v.quilometros,
-  )}, ${v.combustivel}. ${
-    v.estadoVenda === "vendido" ? "Vendido" : formatarPreco(v.preco)
-  }. ${v.descricao}`;
+  )}, ${v.combustivel}`;
+  // O `clamp` dentro de `seoDescricao` normaliza os espaços finos que o Intl
+  // insere nos números — de outro modo saem para o HTML como &nbsp; em bruto.
+  // Uma viatura vendida não anuncia preço nem garantia: a página mantém-se
+  // (links partilhados no WhatsApp continuam a abrir) mas encaminha ao stock.
+  const descricao = seoDescricao(
+    v.estadoVenda === "vendido"
+      ? `${ficha}. Esta viatura já foi vendida — veja o stock disponível no stand Império Auto Concept, no Porto.`
+      : `${ficha}, por ${formatarPreco(v.preco)}. Garantia de ${
+          v.garantia
+        }. Stand Império Auto Concept, no Porto.`,
+  );
+
+  const caminho = urlViatura(v);
 
   return {
     title: titulo,
     description: descricao,
-    openGraph: {
-      title: titulo,
-      description: descricao,
-      images: [{ url: v.fotos[0] }],
-    },
+    alternates: { canonical: caminho },
+    openGraph: openGraphRota({
+      caminho,
+      titulo,
+      descricao,
+      // Sem width/height: as fotos não são 1200×630 e declarar medidas erradas
+      // faz o Facebook recortar mal. A fotografia real da viatura vale mais do
+      // que a imagem gerada do `opengraph-image.tsx` da raiz.
+      imagens: [
+        { url: v.fotos[0], alt: `${v.marca} ${v.modelo} ${v.versao}` },
+      ],
+    }),
   };
 }
 
@@ -57,6 +84,9 @@ export default async function ViaturaPage({
 
   return (
     <>
+      <JsonLd dados={dadosViatura(v)} />
+      <JsonLd dados={dadosPercurso(v)} />
+
       <div className="mx-auto max-w-6xl px-4 pb-20 pt-24 sm:px-6">
         <nav aria-label="Percurso" className="mb-6 text-xs text-muted">
           <Link href="/viaturas" className="transition-colors hover:text-gold-bright">
