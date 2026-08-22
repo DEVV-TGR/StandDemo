@@ -80,3 +80,12 @@ export function getIntervalos(): Intervalos {
 export function getDestaques() {
   return viaturas.filter((v) => v.destaque);
 }
+
+/**
+ * Viaturas ainda à venda. Uma 404 ou um ecrã de erro recebem sobretudo quem
+ * vinha ver um carro; mostrar-lhe stock vendido seria repetir a desilusão.
+ */
+export function getDisponiveis(limite?: number) {
+  const lista = viaturas.filter((v) => v.estadoVenda !== "vendido");
+  return limite ? lista.slice(0, limite) : lista;
+}
