@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Império Auto Concept
 
-## Getting Started
+Site do stand de automóveis [imperioautoconcept.com](https://www.imperioautoconcept.com) — catálogo de viaturas, fichas detalhadas e contactos. Conteúdo em português europeu.
 
-First, run the development server:
+## Arrancar
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev          # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Não é preciso configurar nada: as viaturas vivem em `src/data/viaturas.ts` e o site corre sem base de dados nem variáveis de ambiente.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Comandos
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Comando | O que faz |
+|---|---|
+| `npm run dev` | Servidor de desenvolvimento |
+| `npm run build` | Build de produção |
+| `npm run lint` | ESLint sobre `src/` |
+| `npm run check:seo` | Valida a metadata de todas as rotas |
+| `npx tsc --noEmit` | Verificação de tipos |
 
-## Learn More
+## Stack
 
-To learn more about Next.js, take a look at the following resources:
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · motion v12
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Não há `tailwind.config.*` — o tema vive em `src/app/globals.css`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Antes de mexer em código
 
-## Deploy on Vercel
+O sistema de design está documentado em [`docs/brand/`](docs/brand/), com valores literais e regras do que não fazer. As convenções de trabalho e o índice completo estão em [`AGENTS.md`](AGENTS.md).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+O painel de gestão ainda não existe; a especificação está em [`docs/admin/`](docs/admin/), incluindo as [tarefas de configuração e os custos](docs/admin/07-tarefas-e-custos.md).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Alojamento
+
+Vercel, no plano **Pro** — o Hobby proíbe uso comercial, e um site que anuncia a venda de viaturas é uso comercial. Ver [`docs/admin/07`](docs/admin/07-tarefas-e-custos.md).
+
+---
+
+Feito por [DevPlus](https://devplus.pt).
