@@ -9,7 +9,7 @@ import { stand, telHref } from "@/data/stand";
 const ligacoes = [
   { href: "/", rotulo: "Início" },
   { href: "/viaturas", rotulo: "Viaturas" },
-  { href: "/#contactos", rotulo: "Contactos" },
+  { href: "/contactos", rotulo: "Contactos" },
 ];
 
 export function Header() {

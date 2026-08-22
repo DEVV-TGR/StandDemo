@@ -20,6 +20,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "daily",
       priority: 0.9,
     },
+    {
+      url: urlAbsoluto("/contactos"),
+      changeFrequency: "yearly" as const,
+      priority: 0.6,
+    },
     ...viaturas.map((v) => ({
       url: urlAbsoluto(urlViatura(v)),
       changeFrequency: "weekly" as const,
