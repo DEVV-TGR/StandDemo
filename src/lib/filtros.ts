@@ -34,6 +34,40 @@ export const ORDENACOES: { valor: Ordenacao; rotulo: string }[] = [
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
+/*
+  Os valores que cada filtro pode tomar, para nada do URL entrar sem passar por
+  aqui. O `ordenar` já era validado; o resto era convertido à confiança.
+
+  Sem isto, um valor cru do URL chega aos chips do catálogo — `nomePorSlug()`
+  devolve o próprio slug quando não conhece a marca — e um endereço partilhado
+  consegue pôr texto à escolha de quem o partilha dentro da interface do site.
+  Não é injecção de código, que o React escapa tudo; é o site parecer estar a
+  dizer uma coisa que não é dele.
+*/
+const COMBUSTIVEIS: readonly Combustivel[] = ["Gasolina", "Diesel", "Híbrido", "Elétrico"];
+const TRANSMISSOES: readonly Transmissao[] = ["Automática", "Manual"];
+const SEGMENTOS: readonly Segmento[] = ["Coupé", "SUV", "Carrinha", "Berlina", "Cabrio", "Citadino"];
+
+function umDe<T extends string>(
+  v: string | string[] | undefined,
+  validos: readonly T[],
+): T | undefined {
+  const s = umValor(v);
+  return validos.includes(s as T) ? (s as T) : undefined;
+}
+
+/*
+  Marca e modelo não têm lista fixa — nascem dos dados, e passarão a nascer da
+  base. Valida-se a forma: um slug é minúsculas, dígitos e hífens, e mais nada.
+  Chega para fechar a porta sem acoplar este ficheiro ao inventário.
+*/
+const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+function umSlug(v: string | string[] | undefined): string | undefined {
+  const s = umValor(v);
+  return s !== undefined && s.length <= 60 && SLUG.test(s) ? s : undefined;
+}
+
 function umValor(v: string | string[] | undefined): string | undefined {
   if (Array.isArray(v)) return v[0];
   return v;
@@ -49,11 +83,11 @@ function umNumero(v: string | string[] | undefined): number | undefined {
 export function parseFiltros(sp: SearchParams): Filtros {
   const ordenar = umValor(sp.ordenar);
   return {
-    marca: umValor(sp.marca),
-    modelo: umValor(sp.modelo),
-    combustivel: umValor(sp.combustivel) as Combustivel | undefined,
-    transmissao: umValor(sp.transmissao) as Transmissao | undefined,
-    segmento: umValor(sp.segmento) as Segmento | undefined,
+    marca: umSlug(sp.marca),
+    modelo: umSlug(sp.modelo),
+    combustivel: umDe(sp.combustivel, COMBUSTIVEIS),
+    transmissao: umDe(sp.transmissao, TRANSMISSOES),
+    segmento: umDe(sp.segmento, SEGMENTOS),
     precoMin: umNumero(sp.precoMin),
     precoMax: umNumero(sp.precoMax),
     anoMin: umNumero(sp.anoMin),

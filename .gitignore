@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# worktrees do Claude Code — cópias completas do repositório, centenas de MB
+.claude/worktrees/
+
+# o exemplo de variáveis é para ser versionado, ao contrário do resto dos .env
+!.env.example
