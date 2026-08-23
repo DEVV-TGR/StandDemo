@@ -13,6 +13,21 @@ import { openGraphRota, seoDescricao, seoTitulo } from "@/lib/seo";
 import { urlViatura } from "@/lib/slug";
 import { getViatura, getSugestoes, getViaturas } from "@/lib/viaturas";
 
+/*
+  As fichas são pré-renderizadas no build, uma por viatura.
+
+  O `dynamicParams` é o que torna isto seguro agora que o inventário vem da
+  base: sem ele, uma viatura criada no painel **depois** do build daria 404 até
+  ao deploy seguinte. Com ele, o caminho que não foi pré-gerado é renderizado
+  à primeira visita e fica em cache — e as acções do painel chamam
+  `revalidatePath` para o refazer quando os dados mudam.
+
+  É esta combinação que mantém o Neon dentro do plano gratuito: a base é
+  consultada no build e a cada alteração do cliente, não a cada visita. Ver
+  `docs/admin/07-tarefas-e-custos.md`.
+*/
+export const dynamicParams = true;
+
 export async function generateStaticParams() {
   const viaturas = await getViaturas();
   return viaturas.map((v) => ({

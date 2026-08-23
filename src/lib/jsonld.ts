@@ -38,7 +38,19 @@ export function dadosStand(lista: Viatura[]) {
     ),
     email: stand.email,
     currenciesAccepted: "EUR",
-    priceRange: `${Math.min(...precos)}–${Math.max(...precos)} EUR`,
+    /*
+      Só entra quando há stock. `Math.min(...[])` devolve `Infinity`, e o
+      campo saía como `"Infinity–-Infinity EUR"` — dado estruturado inválido a
+      ir para o Google. Não acontecia com o inventário em ficheiro, que nunca
+      está vazio; passou a poder acontecer no dia em que os dados vieram da
+      base, e uma tabela ainda por semear é o primeiro estado que ela tem.
+
+      Omitir o campo é melhor do que inventar um valor: o `priceRange` é
+      opcional no schema.org, e um intervalo errado é pior do que nenhum.
+    */
+    ...(precos.length > 0 && {
+      priceRange: `${Math.min(...precos)}–${Math.max(...precos)} EUR`,
+    }),
     address: {
       "@type": "PostalAddress",
       streetAddress: stand.morada,
