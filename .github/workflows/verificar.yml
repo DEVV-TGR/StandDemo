@@ -1,0 +1,75 @@
+# Verificações em cada PR e em cada push para `main`.
+#
+# O passo que justifica este ficheiro é o `build`: corre **sem uma única
+# variável de ambiente definida**. É o guarda automático contra a repetição do
+# que aconteceu no PR #12 — o site passou a exigir base de dados para sequer
+# arrancar, e ninguém deu por isso até estar em `main`. Se alguém voltar a pôr
+# o site a depender do Neon para responder, o CI fica vermelho antes do merge.
+#
+# O `arrancar e verificar` fecha a mesma porta pelo outro lado: não basta o
+# build passar, o servidor tem de responder 200 sem credenciais nenhumas.
+
+name: Verificar
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# Um PR com vários pushes seguidos cancela as execuções anteriores em vez de as
+# deixar a ocupar fila para um estado que já não interessa a ninguém.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      # `ci` e não `install`: instala exactamente o que está no lock e falha se
+      # o `package.json` e o lock divergirem, em vez de os reconciliar em
+      # silêncio.
+      - name: Instalar
+        run: npm ci
+
+      # `next typegen` antes do `tsc`: o Next gera os tipos das rotas
+      # (`PageProps`, `LayoutProps`) para dentro de `.next/`, e num checkout
+      # limpo eles ainda não existem. Sem este passo o `tsc` falha com
+      # `Cannot find name 'PageProps'` em todas as páginas com parâmetros —
+      # um erro que não existe na máquina de quem já correu o build uma vez.
+      - name: Tipos
+        run: |
+          npx next typegen
+          npx tsc --noEmit
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Vulnerabilidades
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Build sem variáveis de ambiente
+        run: npm run build
+
+      # O `check:seo` valida a metadata de todas as páginas do sitemap contra o
+      # site servido, e por isso precisa do servidor de pé. O `--max-time` no
+      # curl evita que uma falha de arranque deixe o job pendurado até ao
+      # timeout do runner.
+      - name: Arrancar e verificar
+        run: |
+          npm start &
+          for _ in $(seq 1 30); do
+            curl -sf --max-time 2 -o /dev/null http://localhost:3000/ && break
+            sleep 1
+          done
+          curl -sf --max-time 5 -o /dev/null http://localhost:3000/ \
+            || { echo "::error::O site não respondeu 200 sem variáveis de ambiente."; exit 1; }
+          npm run check:seo
