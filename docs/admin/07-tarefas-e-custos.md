@@ -18,7 +18,9 @@ Este documento existe porque metade do que falta não se escreve em TypeScript: 
 | **GitHub** | Repositório | Free | 0 € |
 | **Domínio** `imperioautoconcept.com` | — | — | ~10–15 €/ano, já registado |
 
-**Total de serviços novos: 0 €/mês.** Nenhum dos três exige cartão para o plano gratuito.
+**Total de serviços novos: 0 €/mês.**
+
+**Mas o R2 exige um método de pagamento** — cartão ou PayPal — para ser activado, mesmo ficando no plano gratuito. Não cobra nada dentro dos limites, e o nosso consumo previsto são 49 MB contra 10 GB. O Neon e o Resend não pedem nada.
 
 ### O plano Hobby da Vercel não serve, e não é detalhe
 
@@ -78,19 +80,26 @@ O trabalho de SEO já criou `/privacidade` e divulgou o Livro de Reclamações. 
 ### 1.1 · Neon — a base de dados
 
 1. Criar conta em [neon.com](https://neon.com) com a conta da agência (não a pessoal do cliente).
-2. Criar um projecto: nome `imperio-auto-concept`, região **Frankfurt** (`eu-central-1`) — é a mais próxima e mantém os dados na UE, que simplifica a conversa de RGPD.
+2. Criar um projecto, região **Europa**. Está em `AWS Europe West 2 (London)`: fica fora da UE, mas a Comissão Europeia renovou a decisão de adequação do Reino Unido até 27 de dezembro de 2031, portanto as transferências são permitidas sem salvaguardas adicionais — e Londres é mais perto do Porto que Frankfurt.
 3. O projecto nasce com um branch `main`. Criar um segundo, `dev`, em Branches → New Branch. O plano gratuito dá dez.
 4. Copiar as duas connection strings (Dashboard → Connect), a do `main` e a do `dev`. São elas o `DATABASE_URL`.
 
 **Porquê dois branches:** o `dev` é onde as migrações se experimentam e onde o `db:push` pode correr à vontade. Contra o `main` correm-se migrações versionadas, porque lá estão os dados reais do cliente e esses não se recriam.
 
-**A guardar para o fim:** o Neon adormece ao fim de 5 minutos, e o primeiro pedido depois disso demora cerca de meio segundo a mais. Não é avaria.
+**A guardar para o fim:** o Neon adormece ao fim de 5 minutos. Medido contra esta base: o primeiro pedido depois de adormecer levou **1 292 ms**; com ela acordada, a mediana é **99 ms**. Não é avaria — e é mais um motivo para o site público ser estático, porque assim esse arranque acontece no build e não à frente de um visitante.
 
 ### 1.2 · Cloudflare R2 — as fotografias
 
 1. Conta em [cloudflare.com](https://cloudflare.com) (a da agência).
-2. R2 → Create bucket, nome `imperio-viaturas`, localização **EU**.
-3. Settings do bucket → Public access → activar o domínio `r2.dev`. É de onde o browser vai buscar as imagens; copiar o URL, que é o `R2_PUBLIC_URL`.
+2. R2 → Create bucket, nome `imperio-viaturas`. Dois campos que parecem o mesmo e não são:
+
+   - **Location hint** → `Europe (EU)`. É só desempenho, uma sugestão de onde os dados ficam.
+   - **Jurisdiction** → **deixar em branco**. É uma garantia legal vinculativa e **não pode ser alterada depois**; escolhê-la muda o endpoint da API para `<ACCOUNT_ID>.eu.r2.cloudflarestorage.com`, para sempre. O que vai para o bucket são fotografias de viaturas à venda — material público, sem dados pessoais e sem EXIF. A jurisdição existe para registos com dados pessoais.
+3. Settings do bucket → **Public Development URL → Enable** (escrever `allow` a confirmar). Copiar o URL `https://pub-….r2.dev` que aparece — é o `R2_PUBLIC_URL`.
+
+   **Isto serve para desenvolvimento, não para produção.** A documentação da Cloudflare é explícita: o `r2.dev` é limitado por taxa e *"should only be used for development purposes"*. Em produção é preciso um domínio próprio (ex.: `fotos.imperioautoconcept.com`) ligado ao bucket em **Custom Domains** — grátis, mas obriga a que o DNS do domínio passe a ser gerido pela Cloudflare. O site continua na Vercel; muda só quem responde às perguntas de DNS. Decidir na Fase 6.
+
+   Não confundir com o **endpoint S3** (`https://<ACCOUNT_ID>.r2.cloudflarestorage.com`), que é por onde o servidor *escreve* e exige assinatura em cada pedido. O código constrói-o a partir do `R2_ACCOUNT_ID`; não vai para variável nenhuma.
 4. R2 → Manage API Tokens → Create token:
    - **Object Read & Write**, e nada mais
    - **restrito a este bucket**, não à conta inteira
@@ -121,6 +130,15 @@ Duas coisas a confirmar com ele, e a segunda não é negociável:
 2. **Verificação em dois passos activa no Gmail dele.** É literalmente a única coisa que separa o painel de um atacante. Se não tiver, vale a pena ajudá-lo a ligar — leva cinco minutos e faz mais pela segurança disto do que qualquer linha de código que eu escreva.
 
 O endereço confirmado é o que entra na variável de quem pode entrar.
+
+### 1.5 · Quando alguma coisa parecer avariada
+
+| O que se vê | O que é |
+|---|---|
+| `npm run dev` pendurado ao carregar uma foto, e ao fim de 15 s um `ETIMEDOUT` | O `r2.cloudflarestorage.com` não responde por IPv6 em algumas redes. Por IPv4 responde em 0,1 s. Correr com `NODE_OPTIONS="--dns-result-order=ipv4first"`. Não afecta a Vercel. |
+| O primeiro pedido à base demora mais de um segundo | O Neon estava a dormir. Ver 1.1. |
+| As fotos não aparecem, e o URL delas tem `r2.cloudflarestorage.com` | O `R2_PUBLIC_URL` está com o endpoint S3 em vez do `pub-….r2.dev`. São coisas diferentes — ver 1.2. |
+| O upload dá `AccessDenied` | O token não abrange este bucket, ou é `Object Read only`. |
 
 ---
 
