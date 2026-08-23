@@ -1,15 +1,21 @@
 import type { Metadata } from "next";
 import { Bodoni_Moda, Geist, Geist_Mono } from "next/font/google";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { CtaFlutuante } from "@/components/layout/CtaFlutuante";
-import { JsonLd } from "@/components/seo/JsonLd";
-import { Preloader } from "@/components/ui/Preloader";
-import { TransicaoRota } from "@/components/ui/TransicaoRota";
 import { SUFIXO_TITULO } from "@/lib/seo";
-import { dadosStand } from "@/lib/jsonld";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
+
+/*
+  O layout de raiz, e só o que tem mesmo de ser de raiz.
+
+  O `<html>`, as fontes, o CSS global e a metadata base — porque o Next exige
+  que existam aqui, e porque valem para tudo o que a aplicação sirva.
+
+  **O chrome do site não vive aqui.** Header, Footer, CTA flutuante, preloader
+  e transições de rota mudaram-se para `(site)/layout.tsx`, onde só os apanha
+  quem pertence ao site público. O painel `/admin` é outro produto na mesma
+  aplicação: é uma ferramenta, não uma montra, e herdar a encenação do site
+  seria tão errado como o site herdar a densidade do painel.
+*/
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -57,17 +63,7 @@ export default function RootLayout({
       lang="pt-PT"
       className={`${geistSans.variable} ${geistMono.variable} ${bodoni.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        {/* Uma vez, no layout: as outras páginas referenciam a organização
-            pelo @id em vez de repetirem o bloco. */}
-        <JsonLd dados={dadosStand()} />
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <CtaFlutuante />
-        <TransicaoRota />
-        <Preloader />
-      </body>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }
