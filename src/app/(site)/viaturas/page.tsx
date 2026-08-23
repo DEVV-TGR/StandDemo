@@ -1,52 +1,53 @@
 import type { Metadata } from "next";
 import { CatalogoClient } from "@/components/catalogo/CatalogoClient";
-import { viaturas } from "@/data/viaturas";
-import { parseFiltros } from "@/lib/filtros";
 import { openGraphRota, seoDescricao, seoTitulo } from "@/lib/seo";
+import { getViaturas } from "@/lib/viaturas";
 
-const TOTAL = viaturas.length;
-const TITULO = seoTitulo(
-  `${TOTAL} ${TOTAL === 1 ? "viatura usada" : "viaturas usadas"} no Porto`,
-);
-const DESCRICAO = seoDescricao(
-  `Stock completo do stand Império Auto Concept, no Porto: ${TOTAL} ${
-    TOTAL === 1 ? "viatura" : "viaturas"
-  } usadas e seminovas com garantia. Pesquise por marca, modelo, preço, ano e quilómetros.`,
-);
+/*
+  Esta página é um ficheiro estático, e é de propósito.
 
-/**
- * Os filtros vivem em query params. Cada combinação produz uma variante quase
- * idêntica da mesma listagem, e há dezenas — por isso só a listagem limpa é
- * indexável. O canonical aponta sempre para `/viaturas`, e as variantes levam
- * `noindex, follow`: não entram no índice, mas os links para as viaturas
- * continuam a ser seguidos.
- */
-export async function generateMetadata({
-  searchParams,
-}: PageProps<"/viaturas">): Promise<Metadata> {
-  const sp = await searchParams;
-  const temFiltros = Object.values(sp).some(
-    (v) => v !== undefined && v !== "",
-  );
+  Os filtros vivem no endereço, mas quem filtra é o browser — o
+  `CatalogoClient` recebe o inventário inteiro e reduz a lista em memória. Ler
+  os filtros no servidor obrigava a renderizar a página a cada visita, e com o
+  inventário a vir da base de dados isso seria uma consulta ao Neon por
+  visitante, na página mais visitada a seguir à homepage. Ver
+  `docs/admin/07-tarefas-e-custos.md`.
+
+  O `noindex` das variantes filtradas não desapareceu — passou a cabeçalho
+  `X-Robots-Tag`, emitido pelo `next.config.ts` quando o endereço traz algum
+  parâmetro de filtro. Faz falta: a grelha de marcas da homepage, as fichas de
+  viatura e o próprio JSON-LD têm links para `/viaturas?marca=…`, e o Google
+  segue-os.
+*/
+
+async function textos() {
+  const total = (await getViaturas()).length;
+  const plural = total === 1 ? "viatura" : "viaturas";
+  return {
+    titulo: seoTitulo(`${total} ${plural} usadas no Porto`),
+    descricao: seoDescricao(
+      `Stock completo do stand Império Auto Concept, no Porto: ${total} ${plural} usadas e seminovas com garantia. Pesquise por marca, modelo, preço, ano e quilómetros.`,
+    ),
+  };
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const { titulo, descricao } = await textos();
 
   return {
-    title: TITULO,
-    description: DESCRICAO,
+    title: titulo,
+    description: descricao,
     alternates: { canonical: "/viaturas" },
-    robots: temFiltros ? { index: false, follow: true } : undefined,
     openGraph: openGraphRota({
       caminho: "/viaturas",
-      titulo: TITULO,
-      descricao: DESCRICAO,
+      titulo,
+      descricao,
     }),
   };
 }
 
-export default async function ViaturasPage({
-  searchParams,
-}: PageProps<"/viaturas">) {
-  const sp = await searchParams;
-  const filtrosIniciais = parseFiltros(sp);
+export default async function ViaturasPage() {
+  const viaturas = await getViaturas();
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-24 pt-28 sm:px-6">
@@ -55,7 +56,7 @@ export default async function ViaturasPage({
           Todas as <span className="italic text-gold">viaturas</span>
         </h1>
       </header>
-      <CatalogoClient filtrosIniciais={filtrosIniciais} />
+      <CatalogoClient viaturas={viaturas} />
     </div>
   );
 }

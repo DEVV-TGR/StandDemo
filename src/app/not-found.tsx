@@ -3,6 +3,7 @@ import { ChromeSite } from "@/components/layout/ChromeSite";
 import { BotaoLink } from "@/components/ui/Botao";
 import { stand } from "@/data/stand";
 import { getDisponiveis } from "@/lib/derivados";
+import { getViaturas } from "@/lib/viaturas";
 
 /**
  * Uma 404 num site de stand recebe sobretudo tráfego de intenção de compra:
@@ -18,8 +19,8 @@ import { getDisponiveis } from "@/lib/derivados";
  * aplica. Daí o `<ChromeSite>` explícito: sem ele, escrever um endereço à toa
  * devolvia a página de erro pelada do Next em vez desta.
  */
-export default function NotFound() {
-  const sugestoes = getDisponiveis(3);
+export default async function NotFound() {
+  const sugestoes = getDisponiveis(await getViaturas(), 3);
 
   return (
     <ChromeSite>
