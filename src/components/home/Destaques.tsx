@@ -1,10 +1,9 @@
 import { DestaquesCarrossel } from "@/components/home/DestaquesCarrossel";
 import { BotaoLink } from "@/components/ui/Botao";
 import { Reveal } from "@/components/ui/Reveal";
-import { getDestaques } from "@/lib/derivados";
+import type { Viatura } from "@/lib/types";
 
-export function Destaques() {
-  const destaques = getDestaques();
+export function Destaques({ destaques }: { destaques: Viatura[] }) {
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">

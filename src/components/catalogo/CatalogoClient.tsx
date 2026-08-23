@@ -1,17 +1,24 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { CarCard } from "@/components/car/CarCard";
 import { FiltersPanel } from "@/components/catalogo/FiltersPanel";
 import { SortSelect } from "@/components/catalogo/SortSelect";
-import { viaturas } from "@/data/viaturas";
 import {
   filtrarViaturas,
   ordenarViaturas,
+  parseFiltros,
   serializeFiltros,
   type Filtros,
 } from "@/lib/filtros";
 import { formatarKm, formatarPreco } from "@/lib/format";
+import type { Viatura } from "@/lib/types";
 
 type Chip = { id: string; rotulo: string; patch: Partial<Filtros> };
 
@@ -43,19 +50,63 @@ function intervalo(
   return `${prefixo}: ${corpo}`;
 }
 
-const nomePorSlug = (campo: "marcaSlug" | "modeloSlug", slug: string) =>
-  viaturas.find((v) => v[campo] === slug)?.[
-    campo === "marcaSlug" ? "marca" : "modelo"
-  ] ?? slug;
+/*
+  O endereço, lido de forma segura para pré-renderização.
 
-export function CatalogoClient({
-  filtrosIniciais,
-}: {
-  filtrosIniciais: Filtros;
-}) {
-  const [filtros, setFiltros] = useState<Filtros>(filtrosIniciais);
+  No servidor devolve string vazia; no browser, o que lá está. O
+  `useSyncExternalStore` existe exactamente para esta diferença e trata da
+  hidratação — ler `window.location` num `useState` daria incompatibilidade
+  entre o HTML e o primeiro render, e fazê-lo num `useEffect` com `setState`
+  provoca uma cascata de renders.
+
+  Sem subscrição: o endereço só muda por nossa mão, no efeito mais abaixo, e
+  aí é o estado que manda.
+*/
+const semSubscricao = () => () => {};
+const semSearch = () => "";
+
+const fazNomePorSlug =
+  (lista: Viatura[]) => (campo: "marcaSlug" | "modeloSlug", slug: string) =>
+    lista.find((v) => v[campo] === slug)?.[
+      campo === "marcaSlug" ? "marca" : "modelo"
+    ] ?? slug;
+
+export function CatalogoClient({ viaturas }: { viaturas: Viatura[] }) {
+  /*
+    Arranca sem filtros, mesmo quando o endereço traz alguns, e aplica-os logo
+    a seguir num efeito.
+
+    É o que permite a página ser um ficheiro estático: o HTML sai do build com
+    a lista completa — bom para quem chega pelo Google e para o primeiro paint
+    — e os filtros do endereço entram na hidratação. A alternativa,
+    `useSearchParams`, empurraria toda esta árvore para renderização no cliente
+    e a lista deixava de vir no HTML.
+
+    Quem abre um link já filtrado vê a lista completa durante um instante. É o
+    preço, e é imperceptível.
+  */
+  const search = useSyncExternalStore(
+    semSubscricao,
+    () => window.location.search,
+    semSearch,
+  );
+
+  /*
+    Enquanto ninguém tocar nos filtros, valem os do endereço; a partir daí,
+    manda o estado. Evita ter de sincronizar as duas fontes — e evita o
+    `setState` dentro de um efeito, que era a alternativa óbvia e a errada.
+  */
+  const [escolhidos, setEscolhidos] = useState<Filtros | null>(null);
+  const doUrl = useMemo(
+    () => parseFiltros(Object.fromEntries(new URLSearchParams(search))),
+    [search],
+  );
+  const filtros = escolhidos ?? doUrl;
+  const setFiltros = setEscolhidos;
+
   const [painelAberto, setPainelAberto] = useState(false);
   const primeiraRender = useRef(true);
+  const nomePorSlug = useMemo(() => fazNomePorSlug(viaturas), [viaturas]);
 
   // estado ⇄ URL (replaceState: sem spam de histórico nem round-trips ao servidor)
   useEffect(() => {
@@ -73,7 +124,7 @@ export function CatalogoClient({
 
   const resultados = useMemo(
     () => ordenarViaturas(filtrarViaturas(viaturas, filtros), filtros.ordenar),
-    [filtros],
+    [viaturas, filtros],
   );
 
   const limpar = () => setFiltros({ ordenar: filtros.ordenar });
@@ -131,7 +182,7 @@ export function CatalogoClient({
         patch: { kmMin: undefined, kmMax: undefined },
       });
     return lista;
-  }, [filtros]);
+  }, [filtros, nomePorSlug]);
 
   const removerChip = (patch: Partial<Filtros>) =>
     setFiltros({ ...filtros, ...patch });
@@ -142,6 +193,7 @@ export function CatalogoClient({
       <aside className="hidden lg:block">
         <div className="sticky top-24 rounded-2xl border border-line/60 bg-surface p-6">
           <FiltersPanel
+            viaturas={viaturas}
             filtros={filtros}
             onChange={setFiltros}
             resultados={resultados.length}
@@ -226,6 +278,7 @@ export function CatalogoClient({
               </div>
               <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
                 <FiltersPanel
+                  viaturas={viaturas}
                   filtros={filtros}
                   onChange={setFiltros}
                   resultados={resultados.length}

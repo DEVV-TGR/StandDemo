@@ -7,13 +7,14 @@ import { SpecsTable } from "@/components/car/SpecsTable";
 import { StickyCard } from "@/components/car/StickyCard";
 import { Sugestoes } from "@/components/car/Sugestoes";
 import { JsonLd } from "@/components/seo/JsonLd";
-import { viaturas } from "@/data/viaturas";
 import { formatarKm, formatarPreco } from "@/lib/format";
 import { dadosPercurso, dadosViatura } from "@/lib/jsonld";
 import { openGraphRota, seoDescricao, seoTitulo } from "@/lib/seo";
 import { urlViatura } from "@/lib/slug";
+import { getViatura, getSugestoes, getViaturas } from "@/lib/viaturas";
 
 export async function generateStaticParams() {
+  const viaturas = await getViaturas();
   return viaturas.map((v) => ({
     marca: v.marcaSlug,
     modelo: v.modeloSlug,
@@ -21,17 +22,23 @@ export async function generateStaticParams() {
   }));
 }
 
-function encontrarViatura(marca: string, modelo: string, id: string) {
-  return viaturas.find(
-    (v) => v.id === id && v.marcaSlug === marca && v.modeloSlug === modelo,
-  );
+/*
+  O id sozinho identifica a viatura; a marca e o modelo estão no caminho por
+  causa do SEO. Confirmam-se na mesma: sem isso, `/carros/bmw/x5/v-0001`
+  serviria o Porsche com um endereço que diz outra coisa — conteúdo duplicado
+  em endereços infinitos, que é exactamente o que os canonicals existem para
+  evitar.
+*/
+async function encontrarViatura(marca: string, modelo: string, id: string) {
+  const v = await getViatura(id);
+  return v && v.marcaSlug === marca && v.modeloSlug === modelo ? v : undefined;
 }
 
 export async function generateMetadata({
   params,
 }: PageProps<"/carros/[marca]/[modelo]/[id]">): Promise<Metadata> {
   const { marca, modelo, id } = await params;
-  const v = encontrarViatura(marca, modelo, id);
+  const v = await encontrarViatura(marca, modelo, id);
   if (!v) return { title: "Viatura não encontrada", robots: { index: false } };
 
   // O `seoTitulo` corta pelo espaço mais próximo do limite, contando já com o
@@ -79,7 +86,7 @@ export default async function ViaturaPage({
   params,
 }: PageProps<"/carros/[marca]/[modelo]/[id]">) {
   const { marca, modelo, id } = await params;
-  const v = encontrarViatura(marca, modelo, id);
+  const v = await encontrarViatura(marca, modelo, id);
   if (!v) notFound();
 
   return (
@@ -129,7 +136,7 @@ export default async function ViaturaPage({
         </div>
       </div>
 
-      <Sugestoes atual={v} />
+      <Sugestoes sugestoes={await getSugestoes(v.id)} />
     </>
   );
 }
