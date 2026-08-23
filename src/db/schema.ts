@@ -129,6 +129,33 @@ export const tentativasAcesso = pgTable(
   ],
 );
 
+/*
+  Configuração que nasce sozinha e tem de sobreviver a reinícios.
+
+  Hoje guarda uma linha só: o segredo com que se assinam os cookies do painel.
+
+  ## De onde vem esse segredo
+
+  A saída óbvia era mais uma variável de ambiente gerada com `openssl rand`.
+  Mas era exactamente a cerimónia que o acesso passwordless tirou do caminho, e
+  uma variável que ninguém sabe explicar acaba copiada entre ambientes.
+
+  Em vez disso nasce à primeira utilização — 32 bytes de `randomBytes`, muito
+  melhor do que qualquer coisa que uma pessoa escrevesse — e fica aqui. O
+  `onConflictDoNothing` é o que torna isso seguro com várias instâncias a
+  arrancar ao mesmo tempo: a primeira ganha, as outras lêem o que ela pôs, em
+  vez de ficarem duas metades do sistema a assinar com chaves diferentes.
+
+  **Apagar a linha `painel:segredo` expulsa toda a gente** — caem as sessões,
+  os códigos a meio e os aparelhos lembrados. É o botão de emergência, e é um
+  só.
+*/
+export const configuracao = pgTable("configuracao", {
+  chave: text("chave").primaryKey(),
+  valor: text("valor").notNull(),
+  criadoEm: timestamp("criado_em", { withTimezone: true }).notNull().defaultNow(),
+});
+
 export type ViaturaRow = typeof viaturas.$inferSelect;
 export type ViaturaInsert = typeof viaturas.$inferInsert;
 export type CodigoAcessoRow = typeof codigosAcesso.$inferSelect;
