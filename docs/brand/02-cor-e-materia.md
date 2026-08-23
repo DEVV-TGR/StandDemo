@@ -1,7 +1,7 @@
 # 02 — Cor e matéria
 
 > **Aplica-se a** — toda a cor, superfície, borda, gradiente e estado de foco.
-> **Fonte de verdade** — `src/app/globals.css` (linhas 3–43 para tokens, 84–156 para materiais).
+> **Fonte de verdade** — `src/app/globals.css` (linhas 3–66 para tokens, 90–179 para materiais).
 > **Ler antes de** — escrever qualquer classe de cor, criar um card, um overlay ou um badge.
 
 ## Tokens
@@ -34,15 +34,23 @@ O racional está comentado no próprio `globals.css` e é a decisão de cor mais
 
 Ou seja: **o ouro deste site é âmbar dessaturado, não amarelo brilhante.** Subir o chroma ou a claridade destrói o efeito e faz o site parecer barato.
 
-### Vermelho — só para o estado "vendido"
+### Cores de estado — vermelho e verde
 
-| Token | Valor |
-|---|---|
-| `--red` | `oklch(0.55 0.19 27)` |
-| `--red-deep` | `oklch(0.42 0.16 27)` |
-| `--red-bright` | `oklch(0.68 0.2 27)` |
+| Token | Valor | Papel | Utility |
+|---|---|---|---|
+| `--red` | `oklch(0.55 0.19 27)` | Vendido | `bg-red` `text-red` |
+| `--red-deep` | `oklch(0.42 0.16 27)` | Extremos do gradiente, bordas | `border-red-deep` |
+| `--red-bright` | `oklch(0.68 0.2 27)` | Centro do gradiente, texto sobre fundo escuro | `text-red-bright` |
+| `--sucesso` | `oklch(0.62 0.12 152)` | Disponível | `bg-sucesso` `text-sucesso` |
+| `--sucesso-deep` | `oklch(0.48 0.1 152)` | Bordas e fundos esbatidos | `border-sucesso-deep` |
 
-Existem **exclusivamente** para o badge "Vendido", via `.red-metal-fill`. Não estão no `@theme`, logo não há `text-red` nem `bg-red` — e é assim de propósito. O vermelho não é uma cor do sistema, é a marca de um estado.
+**No site, o vermelho continua a ser exclusivamente o badge "Vendido"**, via `.red-metal-fill`, e o verde não aparece de todo — uma viatura disponível não leva badge nenhum. São cores de estado, não cores do sistema: não se usam para decorar.
+
+**No painel `/admin` é diferente**, e é por isso que estão expostas ao Tailwind. A listagem precisa de distinguir três estados numa tabela densa, e aí o disponível tem de se ver. O verde é mais claro e menos saturado que o vermelho de propósito: disponível é o estado de quase todas as viaturas, e se gritasse tanto como o vendido a listagem virava um semáforo — o que é excepção deixaria de se ler. Hue 152, o verde mais neutro; a 145 puxa a amarelo e choca com os dourados.
+
+O verde tem dois stops e o vermelho três: o `--red-bright` existe para alimentar o gradiente do `.red-metal-fill`, e o painel não leva metálicos ([`docs/admin/05`](../admin/05-painel-ux.md)).
+
+> **Nota histórica.** Os vermelhos existiam em `:root` desde o PR #17 mas nunca chegaram ao `@theme inline`, portanto `bg-red` e `text-red` não existiam — só a classe `.red-metal-fill`. Foi essa lacuna que levou o painel do PR #12 a escrever `emerald-500` e `red-400`, cores do Tailwind por omissão, fora do sistema. Nenhuma classe de cor por omissão do Tailwind deve aparecer em `src/app/admin/` nem em `src/components/admin/`.
 
 ### Texto
 

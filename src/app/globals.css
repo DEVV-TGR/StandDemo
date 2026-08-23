@@ -21,6 +21,19 @@
   --red-deep: oklch(0.42 0.16 27);
   --red-bright: oklch(0.68 0.2 27);
 
+  /* estado "disponível" — o par semântico do vermelho, para o painel.
+     Dois stops e não três: o vermelho tem um `bright` porque alimenta o
+     gradiente do `.red-metal-fill`, e o painel não leva metálicos nenhuns
+     (docs/admin/05). Aqui só fazem falta o preenchimento e a borda.
+
+     Mais claro e menos saturado que o vermelho de propósito. Disponível é o
+     estado normal de quase todas as viaturas — se gritasse tanto como o
+     vendido, a listagem ficava um semáforo e o que é excepção deixava de se
+     ver. Hue 152, o verde mais neutro; a 145 puxa a amarelo e choca com os
+     dourados. */
+  --sucesso: oklch(0.62 0.12 152);
+  --sucesso-deep: oklch(0.48 0.1 152);
+
   /* texto */
   --ink: oklch(0.96 0.012 95);
   --muted: oklch(0.7 0.022 95);
@@ -35,6 +48,16 @@
   --color-gold-bright: var(--gold-bright);
   --color-gold-deep: var(--gold-deep);
   --color-champagne: var(--champagne);
+  /* Os vermelhos existem em `:root` desde o PR #17 mas nunca foram expostos
+     aqui, e por isso `bg-red` e `text-red` não existiam como utilitários — o
+     vermelho só era alcançável pela classe `.red-metal-fill`. Foi o que levou
+     o painel do PR #12 a escrever `emerald-500` e `red-400`, cores do Tailwind
+     por omissão, fora do sistema. */
+  --color-red: var(--red);
+  --color-red-deep: var(--red-deep);
+  --color-red-bright: var(--red-bright);
+  --color-sucesso: var(--sucesso);
+  --color-sucesso-deep: var(--sucesso-deep);
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --font-sans: var(--font-geist-sans);
