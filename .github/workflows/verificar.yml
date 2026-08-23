@@ -40,8 +40,15 @@ jobs:
       - name: Instalar
         run: npm ci
 
+      # `next typegen` antes do `tsc`: o Next gera os tipos das rotas
+      # (`PageProps`, `LayoutProps`) para dentro de `.next/`, e num checkout
+      # limpo eles ainda não existem. Sem este passo o `tsc` falha com
+      # `Cannot find name 'PageProps'` em todas as páginas com parâmetros —
+      # um erro que não existe na máquina de quem já correu o build uma vez.
       - name: Tipos
-        run: npx tsc --noEmit
+        run: |
+          npx next typegen
+          npx tsc --noEmit
 
       - name: Lint
         run: npm run lint
