@@ -1,5 +1,4 @@
 import { stand } from "@/data/stand";
-import { viaturas } from "@/data/viaturas";
 import { urlViatura } from "@/lib/slug";
 import { SITE_NAME, SITE_URL, urlAbsoluto } from "@/lib/site";
 import type { Viatura } from "@/lib/types";
@@ -19,8 +18,8 @@ import type { Viatura } from "@/lib/types";
 /** Referência à organização, para as ofertas não repetirem o bloco todo. */
 export const ID_ORGANIZACAO = `${SITE_URL}/#organization`;
 
-export function dadosStand() {
-  const precos = viaturas
+export function dadosStand(lista: Viatura[]) {
+  const precos = lista
     .filter((v) => v.estadoVenda !== "vendido")
     .map((v) => v.preco);
 

@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { HeroSearch } from "@/components/home/HeroSearch";
+import type { Viatura } from "@/lib/types";
 import { Reveal } from "@/components/ui/Reveal";
 import { SITE_NAME } from "@/lib/site";
 
-export function Hero() {
+export function Hero({ viaturas }: { viaturas: Viatura[] }) {
   return (
     <section className="grain relative flex min-h-[92svh] items-center overflow-hidden">
       <Image
@@ -46,7 +47,7 @@ export function Hero() {
             </p>
           </Reveal>
           <Reveal delay={0.3} className="mt-9">
-            <HeroSearch />
+            <HeroSearch viaturas={viaturas} />
           </Reveal>
         </div>
       </div>

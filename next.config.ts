@@ -75,9 +75,47 @@ const cabecalhos = [
   },
 ];
 
+/*
+  Os parâmetros que o catálogo aceita no endereço.
+
+  Cada combinação produz uma variante quase idêntica da mesma listagem, e há
+  dezenas. Só a listagem limpa é indexável: as variantes levam `noindex,
+  follow` — não entram no índice, mas os links para as fichas continuam a ser
+  seguidos. O canonical de `/viaturas` já apontava para si próprio.
+
+  Isto era feito no `generateMetadata` da página, a partir dos `searchParams`.
+  Passou para aqui quando a página se tornou estática: um ficheiro
+  pré-renderizado é o mesmo para todos os endereços, e a distinção tem de
+  acontecer na resposta HTTP. O `X-Robots-Tag` vale o mesmo que a meta tag.
+
+  Faz falta a sério — há links internos para `/viaturas?marca=…` na grelha de
+  marcas, nas fichas de viatura e no JSON-LD, e o Google segue-os.
+*/
+const PARAMS_FILTRO = [
+  "marca",
+  "modelo",
+  "combustivel",
+  "transmissao",
+  "segmento",
+  "precoMin",
+  "precoMax",
+  "anoMin",
+  "anoMax",
+  "kmMin",
+  "kmMax",
+  "ordenar",
+] as const;
+
 const nextConfig: NextConfig = {
   async headers() {
     return [
+      // Um `has` só corresponde se **todos** os itens baterem, e o que aqui se
+      // quer é "qualquer um destes" — daí uma entrada por parâmetro.
+      ...PARAMS_FILTRO.map((key) => ({
+        source: "/viaturas",
+        has: [{ type: "query" as const, key }],
+        headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }],
+      })),
       {
         source: "/:path*",
         headers: [

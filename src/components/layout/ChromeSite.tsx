@@ -5,6 +5,7 @@ import { JsonLd } from "@/components/seo/JsonLd";
 import { Preloader } from "@/components/ui/Preloader";
 import { TransicaoRota } from "@/components/ui/TransicaoRota";
 import { dadosStand } from "@/lib/jsonld";
+import { getViaturas } from "@/lib/viaturas";
 
 /*
   Tudo o que envolve uma página do site público: cabeçalho, rodapé, CTA
@@ -18,12 +19,18 @@ import { dadosStand } from "@/lib/jsonld";
   Next — verificado, não suposto.
 */
 
-export function ChromeSite({ children }: { children: React.ReactNode }) {
+export async function ChromeSite({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const viaturas = await getViaturas();
+
   return (
     <>
       {/* Uma vez por página: as rotas filhas referenciam a organização pelo
           @id em vez de repetirem o bloco. */}
-      <JsonLd dados={dadosStand()} />
+      <JsonLd dados={dadosStand(viaturas)} />
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
