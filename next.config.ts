@@ -107,6 +107,19 @@ const PARAMS_FILTRO = [
 ] as const;
 
 const nextConfig: NextConfig = {
+  /*
+    O corpo de uma server action está limitado a 1 MB por omissão, e o
+    carregamento de uma fotografia passa disso à vontade — o erro nem chega ao
+    nosso código: rebenta antes, e só aparece no registo do servidor.
+
+    Quatro megabytes e meio é o tecto da própria Vercel, que não se configura.
+    Ficamos um pouco abaixo, e o browser encolhe as fotos antes de as enviar
+    (`src/lib/painel/redimensionar.ts`) para nem se chegar perto.
+  */
+  experimental: {
+    serverActions: { bodySizeLimit: "4.4mb" },
+  },
+
   async headers() {
     return [
       // Um `has` só corresponde se **todos** os itens baterem, e o que aqui se
