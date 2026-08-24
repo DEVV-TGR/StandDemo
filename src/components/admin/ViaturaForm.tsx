@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
+import { motion, useReducedMotion } from "motion/react";
 import {
   criarViatura,
   atualizarViatura,
@@ -112,6 +113,10 @@ export function ViaturaForm({
   const [aGuardar, startGuardar] = useTransition();
   const [aEnviar, setAEnviar] = useState<{ feitas: number; total: number } | null>(null);
 
+  const reduzido = useReducedMotion();
+  const [anuncio, setAnuncio] = useState("");
+  const [desfazer, setDesfazer] = useState<{ url: string; indice: number } | null>(null);
+
   const edicao = Boolean(viatura);
 
   function set<K extends keyof FormState>(campo: K, valor: FormState[K]) {
@@ -160,24 +165,92 @@ export function ViaturaForm({
       }
       if (r.urls?.length) {
         setF((prev) => ({ ...prev, fotos: [...prev.fotos, ...r.urls!] }));
+        // Fotos novas mudam os índices — o "Anular" guardado deixa de valer.
+        setDesfazer(null);
       }
     }
 
     setAEnviar(null);
   }
 
+  // ---- Reordenar ----
+  /*
+    Reordenar é a operação mais usada desta secção — e era a que estava partida
+    no telemóvel: os controlos viviam atrás de `group-hover`, e no Tailwind v4
+    todo o `hover:` nasce dentro de `@media (hover: hover)`. Em touch a regra
+    nem sequer existe, portanto a barra era invisível. E como `opacity-0` não
+    tira `pointer-events`, um toque às cegas acertava em "Apagar".
+
+    Agora são botões sempre visíveis — que é também o único caminho que o
+    teclado e o leitor de ecrã conseguem percorrer.
+  */
+
+  /*
+    Um `aria-live` só reanuncia quando o texto muda. Mover duas fotos
+    diferentes para a mesma posição gerava a mesma frase e ficava mudo — o
+    espaço de largura zero alterna e resolve, sem se ver.
+  */
+  function anunciar(texto: string) {
+    setAnuncio((antes) => (antes === texto ? `${texto}\u200B` : texto));
+  }
+
+  function frasePosicao(j: number, total: number) {
+    return j === 0
+      ? "Foto movida para a 1.ª posição — passou a ser a capa."
+      : `Foto movida para a ${j + 1}.ª posição de ${total}.`;
+  }
+
   function moverFoto(i: number, dir: -1 | 1) {
+    const j = i + dir;
+    if (j < 0 || j >= f.fotos.length) return;
     setF((prev) => {
       const fotos = [...prev.fotos];
-      const j = i + dir;
-      if (j < 0 || j >= fotos.length) return prev;
       [fotos[i], fotos[j]] = [fotos[j], fotos[i]];
       return { ...prev, fotos };
     });
+    setDesfazer(null);
+    anunciar(frasePosicao(j, f.fotos.length));
   }
 
+  /** Sem isto, pôr a foto 22 na capa eram 21 toques. */
+  function tornarCapa(i: number) {
+    if (i === 0) return;
+    setF((prev) => {
+      const fotos = [...prev.fotos];
+      const [foto] = fotos.splice(i, 1);
+      fotos.unshift(foto);
+      return { ...prev, fotos };
+    });
+    setDesfazer(null);
+    anunciar(frasePosicao(0, f.fotos.length));
+  }
+
+  /*
+    Anular em vez de confirmar.
+
+    O modal de `AcoesViatura` faz sentido para apagar uma viatura inteira, que
+    é raro e irreversível. Remover uma foto é frequente e barato — um diálogo
+    a cada uma seriam trinta diálogos. Mas também não é indolor: o ficheiro já
+    subiu ao R2. Daí o "Anular", que dá a mesma rede sem pôr um passo no
+    caminho de quem acertou no botão à primeira.
+  */
   function removerFoto(i: number) {
+    const url = f.fotos[i];
     setF((prev) => ({ ...prev, fotos: prev.fotos.filter((_, k) => k !== i) }));
+    setDesfazer({ url, indice: i });
+    anunciar(`Foto ${i + 1} removida.`);
+  }
+
+  function anularRemocao() {
+    if (!desfazer) return;
+    const { url, indice } = desfazer;
+    setF((prev) => {
+      const fotos = [...prev.fotos];
+      fotos.splice(Math.min(indice, fotos.length), 0, url);
+      return { ...prev, fotos };
+    });
+    setDesfazer(null);
+    anunciar(`Foto reposta na ${indice + 1}.ª posição.`);
   }
 
   // ---- Extras ----
@@ -538,54 +611,142 @@ export function ViaturaForm({
       {/* Fotos */}
       <Seccao titulo="Fotos">
         {f.fotos.length > 0 && (
-          <div className="mb-5 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+          <motion.ul
+            className="mb-3 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4"
+          >
             {f.fotos.map((url, i) => (
-              <div
-                key={`${url}-${i}`}
-                className="group relative aspect-[4/3] overflow-hidden border border-line/60 bg-background"
-              >
-                <Image
-                  src={url}
-                  alt={`Foto ${i + 1}`}
-                  fill
-                  sizes="200px"
-                  className="object-cover"
-                />
-                {i === 0 && (
-                  <span className="absolute left-1.5 top-1.5 bg-gold px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-background">
-                    Capa
-                  </span>
-                )}
-                <div className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-background/85 px-1.5 py-1 opacity-0 backdrop-blur transition-opacity group-hover:opacity-100">
-                  <button
-                    type="button"
-                    onClick={() => moverFoto(i, -1)}
-                    disabled={i === 0}
-                    className="px-1.5 text-xs text-champagne disabled:opacity-30"
-                    aria-label="Mover para trás"
-                  >
-                    ←
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => removerFoto(i)}
-                    className="px-1.5 text-xs text-red hover:text-red-bright"
-                    aria-label="Remover foto"
-                  >
-                    Apagar
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => moverFoto(i, 1)}
-                    disabled={i === f.fotos.length - 1}
-                    className="px-1.5 text-xs text-champagne disabled:opacity-30"
-                    aria-label="Mover para a frente"
-                  >
-                    →
-                  </button>
-                </div>
-              </div>
+                /*
+                  A chave é só o `url`, e não `${url}-${i}`.
+
+                  Com o índice na chave, trocar duas fotos mudava a chave das
+                  duas: o React desmontava e remontava ambos os `<Image>`, e
+                  via-se o flash. Sem ele, o React *move* os nós — a foto não
+                  pisca e, de graça, o botão que está com foco viaja com ela.
+
+                  Os URLs são únicos por construção: `randomUUID()` no upload
+                  (`lib/painel/r2.ts`) e `1.jpg`…`15.jpg` nas viaturas semeadas.
+                */
+                <motion.li
+                  key={url}
+                  layout={reduzido ? false : "position"}
+                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  className="scroll-mb-24 border border-line/60 bg-surface"
+                >
+                  <div className="relative aspect-[4/3] overflow-hidden bg-background">
+                    <Image
+                      src={url}
+                      alt={`Foto ${i + 1}`}
+                      fill
+                      sizes="200px"
+                      draggable={false}
+                      className="select-none object-cover"
+                    />
+
+                    {/*
+                      A posição, que é a informação que falta quando são trinta
+                      fotos. `aria-hidden` porque o `alt` da imagem e os rótulos
+                      dos botões já dizem de que foto se trata.
+                    */}
+                    <span
+                      aria-hidden
+                      className={`absolute left-1.5 top-1.5 flex h-6 items-center px-1.5 text-[10px] font-medium uppercase tracking-wider tabular-nums ${
+                        i === 0
+                          ? "bg-gold text-background"
+                          : "bg-background/70 text-champagne backdrop-blur"
+                      }`}
+                    >
+                      {i === 0 ? "Capa" : i + 1}
+                    </span>
+
+                    {/*
+                      Apagar sai da barra dos movimentos e vai para o canto
+                      oposto: 44×44 de área de toque, 28×28 de mancha. Quem
+                      quer mover não passa por cima do que destrói.
+                    */}
+                    <button
+                      type="button"
+                      onClick={() => removerFoto(i)}
+                      aria-label={`Remover foto ${i + 1}`}
+                      title="Remover"
+                      className="press absolute right-0 top-0 flex h-11 w-11 items-center justify-center text-champagne hover:text-red-bright"
+                    >
+                      <span
+                        aria-hidden
+                        className="flex h-7 w-7 items-center justify-center rounded-full bg-background/60 text-xs backdrop-blur"
+                      >
+                        ✕
+                      </span>
+                    </button>
+                  </div>
+
+                  {/*
+                    `grid-cols-3` e não `justify-between`: a 320 px a célula tem
+                    138 px, e três terços dão 46 px cada — acima dos 44 da HIG.
+                    Com larguras fixas, os três botões encostavam-se.
+                  */}
+                  <div className="grid grid-cols-3 divide-x divide-line/60 border-t border-line/60">
+                    {/*
+                      `aria-disabled` e não `disabled`: o browser tira o foco a
+                      um elemento que passa a `disabled`, e era isso que
+                      acontecia ao empurrar uma foto até à última posição — o
+                      dedo seguinte já não sabia onde estava. Inerte ao ponteiro
+                      por `pointer-events-none`; ao teclado, a guarda está no
+                      handler.
+                    */}
+                    <button
+                      type="button"
+                      onClick={() => moverFoto(i, -1)}
+                      aria-disabled={i === 0}
+                      aria-label={`Mover a foto ${i + 1} para trás`}
+                      title="Mover para trás"
+                      className="press flex h-11 items-center justify-center text-champagne hover:text-gold-bright aria-disabled:pointer-events-none aria-disabled:opacity-30"
+                    >
+                      <span aria-hidden>←</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => tornarCapa(i)}
+                      aria-disabled={i === 0}
+                      aria-label={`Tornar a foto ${i + 1} a capa`}
+                      title="Tornar capa"
+                      className="press flex h-11 items-center justify-center text-[11px] uppercase tracking-[0.12em] text-muted hover:text-gold-bright aria-disabled:pointer-events-none aria-disabled:opacity-30"
+                    >
+                      Capa
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => moverFoto(i, 1)}
+                      aria-disabled={i === f.fotos.length - 1}
+                      aria-label={`Mover a foto ${i + 1} para a frente`}
+                      title="Mover para a frente"
+                      className="press flex h-11 items-center justify-center text-champagne hover:text-gold-bright aria-disabled:pointer-events-none aria-disabled:opacity-30"
+                    >
+                      <span aria-hidden>→</span>
+                    </button>
+                  </div>
+                </motion.li>
             ))}
+          </motion.ul>
+        )}
+
+        {/*
+          A linha de estado. Visível *e* `aria-live`: a troca era invisível para
+          quem não vê, e fácil de perder de vista com trinta miniaturas. O botão
+          fica fora da região viva — um controlo lá dentro seria reanunciado a
+          cada atualização.
+        */}
+        {f.fotos.length > 0 && (
+          <div className="mb-5 flex min-h-5 flex-wrap items-center gap-x-3 text-xs text-muted">
+            <p aria-live="polite">{desfazer ? "Foto removida." : anuncio}</p>
+            {desfazer && (
+              <button
+                type="button"
+                onClick={anularRemocao}
+                className="press underline underline-offset-4 hover:text-gold-bright"
+              >
+                Anular
+              </button>
+            )}
           </div>
         )}
 
@@ -611,8 +772,10 @@ export function ViaturaForm({
           />
         </label>
         <p className="mt-3 text-xs leading-relaxed text-muted">
-          A primeira foto é a capa — é a que aparece no card e nos resultados de
-          pesquisa. Use as setas para reordenar. Até 30 fotos. As maiores são reduzidas automaticamente antes de subirem.
+          A primeira foto é a capa — é a que aparece no card e nos resultados
+          de pesquisa. As setas trocam com a foto ao lado; “Capa” salta uma
+          foto directamente para primeiro. Até 30 fotos. As maiores são
+          reduzidas automaticamente antes de subirem.
         </p>
       </Seccao>
 
