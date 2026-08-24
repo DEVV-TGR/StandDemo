@@ -107,6 +107,18 @@ body {
 /* dourado metálico: reflexo champanhe→ouro→bronze no próprio texto.
    dá sensação de folha de ouro em vez de tinta chapada; usar só em texto grande. */
 .text-gold-metal {
+  /*
+    O gradiente é recortado pela forma das letras, mas pintado só dentro da
+    caixa do elemento — e com `line-height: 1` os glifos altos do Bodoni
+    itálico saem-lhe fora. O `?` de "procura?" aparecia com o topo comido.
+
+    O `padding` alarga a área pintada e a `margin` negativa devolve o espaço,
+    para o texto ocupar exactamente o mesmo que ocupava. O `inline-block` é o
+    que faz o padding vertical valer aqui.
+  */
+  display: inline-block;
+  padding-block: 0.12em;
+  margin-block: -0.12em;
   background-image: linear-gradient(
     100deg,
     var(--gold-deep) 0%,

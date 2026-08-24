@@ -7,13 +7,24 @@ import { SITE_NAME } from "@/lib/site";
 export function Hero({ viaturas }: { viaturas: Viatura[] }) {
   return (
     <section className="grain relative flex min-h-[92svh] items-center overflow-hidden">
+      {/*
+        O showroom, e não uma viatura.
+
+        Uma foto de carro no hero compete com o catálogo que está logo a
+        seguir; o espaço com o logótipo na parede diz quem é o stand antes de
+        dizer o que vende — e é a única imagem do site que não pode ser
+        substituída pelo painel, porque não é inventário.
+
+        `object-left` porque o interesse está à esquerda (o GT3 RS e a parede
+        com o logótipo) e o texto assenta por cima do véu escuro desse lado.
+      */}
       <Image
-        src="/cars/porsche-macan/01.jpg"
+        src="/hero/showroom.jpg"
         alt=""
         fill
         priority
         sizes="100vw"
-        className="kenburns object-cover object-center"
+        className="kenburns object-cover object-center sm:object-left"
       />
       {/* véus para legibilidade sobre a foto */}
       <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-background/20" />
