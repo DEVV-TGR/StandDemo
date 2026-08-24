@@ -52,3 +52,5 @@ O critério transversal é o mesmo do resto do projeto: **tiers gratuitos e isol
 ## Relação com `docs/brand/`
 
 O [sistema de design](../brand/README.md) descreve o site público. O painel herda dele os tokens de cor e as fontes, mas não a linguagem editorial — ver [05 — UX do painel](05-painel-ux.md), secção *Regras de design*.
+
+- [08 — Pôr em produção](08-por-em-producao.md) — os passos de configuração, por ordem.

@@ -1,6 +1,24 @@
 import type { NextConfig } from "next";
 
 /*
+  O host de onde as fotografias são servidas, lido da mesma variável que o
+  código usa. Se for um `r2.dev`, o padrão genérico abaixo já o cobre; se for
+  um domínio próprio, entra como padrão adicional.
+
+  Envolvido em `try` porque isto corre no build, e um valor mal formado não
+  pode deitar abaixo a compilação inteira — o pior que acontece é as imagens
+  não carregarem, e isso vê-se.
+*/
+let hostDasFotos: string | undefined;
+try {
+  const bruto = process.env.R2_PUBLIC_URL;
+  if (bruto) hostDasFotos = new URL(bruto).hostname;
+} catch {
+  console.warn("[next.config] R2_PUBLIC_URL não é um URL válido — ignorado.");
+}
+
+
+/*
   Os cabeçalhos de segurança.
 
   Sem eles o site ia para o ar a responder sem nenhum: qualquer domínio o podia
@@ -33,7 +51,13 @@ const politicaDeConteudos = [
   "default-src 'self'",
   "script-src 'self' 'unsafe-inline'",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob:",
+  /*
+    As fotografias carregadas pelo painel vivem no R2, noutro domínio. Sem elas
+    aqui, a política bloqueia-as e o site fica com os espaços vazios — o
+    `next/image` serve-as pelo `/_next/image`, mas o `srcset` aponta para a
+    origem.
+  */
+  `img-src 'self' data: blob: https://*.r2.dev${hostDasFotos ? ` https://${hostDasFotos}` : ""}`,
   "font-src 'self'",
   "connect-src 'self'",
   "frame-src https://www.google.com https://maps.google.com",
@@ -118,6 +142,26 @@ const nextConfig: NextConfig = {
   */
   experimental: {
     serverActions: { bodySizeLimit: "4.4mb" },
+  },
+
+  /*
+    De onde o `next/image` aceita carregar fotografias.
+
+    Sem isto o componente **recusa-se** a servir qualquer imagem de fora do
+    domínio, e as fotos carregadas pelo painel não apareciam no site — nem no
+    card, nem na galeria, nem na ficha. É a única lista de permissões do
+    projecto que, faltando, parte uma funcionalidade inteira em silêncio.
+
+    Os dois padrões existem porque o bucket pode ser servido de duas formas: o
+    `r2.dev`, que é o de desenvolvimento, e um domínio próprio, que é o que
+    produção há-de usar. O segundo é lido da variável para não haver um domínio
+    escrito à mão em dois sítios.
+  */
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "**.r2.dev" },
+      ...(hostDasFotos ? [{ protocol: "https" as const, hostname: hostDasFotos }] : []),
+    ],
   },
 
   async headers() {
