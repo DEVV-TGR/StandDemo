@@ -29,13 +29,17 @@ São nove, e **é preciso separá-las por ambiente**. A tabela abaixo diz de ond
 | `R2_PUBLIC_URL` | ver o passo 4 | `https://pub-….r2.dev` | — |
 | `RESEND_API_KEY` | igual | igual | Resend → API Keys |
 | `RESEND_REMETENTE` | `Painel Império <noreply@send.devplus.pt>` | igual | — |
-| `PAINEL_EMAILS` | ver abaixo | os dois emails | — |
+| `PAINEL_EMAILS` | `developerplusteam@gmail.com` | igual | ver abaixo |
 
 **O `DATABASE_URL` é o único que tem de divergir, e a diferença não é cosmética.** Um preview apontado à base de produção é a diferença entre experimentar e apagar as viaturas do cliente. Nunca ponhas a string do `main` no ambiente Preview.
 
-**O `PAINEL_EMAILS` em produção é uma decisão, não uma cópia.** Manter o email da agência lá é cómodo para suporte — entras no painel sem pedir nada ao cliente. Mas é uma segunda chave mestra permanente num sistema de factor único, e o argumento que usámos para o cliente (o email tem de ter 2FA) passa a valer para a conta da agência também.
+**O `PAINEL_EMAILS` em produção é uma decisão, não uma cópia.** Cada endereço na lista é uma chave mestra permanente num sistema de factor único, e o argumento que usámos para o cliente — o email tem de ter 2FA — vale por igual para todos os que lá estiverem. Uma lista com dois endereços são duas caixas de correio para comprometer, não uma.
 
-A recomendação: **em produção fica só o cliente**. Quando precisares de entrar, acrescentas o teu email e fazes redeploy — dois minutos, e o acesso fica com data de início e de fim. Se o suporte for frequente, o atrito não compensa e é melhor deixar lá.
+**A decisão deste projeto: em produção fica só `developerplusteam@gmail.com`** (#24). O painel é operado pela equipa e o endereço do cliente não está na lista — **o acesso dele faz parte da entrega final e entra quando o projeto fechar**, não antes. Não é uma medida de segurança: é o âmbito do que está entregue.
+
+Quando essa altura chegar, ligar o acesso é acrescentar o email do cliente à variável e fazer redeploy. Não há mais nada a implementar do lado do código — vale a pena saber isso antes de prometer prazos. E a pergunta a fazer nesse momento é se o endereço da equipa ainda faz falta na lista, ou se o suporte pontual se resolve como qualquer acesso temporário: entra, faz-se o que há a fazer, e sai.
+
+Manter os ambientes alinhados: o `.env.local` de desenvolvimento tem o mesmo endereço, para nenhum teste local passar por causa de um acesso que produção não dá.
 
 > **Mudar uma variável não afecta o que já está publicado.** É preciso um redeploy para a nova valer. É a explicação de metade dos *"mas eu já mudei isso"*.
 
