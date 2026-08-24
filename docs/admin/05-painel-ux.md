@@ -73,7 +73,15 @@ São os 30 campos de `Viatura` — ver [`docs/brand/08`](../brand/08-dados-e-dom
 
 **Marca e modelo:** campo de texto com sugestões das marcas e modelos já existentes. Escrever livremente tem de continuar possível — é assim que entra uma marca nova — mas sugerir evita "BMW" e "Bmw" como duas marcas distintas. O slug é gerado ao gravar, com o `slugify()`.
 
-**Fotos:** a ordem importa, porque a primeira é a que aparece no card e nos resultados de pesquisa. Reordenar por arrasto, com a primeira assinalada como principal. Ver os limites de tamanho e de quantidade em [04 — Segurança](04-seguranca.md).
+**Fotos:** a ordem importa, porque a primeira é a que aparece no card e nos resultados de pesquisa — a primeira vem assinalada como capa, e as outras mostram o número da posição.
+
+Reordenar é **por botões, sempre visíveis**: `←` e `→` trocam com a foto ao lado, e "Capa" salta uma foto directamente para primeiro — sem esse atalho, pôr a foto 22 na capa eram 21 toques. Cada botão ocupa um terço da largura da célula e tem 44 px de altura, o que dá alvos acima dos 44 px mesmo num ecrã de 320 px. Depois de cada troca, a nova posição é anunciada por `aria-live`.
+
+**Não estão atrás de `hover`.** No Tailwind v4 todo o `hover:` nasce dentro de `@media (hover: hover)`, portanto num telemóvel a regra não existe de todo e o controlo desaparece. Apagar fica no canto oposto da célula, longe dos botões de mover, e é reversível por "Anular" em vez de confirmado à cabeça — trinta fotos seriam trinta diálogos.
+
+**Arrastar não se oferece**, e é decisão, não esquecimento. Chegou a estar implementado e saiu. Fica aqui o que custa, para quem o quiser trazer de volta saber ao que vai: a API nativa de HTML5 (`draggable`/`drop`) não funciona por toque no Safari iOS nem no Chrome Android, portanto é preciso Pointer Events; o `touch-action` é resolvido no instante em que o toque começa, logo o arrasto tem de viver numa pega dedicada com `touch-action: none` — um "long-press e depois arrasta" não funciona; o auto-scroll que traz o destino ao ecrã luta contra o próprio gesto se não for travado; e nada disto é alcançável por teclado ou leitor de ecrã, pelo que os botões teriam de ficar de qualquer maneira.
+
+Ver os limites de tamanho e de quantidade em [04 — Segurança](04-seguranca.md).
 
 **Validação** com zod (`src/lib/viatura-schema.ts` do #12), a mesma no cliente e no servidor. Erros junto ao campo, em português, e ao submeter com erros levar o foco ao primeiro campo com problema.
 
@@ -115,6 +123,8 @@ Detalhe do comportamento: ver [`docs/badges-estado.md`](../badges-estado.md).
 
 - **Fazer da listagem um menu.** Abre no que interessa: os anúncios.
 - **Esconder ações em menus de contexto.** Lápis e caixote, visíveis.
+- **Esconder um controlo atrás de `hover`.** No Tailwind v4 o `hover:` está dentro de `@media (hover: hover)`; num telemóvel a regra não existe e o controlo desaparece. E `opacity-0` sem `pointer-events-none` deixa-o clicável às cegas.
+- **Alvos de toque abaixo de 44 px** nos controlos que se usam a sério.
 - **Apagar sem confirmação nomeada.**
 - **Deixar a tabela em deslize horizontal** como única resposta ao telemóvel.
 - **Trazer a linguagem editorial do site** — itálicos dourados, ouro metálico, animações de entrada.
