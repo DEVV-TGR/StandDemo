@@ -32,6 +32,26 @@ export function FormularioDeEntrada() {
         </p>
       )}
 
+      {/*
+        A mesma frase para o email que tem acesso e para o que não tem. É
+        deliberadamente vaga: dizer "esse email não está autorizado" tornaria
+        este formulário numa ferramenta para descobrir quem entra no painel.
+
+        A segunda linha existe para quem esbarrou no limite de pedidos e, sem
+        ela, ficava a olhar para um ecrã que não reagia.
+      */}
+      {estado.enviado && (
+        <div role="status" className="rounded-xl border border-line/60 bg-raised/60 p-4">
+          <p className="text-sm leading-relaxed text-ink">
+            Se este endereço tiver acesso, receberá um código em instantes.
+          </p>
+          <p className="mt-2 text-xs leading-relaxed text-muted">
+            Não chegou nada? Confirme o endereço e veja o spam. Se pediu vários
+            códigos seguidos, espere uns minutos antes de tentar de novo.
+          </p>
+        </div>
+      )}
+
       <button
         type="submit"
         disabled={aPedir}
