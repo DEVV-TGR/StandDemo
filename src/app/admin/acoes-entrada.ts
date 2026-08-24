@@ -56,6 +56,7 @@ export async function pedirCodigo(
 
   const frasco = await cookies();
   let jaConhecido = false;
+  let desafioCriado = false;
 
   /*
     Tudo o que fala com a base ou com o Resend vive aqui dentro.
@@ -67,27 +68,45 @@ export async function pedirCodigo(
   */
   try {
     /*
-      Conta antes de saber se o email existe. Esgotado o orçamento, responde-se
-      a mesma coisa de sempre: quem está a sondar não fica a saber se parou por
-      causa do limite ou por o email não existir.
-    */
-    if (!(await podePedirCodigo(email))) {
-      await anotar("limite de pedidos esgotado", email);
-      return { enviado: true };
-    }
+      **O aparelho conhecido é verificado primeiro, e não consome orçamento.**
 
+      A ordem inversa — contar antes de tudo — é a que faz sentido para a
+      verificação da lista, e é por isso que ela vem a seguir: quem esteja a
+      sondar endereços não pode perceber pelo comportamento quais os que têm
+      acesso. Mas aplicá-la também ao aparelho lembrado era um erro com
+      consequência prática séria: entrar pelo caminho rápido, que **não envia
+      email nenhum**, gastava na mesma o orçamento de envios. Ao fim de três
+      entradas a pessoa ficava fechada quinze minutos sem o sistema ter
+      mandado um único email — e, pior, sem forma de sair do impasse, porque
+      esquecer o aparelho deixava-a a precisar de um código que já não podia
+      pedir.
+
+      Verificar aqui não abre porta nenhuma: o aparelho exige um cookie
+      assinado por nós, que só existe em quem já entrou pelo menos uma vez.
+      Não é via de enumeração.
+    */
     const quem = autorizado(email);
 
-    if (!quem) {
-      await anotar("pedido para email fora da lista", email);
-      return { enviado: true };
-    }
-
-    /* Já passou pelo código neste aparelho — entra sem repetir. */
-    if (await aparelhoConhecido(frasco.get(NOME_DO_APARELHO)?.value, quem.email)) {
+    if (quem && (await aparelhoConhecido(frasco.get(NOME_DO_APARELHO)?.value, quem.email))) {
       frasco.set(NOME_DO_COOKIE, await selar(quem.email), opcoesDoCookie());
       jaConhecido = true;
     } else {
+      /*
+        Daqui para baixo é que se conta — e conta-se **antes** de saber se o
+        email existe. Esgotado o orçamento, responde-se a mesma coisa de
+        sempre: quem sonda não fica a saber se parou por causa do limite ou
+        por o endereço não existir.
+      */
+      if (!(await podePedirCodigo(email))) {
+        await anotar("limite de pedidos esgotado", email);
+        return { enviado: true };
+      }
+
+      if (!quem) {
+        await anotar("pedido para email fora da lista", email);
+        return { enviado: true };
+      }
+
       /* Pedir outro código invalida o anterior, para não haver dois válidos. */
       await apagarDesafio(frasco.get(NOME_DO_DESAFIO)?.value);
 
@@ -99,6 +118,7 @@ export async function pedirCodigo(
         await criarDesafio(quem.email, codigo),
         opcoesDoCookie(VALIDADE_DO_DESAFIO),
       );
+      desafioCriado = true;
     }
   } catch (erro) {
     /* Uma falha de envio nunca pode virar "entra à mesma". */
@@ -117,7 +137,22 @@ export async function pedirCodigo(
     };
   }
 
-  redirect(jaConhecido ? "/admin" : "/admin/entrar/codigo");
+  if (jaConhecido) redirect("/admin");
+  if (desafioCriado) redirect("/admin/entrar/codigo");
+
+  /*
+    Chega-se aqui quando não se criou desafio nenhum: o email não está na lista,
+    ou o orçamento de pedidos esgotou-se. Nos dois casos a resposta é a mesma,
+    e o ecrã escreve a mesma frase — é isso que impede o formulário de se
+    tornar uma ferramenta para descobrir quem tem acesso.
+
+    **O que não pode acontecer é ficar em silêncio.** Antes, um `redirect` para
+    o ecrã do código dava com um desvio de volta para aqui, porque não havia
+    desafio — e o que a pessoa via era um botão que não fazia nada. Para quem
+    tem acesso legítimo e apenas esbarrou no limite, isso é indistinguível de
+    uma avaria.
+  */
+  return { enviado: true };
 }
 
 export type EstadoDoCodigo = { erro?: string; reenviado?: boolean };
