@@ -1,5 +1,5 @@
 import "server-only";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import { db, temDadosBase } from "@/db";
 import { viaturas as tabela } from "@/db/schema";
 import type { Viatura } from "@/lib/types";
@@ -44,4 +44,41 @@ export async function listarViaturas(): Promise<Viatura[]> {
     transmissao: row.transmissao as Viatura["transmissao"],
     estadoVenda: row.estadoVenda as Viatura["estadoVenda"],
   }));
+}
+
+/** Uma viatura pelo id, para o formulário de edição. */
+export async function obterViatura(id: string): Promise<Viatura | null> {
+  if (!temDadosBase()) throw new SemBaseDeDados();
+
+  const [row] = await db.select().from(tabela).where(eq(tabela.id, id)).limit(1);
+  if (!row) return null;
+
+  return {
+    ...row,
+    segmento: row.segmento as Viatura["segmento"],
+    combustivel: row.combustivel as Viatura["combustivel"],
+    transmissao: row.transmissao as Viatura["transmissao"],
+    estadoVenda: row.estadoVenda as Viatura["estadoVenda"],
+  };
+}
+
+/*
+  As marcas e modelos já usados, para as sugestões do formulário.
+
+  São `DISTINCT` na base e não uma leitura de tudo em memória: é a única
+  consulta do painel que pode crescer com o inventário, e ordenada dá uma lista
+  que se percorre com os olhos.
+*/
+export async function opcoesConhecidas(): Promise<{
+  marcas: string[];
+  modelos: string[];
+}> {
+  if (!temDadosBase()) return { marcas: [], modelos: [] };
+
+  const [m, mo] = await Promise.all([
+    db.selectDistinct({ v: tabela.marca }).from(tabela).orderBy(tabela.marca),
+    db.selectDistinct({ v: tabela.modelo }).from(tabela).orderBy(tabela.modelo),
+  ]);
+
+  return { marcas: m.map((x) => x.v), modelos: mo.map((x) => x.v) };
 }
