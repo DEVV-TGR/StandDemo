@@ -20,8 +20,16 @@ export function CarCard({
   prioridade?: boolean;
 }) {
   const total = viatura.fotos.length;
-  // miniatura abre na 2ª foto (índice 1); a página dedicada é que mostra a 1ª
-  const inicial = total > 1 ? 1 : 0;
+  /*
+    A capa é a primeira foto — a que estiver em primeiro lugar no painel.
+
+    Isto abria na segunda (índice 1) por uma razão que deixou de existir: as
+    fotos vinham dos anúncios do StandVirtual, onde a primeira é sempre o mesmo
+    ângulo de frente, e saltá-la dava variedade à grelha. Agora que a ordem se
+    escolhe no painel, esse truque passa a contrariar quem a escolheu — quem
+    põe uma foto em primeiro lugar espera vê-la na capa.
+  */
+  const inicial = 0;
   const [foto, setFoto] = useState(inicial);
   const vendido = viatura.estadoVenda === "vendido";
 

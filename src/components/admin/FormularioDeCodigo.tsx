@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState, useTransition } from "react";
+import { Contagem } from "@/components/admin/Contagem";
 import {
   confirmarCodigo,
   reenviarCodigo,
@@ -8,6 +9,13 @@ import {
 } from "@/app/admin/acoes-entrada";
 
 const INICIAL: EstadoDoCodigo = {};
+
+/*
+  Dez minutos, o mesmo valor que `src/lib/painel/codigo.ts` impõe do lado do
+  servidor. Aqui é só para se ver o relógio a andar — quem manda é o `expiraEm`
+  da linha na base.
+*/
+const VALIDADE_SEGUNDOS = 10 * 60;
 
 export function FormularioDeCodigo({ paraOnde }: { paraOnde: string }) {
   const [estado, accao, aConfirmar] = useActionState(confirmarCodigo, INICIAL);
@@ -19,6 +27,16 @@ export function FormularioDeCodigo({ paraOnde }: { paraOnde: string }) {
       <p className="text-sm leading-relaxed text-muted">
         Enviámos um código de 6 algarismos para <strong className="text-ink">{paraOnde}</strong>.
         Está no assunto do email.
+      </p>
+
+      {/*
+        O prazo à vista, e a andar. Sem isto, quem demora a ir ao email não
+        sabe se ainda vale a pena escrever o código ou se já tem de pedir
+        outro — e descobre-o da pior maneira, com uma tentativa gasta.
+      */}
+      <p className="text-xs text-muted">
+        O código vale 10 minutos e serve uma vez só.{" "}
+        <Contagem segundos={VALIDADE_SEGUNDOS} />
       </p>
 
       <form action={accao} className="space-y-4">

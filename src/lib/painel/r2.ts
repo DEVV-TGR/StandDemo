@@ -5,6 +5,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
+import { semAspas } from "./env";
 
 /*
   As fotografias das viaturas, no Cloudflare R2.
@@ -27,12 +28,17 @@ import {
   por causa de uma funcionalidade que nem sequer está a ser usada.
 */
 function config() {
+  /*
+    Tudo passa pelo `semAspas`. O `R2_PUBLIC_URL` é o mais traiçoeiro do
+    conjunto: com aspas, as fotografias deixam de carregar e não há erro
+    nenhum — só espaços vazios no site.
+  */
   return {
-    accountId: process.env.R2_ACCOUNT_ID,
-    accessKeyId: process.env.R2_ACCESS_KEY_ID,
-    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY,
-    bucket: process.env.R2_BUCKET,
-    publicUrl: process.env.R2_PUBLIC_URL?.replace(/\/$/, ""),
+    accountId: semAspas(process.env.R2_ACCOUNT_ID),
+    accessKeyId: semAspas(process.env.R2_ACCESS_KEY_ID),
+    secretAccessKey: semAspas(process.env.R2_SECRET_ACCESS_KEY),
+    bucket: semAspas(process.env.R2_BUCKET),
+    publicUrl: semAspas(process.env.R2_PUBLIC_URL)?.replace(/\/$/, ""),
   };
 }
 

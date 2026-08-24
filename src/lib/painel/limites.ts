@@ -1,7 +1,7 @@
 import "server-only";
 import { createHash, randomUUID } from "node:crypto";
 import { headers } from "next/headers";
-import { and, count, eq, gte, lt } from "drizzle-orm";
+import { and, eq, gte, lt } from "drizzle-orm";
 import { db } from "@/db";
 import { tentativasAcesso } from "@/db/schema";
 
@@ -69,13 +69,15 @@ async function origem(): Promise<string> {
   );
 }
 
-async function registarEContar(chave: string, acao: string): Promise<number> {
+type Contagem = { total: number; maisAntigo: Date | null };
+
+async function registarEContar(chave: string, acao: string): Promise<Contagem> {
   const desde = new Date(Date.now() - JANELA_MS);
 
   await db.insert(tentativasAcesso).values({ id: randomUUID(), chave, acao });
 
-  const [{ total }] = await db
-    .select({ total: count() })
+  const linhas = await db
+    .select({ ocorridoEm: tentativasAcesso.ocorridoEm })
     .from(tentativasAcesso)
     .where(
       and(
@@ -83,9 +85,10 @@ async function registarEContar(chave: string, acao: string): Promise<number> {
         eq(tentativasAcesso.acao, acao),
         gte(tentativasAcesso.ocorridoEm, desde),
       ),
-    );
+    )
+    .orderBy(tentativasAcesso.ocorridoEm);
 
-  return total;
+  return { total: linhas.length, maisAntigo: linhas[0]?.ocorridoEm ?? null };
 }
 
 /*
@@ -96,7 +99,35 @@ async function registarEContar(chave: string, acao: string): Promise<number> {
   diria a quem está do outro lado quais os endereços que existem — que é
   exactamente a enumeração que a resposta uniforme do ecrã existe para evitar.
 */
-export async function podePedirCodigo(email: string): Promise<boolean> {
+/*
+  Devolve **quanto falta** e não só um sim/não.
+
+  A versão anterior dizia apenas que não se podia pedir, e o ecrã respondia com
+  a mesma frase vaga de sempre. Quem esbarrava no limite não tinha como
+  distinguir isso de uma avaria — e foi o que aconteceu em uso real: cinco
+  pedidos, bloqueio de quinze minutos, e um ecrã que não dizia nada.
+
+  ## Porque é que dizer o tempo não abre porta nenhuma
+
+  O contador corre **antes** de se saber se o email está na lista, e conta para
+  todos por igual. Logo, "espere sete minutos" é exactamente a mesma resposta
+  para um endereço com acesso e para um sem — não distingue os dois, que é o
+  que a resposta uniforme existe para garantir.
+
+  O que revela é que houve pedidos a mais deste email ou deste IP, e isso quem
+  os fez já sabe.
+*/
+export type Orcamento =
+  | { pode: true }
+  | { pode: false; esperarSegundos: number };
+
+function faltaPara(maisAntigo: Date | null): number {
+  if (!maisAntigo) return Math.ceil(JANELA_MS / 1000);
+  const passou = Date.now() - maisAntigo.getTime();
+  return Math.max(1, Math.ceil((JANELA_MS - passou) / 1000));
+}
+
+export async function podePedirCodigo(email: string): Promise<Orcamento> {
   /* Limpa o que já saiu da janela, na mesma passagem. Sem isto a tabela cresce
      para sempre e as contagens ficam cada vez mais lentas. */
   await db
@@ -108,7 +139,20 @@ export async function podePedirCodigo(email: string): Promise<boolean> {
     registarEContar(`ip:${await origem()}`, "pedido"),
   ]);
 
-  return porEmail <= POR_EMAIL && porIp <= POR_IP;
+  if (porEmail.total > POR_EMAIL) {
+    return { pode: false, esperarSegundos: faltaPara(porEmail.maisAntigo) };
+  }
+  if (porIp.total > POR_IP) {
+    return { pode: false, esperarSegundos: faltaPara(porIp.maisAntigo) };
+  }
+  return { pode: true };
+}
+
+/** `430` → `"7 minutos"`, `45` → `"menos de um minuto"`. */
+export function emPortugues(segundos: number): string {
+  if (segundos < 60) return "menos de um minuto";
+  const minutos = Math.ceil(segundos / 60);
+  return minutos === 1 ? "1 minuto" : `${minutos} minutos`;
 }
 
 /*
