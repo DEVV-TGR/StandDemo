@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { stand, telHref } from "@/data/stand";
 
 const ligacoes = [
@@ -16,7 +16,33 @@ export function Header() {
   const pathname = usePathname();
   const [aberto, setAberto] = useState(false);
 
+  /*
+    Com o menu a ocupar o ecrã, o que está por trás não deve deslizar — e o
+    Escape tem de o fechar, que é o que qualquer pessoa tenta primeiro.
+
+    Este efeito não chama `setState` de forma síncrona: mexe no DOM e regista
+    um ouvinte. É a distinção que a regra do React 19 faz, e a razão de este
+    passar onde os outros não passavam.
+  */
+  useEffect(() => {
+    if (!aberto) return;
+
+    const anterior = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const aoTeclar = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setAberto(false);
+    };
+    window.addEventListener("keydown", aoTeclar);
+
+    return () => {
+      document.body.style.overflow = anterior;
+      window.removeEventListener("keydown", aoTeclar);
+    };
+  }, [aberto]);
+
   return (
+    <>
     <header className="fixed inset-x-0 top-0 z-50 border-b border-line/60 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" aria-label={stand.nome} className="flex items-center">
@@ -70,35 +96,67 @@ export function Header() {
         </button>
       </div>
 
-      {aberto && (
-        <nav
-          className="border-t border-line/60 bg-background/95 px-6 py-6 md:hidden"
-          aria-label="Menu móvel"
-        >
-          <ul className="flex flex-col gap-5">
+    </header>
+
+    {/*
+      O menu é um card ao centro, não um painel colado ao cabeçalho.
+
+      Antes empurrava o conteúdo e deixava metade da página a espreitar por
+      baixo, o que faz o menu parecer um acidente em vez de uma escolha. Agora
+      o fundo escurece e o que se lê é só o que há para escolher — mas o card
+      mantém a página presente por trás, que é o que diz a quem o abriu que
+      não saiu de lado nenhum.
+
+      **E vive fora do `<header>`**, o que parece detalhe e não é: o cabeçalho
+      tem `backdrop-blur`, e um elemento com `backdrop-filter` passa a ser o
+      bloco de contenção dos descendentes `fixed`. Lá dentro, o `inset-0`
+      media-se contra o cabeçalho — 390×64 em vez do ecrã inteiro.
+    */}
+    {aberto && (
+      <div
+        className="fixed inset-0 z-40 flex items-center justify-center p-6 md:hidden"
+        role="dialog"
+        aria-modal
+        aria-label="Menu"
+      >
+        {/* Fechar tocando fora — o gesto que toda a gente tenta primeiro. */}
+        <button
+          type="button"
+          aria-label="Fechar menu"
+          onClick={() => setAberto(false)}
+          className="absolute inset-0 bg-background/70 backdrop-blur-sm"
+        />
+
+        <nav className="relative z-10 w-full max-w-xs rounded-2xl border border-line bg-surface px-8 py-10 shadow-2xl shadow-black/60">
+          <ul className="flex flex-col items-center gap-6">
             {ligacoes.map((l) => (
               <li key={l.href}>
                 <Link
                   href={l.href}
                   onClick={() => setAberto(false)}
-                  className="font-display text-2xl text-ink transition-colors hover:text-gold"
+                  className="press font-display text-3xl text-ink transition-colors hover:text-gold-bright"
                 >
                   {l.rotulo}
                 </Link>
               </li>
             ))}
-            <li>
-              <a
-                href={telHref(stand.telemovel)}
-                onClick={() => setAberto(false)}
-                className="text-sm tracking-wide text-gold"
-              >
-                Fale connosco — {stand.telemovel}
-              </a>
-            </li>
           </ul>
+
+          <div className="hairline mx-auto my-7 w-20" />
+
+          <a
+            href={telHref(stand.telemovel)}
+            onClick={() => setAberto(false)}
+            className="press block text-center text-xs uppercase tracking-[0.2em] text-gold"
+          >
+            Fale connosco
+            <span className="mt-2 block text-lg normal-case tracking-normal text-champagne">
+              {stand.telemovel}
+            </span>
+          </a>
         </nav>
-      )}
-    </header>
+      </div>
+    )}
+    </>
   );
 }
