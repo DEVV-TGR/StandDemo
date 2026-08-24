@@ -3,7 +3,7 @@ import Link from "next/link";
 import { exigirSessao } from "@/lib/painel/porta";
 import { listarViaturas, SemBaseDeDados } from "@/lib/painel/viaturas";
 import { AcoesViatura } from "@/components/admin/AcoesViatura";
-import { BotoesDeSessao } from "@/components/admin/BotoesDeSessao";
+import { BotaoSair, EsquecerAparelho } from "@/components/admin/BotoesDeSessao";
 import { formatarPreco, formatarRegisto } from "@/lib/format";
 import type { EstadoVenda, Viatura } from "@/lib/types";
 
@@ -44,6 +44,15 @@ const ESTADO: Record<EstadoVenda, { texto: string; classe: string }> = {
   },
 };
 
+/*
+  O preço aparece sempre, mesmo nas vendidas.
+
+  No site, uma viatura vendida troca o preço pela palavra "Vendido" — ali o
+  preço já não é uma proposta e mostrá-lo seria enganador. **No painel é o
+  contrário**: quem gere quer saber por quanto ficou, e repetir "Vendido" na
+  coluna do preço ao lado do estado que já o diz é ruído numa tabela que
+  existe para se ler de relance.
+*/
 function Estado({ estado }: { estado: EstadoVenda }) {
   const { texto, classe } = ESTADO[estado];
   return (
@@ -161,9 +170,7 @@ export default async function Painel() {
                     <div className="mt-2 flex flex-wrap items-center gap-2">
                       <Estado estado={v.estadoVenda} />
                       <span className="text-sm text-ink">
-                        {v.estadoVenda === "vendido"
-                          ? "Vendido"
-                          : formatarPreco(v.preco)}
+                        {formatarPreco(v.preco)}
                       </span>
                     </div>
                   </div>
@@ -204,9 +211,7 @@ export default async function Painel() {
                       <Estado estado={v.estadoVenda} />
                     </td>
                     <td className="whitespace-nowrap px-5 py-3 text-sm text-ink">
-                      {v.estadoVenda === "vendido"
-                        ? "Vendido"
-                        : formatarPreco(v.preco)}
+                      {formatarPreco(v.preco)}
                     </td>
                     <td className="whitespace-nowrap px-5 py-3 text-sm text-muted">
                       {formatarRegisto(v.registoMes, v.registoAno)}
@@ -236,28 +241,34 @@ function Moldura({
 }) {
   return (
     <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
-      <header className="mb-8 flex flex-wrap items-start justify-between gap-4">
-        <div>
-          <h1 className="font-display text-3xl text-ink">Viaturas</h1>
-          <p className="mt-1 text-sm text-muted">
+      <header className="mb-8 flex flex-wrap items-center justify-between gap-x-4 gap-y-3">
+        <div className="min-w-0">
+          <h1 className="font-display text-3xl leading-none text-ink">Viaturas</h1>
+          <p className="mt-2 truncate text-sm text-muted">
             {total === undefined
               ? email
               : `${total} ${total === 1 ? "anúncio publicado" : "anúncios publicados"} · ${email}`}
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        {/*
+          Os dois na mesma linha e com a mesma altura. O primário leva o
+          dourado; o secundário, contorno — a hierarquia faz-se pelo
+          preenchimento, não pelo tamanho.
+        */}
+        <div className="flex shrink-0 items-center gap-2">
           {total !== undefined && (
             <Link
               href="/admin/viaturas/nova"
-              className="gold-metal-fill press rounded-full px-5 py-2.5 text-sm font-medium text-background"
+              className="gold-metal-fill press inline-flex h-10 items-center justify-center rounded-full px-5 text-sm font-medium text-background"
             >
               + Adicionar
             </Link>
           )}
-          <BotoesDeSessao />
+          <BotaoSair />
         </div>
       </header>
       {children}
+      <EsquecerAparelho />
     </main>
   );
 }
