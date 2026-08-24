@@ -45,3 +45,8 @@ next-env.d.ts
 
 # o exemplo de variáveis é para ser versionado, ao contrário do resto dos .env
 !.env.example
+
+# qualquer ficheiro de variáveis, não só os que começam por `.env` — o
+# `vercel-production.env` que gerámos para colar na consola passou ao lado da
+# regra acima e só o bloqueio do GitHub o travou
+*.env

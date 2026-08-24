@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { pedirCodigo, type EstadoDaEntrada } from "@/app/admin/acoes-entrada";
+import { Contagem } from "@/components/admin/Contagem";
 
 const INICIAL: EstadoDaEntrada = {};
 
@@ -27,9 +28,17 @@ export function FormularioDeEntrada() {
       </label>
 
       {estado.erro && (
-        <p role="alert" className="text-sm leading-relaxed text-red-bright">
-          {estado.erro}
-        </p>
+        <div
+          role="alert"
+          className="rounded-xl border border-red-deep bg-red/10 p-4 text-sm leading-relaxed text-red-bright"
+        >
+          <p>{estado.erro}</p>
+          {estado.esperar !== undefined && (
+            <p className="mt-1.5 text-xs text-muted">
+              <Contagem segundos={estado.esperar} />
+            </p>
+          )}
+        </div>
       )}
 
       {/*

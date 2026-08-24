@@ -1,4 +1,5 @@
 import "server-only";
+import { semAspas } from "./env";
 
 /*
   Quem pode entrar no painel — uma lista de emails, e mais nada.
@@ -45,7 +46,8 @@ export type Utilizador = { email: string; nome: string };
   alguma coisa mal configurada.
 */
 function carregar(): Utilizador[] {
-  const bruto = process.env.PAINEL_EMAILS;
+  /* Ver `semAspas` — esta variável já chegou aqui com aspas em produção. */
+  const bruto = semAspas(process.env.PAINEL_EMAILS);
   if (!bruto) return [];
 
   return bruto

@@ -23,7 +23,7 @@ import {
   VALIDADE_MS as VALIDADE_DO_DESAFIO,
 } from "@/lib/painel/codigo";
 import { enviarCodigo, ErroAoEnviar } from "@/lib/painel/email";
-import { podePedirCodigo, anotar } from "@/lib/painel/limites";
+import { podePedirCodigo, emPortugues, anotar } from "@/lib/painel/limites";
 import { exigirSessaoNaAccao } from "@/lib/painel/porta";
 
 /*
@@ -33,7 +33,12 @@ import { exigirSessaoNaAccao } from "@/lib/painel/porta";
   aparelho que já tenha passado pelo código salta-o durante 30 dias.
 */
 
-export type EstadoDaEntrada = { erro?: string; enviado?: boolean };
+export type EstadoDaEntrada = {
+  erro?: string;
+  enviado?: boolean;
+  /** Segundos até poder pedir outro código, quando o limite travou. */
+  esperar?: number;
+};
 
 /*
   A resposta é sempre a mesma, e é o ponto mais delicado deste ficheiro.
@@ -97,9 +102,22 @@ export async function pedirCodigo(
         sempre: quem sonda não fica a saber se parou por causa do limite ou
         por o endereço não existir.
       */
-      if (!(await podePedirCodigo(email))) {
+      const orcamento = await podePedirCodigo(email);
+
+      if (!orcamento.pode) {
         await anotar("limite de pedidos esgotado", email);
-        return { enviado: true };
+        /*
+          Diz-se quanto falta, e não apenas que não dá.
+
+          Não abre porta nenhuma: o contador corre antes de se saber se o email
+          está na lista e conta para todos por igual, portanto esta resposta é
+          a mesma para um endereço com acesso e para um sem. O que revela é que
+          houve pedidos a mais — e isso quem os fez já sabe.
+        */
+        return {
+          erro: `Já foram pedidos códigos a mais. Pode tentar de novo daqui a ${emPortugues(orcamento.esperarSegundos)}.`,
+          esperar: orcamento.esperarSegundos,
+        };
       }
 
       if (!quem) {
@@ -217,9 +235,12 @@ export async function reenviarCodigo(): Promise<EstadoDoCodigo> {
     if (!email) return { erro: "O código expirou. Volte a escrever o email." };
 
     /* O reenvio conta como pedido — senão era a porta das traseiras do limite. */
-    if (!(await podePedirCodigo(email))) {
+    const orcamento = await podePedirCodigo(email);
+    if (!orcamento.pode) {
       await anotar("limite esgotado no reenvio", email);
-      return { erro: "Já pediu códigos demais. Espere uns minutos." };
+      return {
+        erro: `Já foram pedidos códigos a mais. Pode tentar de novo daqui a ${emPortugues(orcamento.esperarSegundos)}.`,
+      };
     }
 
     await apagarDesafio(frasco.get(NOME_DO_DESAFIO)?.value);
@@ -254,7 +275,15 @@ export async function sair(): Promise<void> {
   */
   (await cookies()).delete({ name: NOME_DO_COOKIE, path: "/admin" });
 
-  redirect("/admin/entrar");
+  /*
+    Sair leva ao site, não ao ecrã de entrada.
+
+    Quem carrega em "Sair" acabou o que tinha a fazer no painel — mandá-lo de
+    volta para um formulário de entrada é oferecer-lhe justamente aquilo de que
+    se está a despedir. O site é o destino natural, e é de lá que ele volta a
+    entrar se precisar.
+  */
+  redirect("/");
 }
 
 /*
