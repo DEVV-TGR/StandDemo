@@ -118,7 +118,7 @@ O projeto usa caracteres de texto para quase toda a iconografia:
 | Glifo | Uso |
 |---|---|
 | `‹` `›` | Navegação de fotos (card, carrossel, lightbox); `›` também abre o `<details>` da ficha, com `group-open:rotate-90` |
-| `→` | Cards de marca, avanço no carrossel |
+| `→` | Cards de marca, link «Ver todas» dos destaques |
 | `↗` | Links externos (Instagram, mapa) |
 | `✕` | Fechar overlays, remover chip de filtro |
 | `▾` | Seta dos selects |
