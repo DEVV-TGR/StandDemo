@@ -109,16 +109,25 @@ body {
 .text-gold-metal {
   /*
     O gradiente é recortado pela forma das letras, mas pintado só dentro da
-    caixa do elemento — e com `line-height: 1` os glifos altos do Bodoni
-    itálico saem-lhe fora. O `?` de "procura?" aparecia com o topo comido.
+    caixa do elemento — o que sair da caixa fica transparente, ou seja,
+    invisível. E o Bodoni itálico sai da caixa por três lados: a inclinação
+    leva a tinta para lá da largura de avanço dos glifos das pontas, e com
+    `line-height: 1` os descendentes passam por baixo da linha.
+
+    Medido no hero ("procura?", em toda a escala fluida do `.h-hero`, com as
+    métricas de tinta do canvas): 0.111em abaixo, 0.095em à esquerda, 0.060em
+    à direita, e folga em cima. Os valores abaixo dão margem sobre isso.
 
     O `padding` alarga a área pintada e a `margin` negativa devolve o espaço,
-    para o texto ocupar exactamente o mesmo que ocupava. O `inline-block` é o
-    que faz o padding vertical valer aqui.
+    para o texto ocupar exactamente o mesmo que ocupava e o alinhamento do
+    bloco não mexer. O `inline-block` é o que faz o padding valer aqui. Tudo
+    em `em`, para acompanhar a escala fluida sem depender da largura do ecrã.
   */
   display: inline-block;
-  padding-block: 0.12em;
-  margin-block: -0.12em;
+  padding-block: 0.18em;
+  margin-block: -0.18em;
+  padding-inline: 0.14em;
+  margin-inline: -0.14em;
   background-image: linear-gradient(
     100deg,
     var(--gold-deep) 0%,

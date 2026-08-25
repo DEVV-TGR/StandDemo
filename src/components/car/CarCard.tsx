@@ -41,6 +41,7 @@ export function CarCard({
   const inicioX = useRef(0);
   const moveu = useRef(false);
   const ativoPonteiro = useRef(false);
+  const capturado = useRef(false);
   const LIMIAR_MOVE = 6; // px acima do qual é arrasto (e não clique)
   const LIMIAR_SWIPE = 40; // px para trocar de foto
 
@@ -48,16 +49,30 @@ export function CarCard({
     if (total <= 1) return;
     ativoPonteiro.current = true;
     moveu.current = false;
+    capturado.current = false;
     inicioX.current = e.clientX;
-    e.currentTarget.setPointerCapture(e.pointerId);
+    /*
+      Sem `setPointerCapture` já: capturar o ponteiro aqui redirecionava o
+      `pointerup` para esta caixa, e o browser deixava de gerar o `click` nas
+      setas lá dentro — carregar em ‹ › não passava a foto. A captura só é
+      precisa quando isto passa mesmo a ser um arrasto, e é aí que se faz.
+    */
   };
   const onPointerMove = (e: React.PointerEvent) => {
     if (!ativoPonteiro.current) return;
-    if (Math.abs(e.clientX - inicioX.current) > LIMIAR_MOVE) moveu.current = true;
+    if (Math.abs(e.clientX - inicioX.current) <= LIMIAR_MOVE) return;
+    moveu.current = true;
+    // a partir daqui é arrasto: agarra o ponteiro para o dedo poder sair da
+    // caixa sem se perder o fim do gesto
+    if (!capturado.current) {
+      capturado.current = true;
+      e.currentTarget.setPointerCapture(e.pointerId);
+    }
   };
   const terminarArrasto = (e: React.PointerEvent) => {
     if (!ativoPonteiro.current) return;
     ativoPonteiro.current = false;
+    capturado.current = false;
     const dx = e.clientX - inicioX.current;
     if (Math.abs(dx) > LIMIAR_SWIPE) mudar(dx < 0 ? 1 : -1);
   };
