@@ -222,7 +222,12 @@ export function DestaquesCarrossel({ destaques }: { destaques: Viatura[] }) {
                   // lhes tocar visualmente. Fica aqui, e não no div acima, para
                   // o clique que centra o card continuar a chegar.
                   inert={!central}
-                  className={central ? "" : "pointer-events-none"}
+                  // A borda, os cantos e o recorte vivem aqui, no card
+                  // inteiro: a foto e o painel são as duas metades da mesma
+                  // caixa, e não dois blocos encostados um ao outro.
+                  className={`overflow-hidden rounded-2xl border border-line/60 bg-surface ${
+                    central ? "" : "pointer-events-none"
+                  }`}
                   onClickCapture={(e) => {
                     if (moveu.current) {
                       e.preventDefault();
@@ -231,7 +236,7 @@ export function DestaquesCarrossel({ destaques }: { destaques: Viatura[] }) {
                   }}
                 >
                   {/* foto */}
-                  <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-line/60 bg-surface">
+                  <div className="relative aspect-[16/10] overflow-hidden">
                     <Badge viatura={v} />
                     <Link
                       href={href}
@@ -278,7 +283,7 @@ export function DestaquesCarrossel({ destaques }: { destaques: Viatura[] }) {
                   </div>
 
                   {/* painel */}
-                  <div className="relative mx-2 -mt-1 rounded-b-2xl bg-surface px-6 pb-6 pt-6">
+                  <div className="relative px-6 pb-6 pt-6">
                     <Link href={href} className="block" draggable={false}>
                       <h3 className="font-display text-2xl leading-tight text-ink transition-colors hover:text-gold-bright">
                         {v.marca}
@@ -292,14 +297,6 @@ export function DestaquesCarrossel({ destaques }: { destaques: Viatura[] }) {
                       <p className="mt-0.5 font-display text-2xl text-gold">
                         {vendido ? "Vendido" : formatarPreco(v.preco)}
                       </p>
-                    </Link>
-                    <Link
-                      href={href}
-                      aria-label="Ver detalhes"
-                      draggable={false}
-                      className="press absolute bottom-5 right-5 flex h-9 w-14 items-center justify-center rounded-full bg-raised text-lg text-muted hover:bg-gold hover:text-background"
-                    >
-                      →
                     </Link>
                   </div>
                 </article>
