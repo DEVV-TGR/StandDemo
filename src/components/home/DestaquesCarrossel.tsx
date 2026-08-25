@@ -91,6 +91,7 @@ export function DestaquesCarrossel({ destaques }: { destaques: Viatura[] }) {
   const inicioX = useRef(0);
   const moveu = useRef(false);
   const ativoPonteiro = useRef(false);
+  const capturado = useRef(false);
 
   useEffect(() => {
     const el = wrapRef.current;
@@ -135,19 +136,33 @@ export function DestaquesCarrossel({ destaques }: { destaques: Viatura[] }) {
     if (!dims.card) return;
     ativoPonteiro.current = true;
     moveu.current = false;
+    capturado.current = false;
     inicioX.current = e.clientX;
     setAArrastar(true);
-    e.currentTarget.setPointerCapture(e.pointerId);
+    /*
+      Sem `setPointerCapture` já: com o ponteiro agarrado a partir daqui, o
+      `click` do rato era entregue a este trilho e não ao que está debaixo do
+      cursor — o card central não abria a viatura e os laterais não se
+      centravam. A captura só serve para não perder o gesto quando o ponteiro
+      sai do trilho a meio de um arrasto, e faz-se quando o arrasto começa.
+    */
   };
   const onPointerMove = (e: React.PointerEvent) => {
     if (!ativoPonteiro.current) return;
     const dx = e.clientX - inicioX.current;
-    if (Math.abs(dx) > LIMIAR_ARRASTO) moveu.current = true;
+    if (Math.abs(dx) > LIMIAR_ARRASTO) {
+      moveu.current = true;
+      if (!capturado.current) {
+        capturado.current = true;
+        e.currentTarget.setPointerCapture(e.pointerId);
+      }
+    }
     setArrastoPx(dx);
   };
   const terminarArrasto = (e: React.PointerEvent) => {
     if (!ativoPonteiro.current) return;
     ativoPonteiro.current = false;
+    capturado.current = false;
     const dx = e.clientX - inicioX.current;
     const passos = Math.round(-dx / step);
     setArrastoPx(0);
@@ -229,20 +244,30 @@ export function DestaquesCarrossel({ destaques }: { destaques: Viatura[] }) {
                     central ? "" : "pointer-events-none"
                   }`}
                   onClickCapture={(e) => {
+                    // clique fantasma no fim de um arrasto: o gesto era para
+                    // andar no carrossel, não para abrir a viatura
                     if (moveu.current) {
                       e.preventDefault();
                       e.stopPropagation();
                     }
                   }}
                 >
-                  {/* foto */}
-                  <div className="relative aspect-[16/10] overflow-hidden">
-                    <Badge viatura={v} />
-                    <Link
-                      href={href}
-                      aria-label={`${v.marca} ${v.modelo}`}
-                      draggable={false}
-                    >
+                  {/*
+                    Um único destino por card, a envolver a foto e o painel:
+                    qualquer ponto abre a viatura, incluindo a faixa de specs
+                    e o espaço à volta do texto, que antes eram zonas mortas.
+                    Um só <Link> também evita repetir o mesmo href três vezes
+                    no percurso de teclado e no leitor de ecrã.
+                  */}
+                  <Link
+                    href={href}
+                    aria-label={`Ver ${v.marca} ${v.modelo} ${v.versao}`}
+                    draggable={false}
+                    className="group block"
+                  >
+                    {/* foto */}
+                    <div className="relative aspect-[16/10] overflow-hidden">
+                      <Badge viatura={v} />
                       {/* A capa é a primeira foto, escolhida no painel — ver
                           o comentário em `CarCard.tsx`. */}
                       <Image
@@ -256,36 +281,34 @@ export function DestaquesCarrossel({ destaques }: { destaques: Viatura[] }) {
                           vendido ? "opacity-70 saturate-50" : ""
                         }`}
                       />
-                    </Link>
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background/90 to-transparent" />
-                    <div className="absolute inset-x-0 bottom-3 flex items-center justify-center gap-4 text-[13px] font-medium text-champagne">
-                      <span className="flex items-center gap-1.5">
-                        <span className="text-gold">
-                          <IconeCalendario />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background/90 to-transparent" />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-3 flex items-center justify-center gap-4 text-[13px] font-medium text-champagne">
+                        <span className="flex items-center gap-1.5">
+                          <span className="text-gold">
+                            <IconeCalendario />
+                          </span>
+                          {formatarRegisto(v.registoMes, v.registoAno)}
                         </span>
-                        {formatarRegisto(v.registoMes, v.registoAno)}
-                      </span>
-                      <span className="h-4 w-px bg-line" />
-                      <span className="flex items-center gap-1.5">
-                        <span className="text-gold">
-                          <IconeCombustivel />
+                        <span className="h-4 w-px bg-line" />
+                        <span className="flex items-center gap-1.5">
+                          <span className="text-gold">
+                            <IconeCombustivel />
+                          </span>
+                          {v.combustivel}
                         </span>
-                        {v.combustivel}
-                      </span>
-                      <span className="h-4 w-px bg-line" />
-                      <span className="flex items-center gap-1.5">
-                        <span className="text-gold">
-                          <IconeKm />
+                        <span className="h-4 w-px bg-line" />
+                        <span className="flex items-center gap-1.5">
+                          <span className="text-gold">
+                            <IconeKm />
+                          </span>
+                          {vendido ? "—" : formatarNumero(v.quilometros)}
                         </span>
-                        {vendido ? "—" : formatarNumero(v.quilometros)}
-                      </span>
+                      </div>
                     </div>
-                  </div>
 
-                  {/* painel */}
-                  <div className="relative px-6 pb-6 pt-6">
-                    <Link href={href} className="block" draggable={false}>
-                      <h3 className="font-display text-2xl leading-tight text-ink transition-colors hover:text-gold-bright">
+                    {/* painel */}
+                    <div className="relative px-6 pb-6 pt-6">
+                      <h3 className="font-display text-2xl leading-tight text-ink transition-colors group-hover:text-gold-bright">
                         {v.marca}
                       </h3>
                       <p className="mt-1 line-clamp-1 text-base text-muted">
@@ -297,8 +320,8 @@ export function DestaquesCarrossel({ destaques }: { destaques: Viatura[] }) {
                       <p className="mt-0.5 font-display text-2xl text-gold">
                         {vendido ? "Vendido" : formatarPreco(v.preco)}
                       </p>
-                    </Link>
-                  </div>
+                    </div>
+                  </Link>
                 </article>
               </div>
             );
