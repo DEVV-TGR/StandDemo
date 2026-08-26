@@ -99,6 +99,8 @@ function linhaParaViatura(row: ViaturaRow): Viatura {
     estadoVenda: row.estadoVenda as EstadoVenda,
     ivaDedutivel: row.ivaDedutivel,
     descricao: row.descricao,
+    criadoEm: row.criadoEm,
+    atualizadoEm: row.atualizadoEm,
   };
 }
 
