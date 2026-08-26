@@ -1,10 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
 import { exigirSessao } from "@/lib/painel/porta";
-import { listarViaturas, SemBaseDeDados } from "@/lib/painel/viaturas";
+import {
+  listarViaturas,
+  SemBaseDeDados,
+  type ViaturaPainel,
+} from "@/lib/painel/viaturas";
 import { AcoesViatura } from "@/components/admin/AcoesViatura";
 import { BotaoSair, EsquecerAparelho } from "@/components/admin/BotoesDeSessao";
-import { formatarPreco, formatarRegisto } from "@/lib/format";
+import {
+  formatarData,
+  formatarDataRelativa,
+  formatarPreco,
+} from "@/lib/format";
 import type { EstadoVenda, Viatura } from "@/lib/types";
 
 /*
@@ -109,7 +117,7 @@ function Nome({ v }: { v: Viatura }) {
 export default async function Painel() {
   const { email } = await exigirSessao();
 
-  let viaturas: Viatura[];
+  let viaturas: ViaturaPainel[];
   try {
     viaturas = await listarViaturas();
   } catch (erro) {
@@ -172,6 +180,12 @@ export default async function Painel() {
                       <span className="text-sm text-ink">
                         {formatarPreco(v.preco)}
                       </span>
+                      <span
+                        title={formatarData(v.criadoEm)}
+                        className="text-xs text-muted"
+                      >
+                        {formatarDataRelativa(v.criadoEm)}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -191,7 +205,7 @@ export default async function Painel() {
                   <th className="px-5 py-3 font-normal">Viatura</th>
                   <th className="px-5 py-3 font-normal">Estado</th>
                   <th className="px-5 py-3 font-normal">Preço</th>
-                  <th className="px-5 py-3 font-normal">Registo</th>
+                  <th className="px-5 py-3 font-normal">Publicado</th>
                   <th className="px-5 py-3 text-right font-normal">Acções</th>
                 </tr>
               </thead>
@@ -214,7 +228,9 @@ export default async function Painel() {
                       {formatarPreco(v.preco)}
                     </td>
                     <td className="whitespace-nowrap px-5 py-3 text-sm text-muted">
-                      {formatarRegisto(v.registoMes, v.registoAno)}
+                      <span title={formatarData(v.criadoEm)}>
+                        {formatarDataRelativa(v.criadoEm)}
+                      </span>
                     </td>
                     <td className="px-5 py-3">
                       <AcoesViatura id={v.id} nome={`${v.marca} ${v.modelo}`} />

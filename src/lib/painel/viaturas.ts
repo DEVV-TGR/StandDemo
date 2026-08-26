@@ -26,13 +26,28 @@ export class SemBaseDeDados extends Error {
   }
 }
 
+/*
+  A viatura como o painel a vê: com as datas.
+
+  O `Viatura` que o site usa não as tem, e não é distracção — o inventário
+  estático de `src/data/viaturas.ts` também é um `Viatura[]`, e datas de
+  publicação num ficheiro escrito à mão seriam datas inventadas. Quem tem
+  datas a sério é quem vem da base, e é só o painel.
+*/
+export type ViaturaPainel = Viatura & {
+  /** Quando o anúncio foi publicado. */
+  criadoEm: Date;
+  /** Última vez que foi editado. */
+  atualizadoEm: Date;
+};
+
 /**
  * Todas as viaturas, mais recentes primeiro.
  *
  * A ordenação por `criadoEm` é o que faz uma viatura acabada de criar aparecer
  * no topo, onde quem a criou está a olhar. É para isto que a coluna existe.
  */
-export async function listarViaturas(): Promise<Viatura[]> {
+export async function listarViaturas(): Promise<ViaturaPainel[]> {
   if (!temDadosBase()) throw new SemBaseDeDados();
 
   const linhas = await db.select().from(tabela).orderBy(desc(tabela.criadoEm));
