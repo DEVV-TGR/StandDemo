@@ -27,6 +27,8 @@ const numero = new Intl.NumberFormat("pt-PT");
 | `formatarNumero(161860)` | qualquer | `161 860` |
 | `formatarKm(161860)` | quilómetros | `161 860 km` |
 | `formatarRegisto(7, 2017)` | mês, ano | `Jul. 2017` |
+| `formatarData(d)` | `Date` | `24 Ago. 2026` |
+| `formatarDataRelativa(d)` | `Date` | `hoje`, `ontem`, `há 3 dias`, `24 Ago. 2026` |
 | `formatarPotencia(258)` | cavalos | `258 cv` |
 | `formatarCilindrada(2967)` | cc | `2 967 cc` |
 
@@ -36,6 +38,8 @@ Detalhes que importam:
 - **Meses abreviados levam ponto** — `MESES_ABREV` é `["Jan.", "Fev.", "Mar.", …]`. Nunca `Jul` sem ponto.
 - **Unidades em minúsculas** — `cv` e `cc`, não `CV` nem `CC`.
 - O separador de milhares em `pt-PT` é o espaço fino, não o ponto. Vem do `Intl`; não o reproduzir à mão.
+- **As datas contam-se no fuso de Lisboa**, não no do servidor. `getDate()` e companhia dariam o dia em UTC, e uma viatura publicada às 00h30 de Agosto apareceria como sendo de ontem a quem a acabou de publicar.
+- **`formatarDataRelativa` só vale até um mês.** A partir daí devolve a data por extenso — `há 47 dias` já não diz nada a ninguém. Onde é usada, a data exacta fica no `title`.
 
 ## Pluralização é manual
 
