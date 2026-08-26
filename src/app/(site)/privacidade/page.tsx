@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { stand } from "@/data/stand";
+import { enderecoLinha, stand } from "@/data/stand";
 
 /**
  * ⚠️ RASCUNHO — NÃO PUBLICAR SEM VALIDAÇÃO.
@@ -14,11 +14,22 @@ import { stand } from "@/data/stand";
  * saem daqui, para onde vão, que serviços de terceiros são carregados) e os
  * campos que só o cliente pode preencher estão marcados como POR CONFIRMAR.
  *
- * Para publicar, por esta ordem:
- *   1. preencher a designação social, o NIF e a morada da sede;
- *   2. rever o texto todo com o cliente;
- *   3. remover o aviso de rascunho e o `robots: noindex` daqui;
- *   4. ligar a página no rodapé (ver o comentário em Footer.tsx).
+ * Identificação, finalidades, partilha com terceiros e prazo de conservação
+ * dos contactos já vieram do cliente (respostas de 25/08/2026, ver a #32).
+ *
+ * Para publicar, falta:
+ *   1. o código postal completo — `stand.codigoPostal` tem só "4300";
+ *   2. o prazo de conservação dos documentos de venda, a confirmar com a
+ *      contabilidade do cliente;
+ *   3. rever o texto todo com o cliente e datar a aprovação — a data a
+ *      escrever é a do dia em que a página for publicada;
+ *   4. remover o aviso de rascunho e o `robots: noindex` daqui;
+ *   5. ligar a página no rodapé (ver o comentário em Footer.tsx).
+ *
+ * Atenção à secção "Serviços de terceiros": diz que o site não tem píxeis nem
+ * cookies de seguimento. É verdade hoje. O cliente pediu publicidade dirigida
+ * (ver a issue do banner de consentimento) — se isso entrar, esta secção muda
+ * e passa a ser preciso consentimento prévio.
  */
 export const metadata: Metadata = {
   title: "Política de Privacidade",
@@ -74,12 +85,13 @@ export default function PrivacidadePage() {
 
       <Seccao titulo="Responsável pelo tratamento">
         <p>
-          {POR_CONFIRMAR} designação social, {POR_CONFIRMAR} número de
-          identificação fiscal, com sede em {POR_CONFIRMAR} morada da sede.
+          Ricardo Moura Rodrigues Unipessoal, Lda., pessoa coletiva n.º
+          518932400, com sede em {enderecoLinha}, que explora o
+          estabelecimento {stand.nome}.
         </p>
         <p>
-          Estabelecimento: {stand.morada}, {stand.codigoPostal}{" "}
-          {stand.localidade}. Contacto: {stand.email}, {stand.telemovel}.
+          A sede é também o estabelecimento onde as viaturas são mostradas.
+          Contacto: {stand.email}, {stand.telemovel}.
         </p>
       </Seccao>
 
@@ -104,14 +116,23 @@ export default function PrivacidadePage() {
           solicitadas pelo próprio; e garantir o funcionamento e a segurança do
           site, com fundamento no interesse legítimo.
         </p>
-        <p>{POR_CONFIRMAR} rever com o cliente se existem outras finalidades.</p>
+        <p>
+          Quando um pedido de informação fica sem resposta durante algum tempo,
+          o stand pode voltar a contactar quem o enviou, no seguimento desse
+          mesmo pedido. Não são enviadas campanhas nem comunicações de
+          marketing a quem não as tenha pedido.
+        </p>
       </Seccao>
 
       <Seccao titulo="Prazos de conservação">
         <p>
-          {POR_CONFIRMAR} definir com o cliente o prazo de conservação dos
-          contactos comerciais e dos documentos associados a uma venda, tendo
-          em conta as obrigações fiscais aplicáveis.
+          Os contactos de quem pediu informação e não chegou a comprar são
+          conservados durante dois anos a contar do último contacto.
+        </p>
+        <p>
+          Os documentos associados a uma venda são conservados durante o prazo
+          exigido pelas obrigações fiscais e contabilísticas aplicáveis:{" "}
+          {POR_CONFIRMAR} confirmar o prazo com a contabilidade.
         </p>
       </Seccao>
 
@@ -124,6 +145,19 @@ export default function PrivacidadePage() {
           A página de contactos e a homepage embebem um mapa do Google Maps.
           Ao carregar esse mapa, o navegador comunica com servidores da Google,
           que pode recolher dados nos termos da sua própria política.
+        </p>
+        <p>
+          Fora do site, e apenas quando o processo de compra o exige, os dados
+          necessários podem ser comunicados a instituições de crédito e
+          intermediários de crédito, a seguradoras, a oficinas, a empresas de
+          transporte e à contabilidade do stand. Em cada caso é comunicado o
+          mínimo indispensável para o efeito em causa.
+        </p>
+        <p>
+          Quem contacta o stand por WhatsApp fá-lo através de um serviço da
+          Meta, que trata esses dados nos termos da sua própria política. O
+          acesso a essas conversas está limitado às pessoas do stand que fazem
+          o atendimento.
         </p>
         <p>
           Não há analytics, píxeis de redes sociais nem cookies de seguimento
