@@ -86,13 +86,16 @@ Todas as `<Image fill>` do projeto já declaram `sizes`.
 
 ## Por confirmar com o cliente
 
+Resolvido a 26/08/2026 (ver a #32): **código postal** (`4300-214`, já no
+`stand.ts`), **designação social, NIF e morada da sede**, e os **prazos de
+conservação** — as duas páginas legais estão publicadas.
+
+Continua por confirmar:
+
 | Item | Bloqueia |
 |---|---|
-| Código postal completo (`4300-XXX`) | endereço no JSON-LD e consistência do NAP |
 | Coordenadas GPS do stand | `geo` no JSON-LD |
 | URL canónico da página de Facebook (não o shortlink) | `sameAs` no JSON-LD |
-| Designação social, NIF e morada da sede | `/privacidade` |
-| Prazos de conservação de dados | `/privacidade` |
 | Empresa registada na plataforma do Livro de Reclamações? | cumprimento da obrigação legal |
 | Logótipo oficial do Livro de Reclamações | forma habitual da divulgação |
 | Manter VIN e matrícula públicos? | ficha técnica e JSON-LD (hoje estão publicados) |
@@ -103,8 +106,13 @@ Todas as `<Image fill>` do projeto já declaram `sizes`.
    intenção comercial local. É gratuito. Sem isto, todo o trabalho técnico tem
    um teto baixo.
 2. **Search Console** como propriedade de *domínio* (verificação por TXT no
-   DNS), não de prefixo de URL. Submeter o sitemap e pedir indexação das nove
-   páginas.
+   DNS), não de prefixo de URL. Submeter o sitemap e pedir indexação. **Por
+   fazer, e é o que falta para as páginas serem descobertas** — o trabalho
+   dentro do repositório está completo: `robots.txt` e `sitemap.xml` a
+   responder, canonical em todas as rotas, JSON-LD e Open Graph no sítio.
+
+   O número de URLs do sitemap acompanha o inventário — cresce a cada viatura
+   que o cliente publica —, portanto não vale a pena fixá-lo aqui.
 3. **Colisão de marca.** Existem o Império Automóvel (Trofa) e o Império Centro
    Auto (Braga), ambos com presença muito maior. Para "império auto porto" o
    incumbente ganha, independentemente da qualidade técnica do site. A aposta
