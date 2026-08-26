@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { stand, telHref } from "@/data/stand";
 
 const ligacoes = [
@@ -41,11 +41,64 @@ export function Header() {
     };
   }, [aberto]);
 
+  /*
+    Clicar num link para a página onde já se está.
+
+    Um `<Link>` não tem para onde navegar nesse caso, e o clique fica sem
+    resposta nenhuma — quem carrega no logótipo a meio da home espera voltar
+    ao topo e não acontece nada. Passa a subir.
+
+    A excepção é o endereço trazer filtros (`/viaturas?marca=…`): aí o clique
+    ainda significa alguma coisa — voltar ao catálogo sem filtros — e deixa-se
+    navegar como até aqui.
+
+    `scrollTo(0, 0)` sem opções herda o `scroll-behavior` do CSS: suave para
+    quem quer movimento, instantâneo para quem pediu `prefers-reduced-motion`
+    em `globals.css`. Passar `behavior: "smooth"` aqui atropelava essa escolha.
+  */
+  const jaAqui = (href: string) =>
+    pathname === href && window.location.search === "";
+
+  const aoClicar = (href: string) => (e: React.MouseEvent) => {
+    if (!jaAqui(href)) return;
+    e.preventDefault();
+    window.scrollTo(0, 0);
+  };
+
+  /*
+    No telemóvel o menu fecha-se e a página sobe — por esta ordem, e não ao
+    contrário. Enquanto o menu está aberto o `body` tem `overflow: hidden`, e
+    um `scrollTo` contra um body bloqueado não vai a lado nenhum.
+
+    Daí a subida ficar aqui e não no `onClick`: quando este efeito corre, o
+    cleanup do efeito acima já devolveu o `overflow` ao que era.
+  */
+  const subirAoFechar = useRef(false);
+
+  useEffect(() => {
+    if (aberto || !subirAoFechar.current) return;
+    subirAoFechar.current = false;
+    window.scrollTo(0, 0);
+  }, [aberto]);
+
+  const aoClicarNoMenu = (href: string) => (e: React.MouseEvent) => {
+    if (jaAqui(href)) {
+      e.preventDefault();
+      subirAoFechar.current = true;
+    }
+    setAberto(false);
+  };
+
   return (
     <>
     <header className="fixed inset-x-0 top-0 z-50 border-b border-line/60 bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-        <Link href="/" aria-label={stand.nome} className="flex items-center">
+        <Link
+          href="/"
+          aria-label={stand.nome}
+          onClick={aoClicar("/")}
+          className="flex items-center"
+        >
           <Image
             src="/logo/imperio-mark-sm.png"
             alt={stand.nome}
@@ -64,6 +117,7 @@ export function Header() {
               <Link
                 key={l.href}
                 href={l.href}
+                onClick={aoClicar(l.href)}
                 className={`text-sm tracking-wide transition-colors ${
                   ativo ? "text-gold" : "text-muted hover:text-ink"
                 }`}
@@ -133,7 +187,7 @@ export function Header() {
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  onClick={() => setAberto(false)}
+                  onClick={aoClicarNoMenu(l.href)}
                   className="press font-display text-3xl text-ink transition-colors hover:text-gold-bright"
                 >
                   {l.rotulo}
