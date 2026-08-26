@@ -14,17 +14,20 @@ import { enderecoLinha, stand } from "@/data/stand";
  * saem daqui, para onde vão, que serviços de terceiros são carregados) e os
  * campos que só o cliente pode preencher estão marcados como POR CONFIRMAR.
  *
- * Identificação, finalidades, partilha com terceiros e prazo de conservação
- * dos contactos já vieram do cliente (respostas de 25/08/2026, ver a #32).
+ * O texto está completo — as respostas do cliente chegaram a 25 e 26/08/2026
+ * e estão registadas na #32. O que falta não é conteúdo, é aprovação.
  *
- * Para publicar, falta:
- *   1. o código postal completo — `stand.codigoPostal` tem só "4300";
- *   2. o prazo de conservação dos documentos de venda, a confirmar com a
- *      contabilidade do cliente;
- *   3. rever o texto todo com o cliente e datar a aprovação — a data a
- *      escrever é a do dia em que a página for publicada;
- *   4. remover o aviso de rascunho e o `robots: noindex` daqui;
- *   5. ligar a página no rodapé (ver o comentário em Footer.tsx).
+ * Para publicar, por esta ordem:
+ *   1. o cliente lê o texto todo e aprova por escrito;
+ *   2. escrever a data dessa aprovação no fim da página;
+ *   3. remover o aviso de rascunho e o `robots: noindex` daqui;
+ *   4. pôr a página no sitemap e ligá-la no rodapé (ver Footer.tsx);
+ *   5. actualizar `docs/seo.md`, que a descreve como estando fora do índice.
+ *
+ * O prazo de conservação dos documentos de venda ficou sem número de
+ * propósito. O cliente disse "2 anos por aí", mas quem manda nesse prazo é a
+ * obrigação fiscal, que é bem mais longa — escrever dois anos era escrever
+ * uma coisa que ele não cumpre nem pode cumprir.
  *
  * Atenção à secção "Serviços de terceiros": diz que o site não tem píxeis nem
  * cookies de seguimento. É verdade hoje. O cliente pediu publicidade dirigida
@@ -131,8 +134,8 @@ export default function PrivacidadePage() {
         </p>
         <p>
           Os documentos associados a uma venda são conservados durante o prazo
-          exigido pelas obrigações fiscais e contabilísticas aplicáveis:{" "}
-          {POR_CONFIRMAR} confirmar o prazo com a contabilidade.
+          exigido pelas obrigações legais, fiscais e contabilísticas
+          aplicáveis a essa venda.
         </p>
       </Seccao>
 

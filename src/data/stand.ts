@@ -2,15 +2,7 @@ export const stand = {
   nome: "Império Auto Concept",
   slogan: "Viaturas premium, escolhidas a dedo.",
   morada: "Rua do Freixo 1680",
-  /**
-   * ⚠️ INCOMPLETO — falta confirmar com o cliente.
-   * Os códigos postais portugueses têm o formato XXXX-XXX; este só tem os
-   * primeiros quatro dígitos. Enquanto assim estiver, o endereço no JSON-LD
-   * fica igualmente incompleto, e o NAP (nome, morada, telefone) não bate
-   * certo com o Perfil de Empresa do Google — que é o que mais pesa para um
-   * negócio local. Assim que houver o código completo, é só preencher aqui.
-   */
-  codigoPostal: "4300",
+  codigoPostal: "4300-214",
   localidade: "Porto",
   distrito: "Porto",
   pais: "PT",
