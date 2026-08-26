@@ -130,10 +130,24 @@ export function Footer() {
           </div>
         </div>
 
-        {/* A Política de Privacidade entra aqui assim que o texto estiver
-            validado — a página existe em /privacidade, ainda como rascunho e
-            com noindex. Ver o cabeçalho de src/app/privacidade/page.tsx. */}
         <div className="hairline mt-12" />
+        <div className="mt-6 flex flex-col items-center justify-center gap-1 text-xs text-muted sm:flex-row sm:gap-2.5">
+          <Link
+            href="/termos"
+            className="transition-colors hover:text-champagne"
+          >
+            Termos e Condições
+          </Link>
+          <span aria-hidden className="hidden text-gold-deep sm:inline">
+            ·
+          </span>
+          <Link
+            href="/privacidade"
+            className="transition-colors hover:text-champagne"
+          >
+            Política de Privacidade
+          </Link>
+        </div>
         <div className="mt-6 flex flex-col items-center justify-center gap-1 text-xs text-muted sm:flex-row sm:gap-2.5">
           <p>
             © {new Date().getFullYear()} {stand.nome}

@@ -2,48 +2,30 @@ import type { Metadata } from "next";
 import { enderecoLinha, stand } from "@/data/stand";
 
 /**
- * ⚠️ RASCUNHO — NÃO PUBLICAR SEM VALIDAÇÃO.
+ * Aprovada pelo cliente a 26/08/2026 (ver a #32). Publicada: sem aviso de
+ * rascunho, no índice, no sitemap e ligada no rodapé.
  *
- * Esta página existe para dar estrutura ao texto que falta, não para o
- * substituir. O conteúdo de uma política de privacidade tem consequências
- * legais e tem de ser validado por quem tenha competência jurídica, ou no
- * mínimo aprovado formalmente pelo cliente. Copiar a política de outro site
- * não serve: é outra entidade, outro tratamento, outro responsável.
+ * O texto descreve o que se observa no próprio site — que dados saem daqui,
+ * para onde vão, que serviços de terceiros são carregados — e o resto veio das
+ * respostas do cliente. Não houve validação jurídica: dispensou-a por escrito.
  *
- * O que está escrito abaixo é o que se observa no próprio site (que dados
- * saem daqui, para onde vão, que serviços de terceiros são carregados) e os
- * campos que só o cliente pode preencher estão marcados como POR CONFIRMAR.
+ * Dois pontos a não perder de vista:
  *
- * O texto está completo — as respostas do cliente chegaram a 25 e 26/08/2026
- * e estão registadas na #32. O que falta não é conteúdo, é aprovação.
+ * **"Serviços de terceiros" diz que não há píxeis nem cookies de seguimento.**
+ * É verdade hoje. Se algum dia entrar publicidade dirigida, esta secção muda e
+ * passa a ser preciso consentimento prévio.
  *
- * Para publicar, por esta ordem:
- *   1. o cliente lê o texto todo e aprova por escrito;
- *   2. escrever a data dessa aprovação no fim da página;
- *   3. remover o aviso de rascunho e o `robots: noindex` daqui;
- *   4. pôr a página no sitemap e ligá-la no rodapé (ver Footer.tsx);
- *   5. actualizar `docs/seo.md`, que a descreve como estando fora do índice.
- *
- * O prazo de conservação dos documentos de venda ficou sem número de
- * propósito. O cliente disse "2 anos por aí", mas quem manda nesse prazo é a
- * obrigação fiscal, que é bem mais longa — escrever dois anos era escrever
- * uma coisa que ele não cumpre nem pode cumprir.
- *
- * Atenção à secção "Serviços de terceiros": diz que o site não tem píxeis nem
- * cookies de seguimento. É verdade hoje. O cliente pediu publicidade dirigida
- * (ver a issue do banner de consentimento) — se isso entrar, esta secção muda
- * e passa a ser preciso consentimento prévio.
+ * **O prazo dos documentos de venda não tem número, e é de propósito.** O
+ * cliente disse "2 anos por aí", mas quem manda nesse prazo é a obrigação
+ * fiscal e é bem mais longa — escrever dois anos era escrever uma coisa que
+ * ele não cumpre nem pode cumprir.
  */
 export const metadata: Metadata = {
   title: "Política de Privacidade",
   description:
     "Como o Império Auto Concept trata os dados pessoais de quem visita o site e entra em contacto.",
   alternates: { canonical: "/privacidade" },
-  // Enquanto for rascunho, fora do índice. Também não está no sitemap.
-  robots: { index: false, follow: true },
 };
-
-const POR_CONFIRMAR = "[POR CONFIRMAR]";
 
 function Seccao({
   titulo,
@@ -65,17 +47,7 @@ function Seccao({
 export default function PrivacidadePage() {
   return (
     <div className="mx-auto max-w-3xl px-4 pb-24 pt-28 sm:px-6">
-      <div className="rounded-2xl border border-gold/40 bg-raised px-5 py-4">
-        <p className="text-xs uppercase tracking-[0.2em] text-gold">
-          Rascunho
-        </p>
-        <p className="mt-2 text-sm leading-relaxed text-muted">
-          Este texto ainda não foi validado juridicamente nem aprovado pelo
-          stand. Não tem valor legal enquanto estiver com este aviso.
-        </p>
-      </div>
-
-      <header className="mt-10">
+      <header>
         <h1 className="font-display h-section text-ink">
           Política de <span className="italic text-gold">Privacidade</span>
         </h1>
@@ -183,7 +155,7 @@ export default function PrivacidadePage() {
       </Seccao>
 
       <p className="mt-12 text-xs text-muted">
-        Última atualização: {POR_CONFIRMAR} data de aprovação.
+        Última atualização: 26 de agosto de 2026.
       </p>
     </div>
   );
