@@ -22,24 +22,38 @@ export function GrelhaMarcas({ viaturas }: { viaturas: Viatura[] }) {
             const total = viaturas.filter((v) => v.marcaSlug === m.slug).length;
             const logo = logoMarca(m.slug);
             return (
-              <Reveal key={m.slug} delay={i * 0.08}>
+              <Reveal key={m.slug} delay={i * 0.08} className="h-full">
                 <Link
                   href={urlViaturasPorMarca(m.slug)}
-                  className="group flex items-center justify-between gap-4 rounded-2xl border border-line/60 bg-background px-8 py-10 transition-colors duration-300 hover:border-gold/50"
+                  className="group flex h-full items-center justify-between gap-4 rounded-2xl border border-line/60 bg-background px-8 py-10 transition-colors duration-300 hover:border-gold/50"
                 >
                   <div className="min-w-0">
-                    {logo ? (
-                      // eslint-disable-next-line @next/next/no-img-element -- logótipo estático em /public (mistura de svg/webp)
-                      <img
-                        src={logo}
-                        alt={m.nome}
-                        className="h-11 w-auto max-w-[170px] object-contain object-left opacity-85 transition-opacity duration-300 group-hover:opacity-100"
-                      />
-                    ) : (
-                      <span className="font-display text-4xl text-ink transition-colors group-hover:text-gold-bright">
-                        {m.nome}
-                      </span>
-                    )}
+                    {/*
+                      As duas variantes ocupam a mesma altura — `h-11`, a do
+                      logótipo. Sem a caixa, o nome saía numa linha de 40px
+                      contra os 44px de uma imagem, e o card da marca sem
+                      logótipo assentava quatro pixéis acima dos vizinhos.
+                    */}
+                    <div className="flex h-11 items-center">
+                      {logo ? (
+                        // eslint-disable-next-line @next/next/no-img-element -- logótipo estático em /public (mistura de svg/webp)
+                        <img
+                          src={logo}
+                          alt={m.nome}
+                          className="h-11 w-auto max-w-[170px] object-contain object-left opacity-85 transition-opacity duration-300 group-hover:opacity-100"
+                        />
+                      ) : (
+                        /*
+                          O nome, quando não há logótipo. Em Bodoni, como os
+                          títulos — mas com o corpo e a opacidade calibrados
+                          pelos logótipos ao lado, para se ler como uma marca
+                          desenhada e não como um card por acabar.
+                        */
+                        <span className="truncate font-display text-[2rem] leading-none text-ink/85 transition-colors duration-300 group-hover:text-gold-bright">
+                          {m.nome}
+                        </span>
+                      )}
+                    </div>
                     <p className="mt-3 text-sm text-muted">
                       {total} {total === 1 ? "viatura" : "viaturas"} em stock
                     </p>
