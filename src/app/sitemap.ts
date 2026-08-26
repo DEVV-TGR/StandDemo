@@ -15,6 +15,9 @@ import { getViaturas } from "@/lib/viaturas";
  * Quando a base não responde, o site serve o inventário estático, que não tem
  * datas. Nesse caso o campo fica de fora, que é melhor do que uma data errada.
  */
+/** Data em que o cliente aprovou os Termos e a Política de Privacidade. */
+const LEGAIS_APROVADAS_EM = new Date("2026-08-26T00:00:00.000Z");
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const viaturas = await getViaturas();
 
@@ -51,6 +54,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "yearly" as const,
       priority: 0.6,
     },
+    /*
+      As legais. `lastModified` é a data da aprovação do cliente, escrita à
+      mão: é a data em que o texto passou a ser o que é, e não muda enquanto o
+      texto não mudar. Se um dia se alterar uma cláusula, muda-se aqui também.
+    */
+    ...["/termos", "/privacidade"].map((caminho) => ({
+      url: urlAbsoluto(caminho),
+      lastModified: LEGAIS_APROVADAS_EM,
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    })),
     ...viaturas.map((v) => ({
       url: urlAbsoluto(urlViatura(v)),
       lastModified: v.atualizadoEm,

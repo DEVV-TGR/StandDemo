@@ -3,47 +3,29 @@ import Link from "next/link";
 import { enderecoLinha, stand } from "@/data/stand";
 
 /**
- * ⚠️ RASCUNHO — NÃO PUBLICAR SEM APROVAÇÃO DO CLIENTE.
+ * Aprovada pelo cliente a 26/08/2026 (ver a #32). Publicada: sem aviso de
+ * rascunho, no índice, no sitemap e ligada no rodapé.
  *
- * O texto abaixo não foi inventado: cada cláusula corresponde a uma resposta
- * do cliente, dadas a 25 e 26/08/2026 e registadas na #32. Mas um documento
- * que fixa condições de venda tem consequências, e nenhuma delas recai sobre
- * quem o escreveu — recai sobre quem o assina.
+ * Cada cláusula corresponde a uma resposta dele, dadas a 25 e 26/08/2026. Não
+ * houve validação jurídica — dispensou-a por escrito, e é a aprovação dele que
+ * sustenta esta página.
  *
- * Para publicar, por esta ordem:
- *   1. o cliente lê o texto todo e aprova por escrito;
- *   2. escrever a data dessa aprovação no fim da página;
- *   3. remover o aviso de rascunho e o `robots: noindex` daqui;
- *   4. pôr a página no sitemap e ligá-la no rodapé (ver Footer.tsx);
- *   5. actualizar `docs/seo.md`.
+ * Duas cláusulas a tratar com cuidado se alguma vez forem mexidas:
  *
- * Três pontos que merecem um segundo olhar antes de isso acontecer:
+ * **Garantia.** O que o stand dá (18 meses, motor e caixa) está em cláusula
+ * separada da garantia legal de conformidade, que existe por lei e não é este
+ * texto que a define. Juntá-las daria a entender que se limita um direito que
+ * não se pode limitar.
  *
- * **Garantia.** O cliente pediu, com estas palavras, que ficasse escrito que
- * "assume tudo". Está escrito. Mas a garantia comercial que ele descreve —
- * 18 meses, motor e caixa — vive ao lado da garantia legal de conformidade,
- * que existe por lei e não depende do que este texto diga. As duas estão
- * separadas de propósito: juntá-las daria a entender que se está a limitar um
- * direito que não se pode limitar.
- *
- * **Financiamento.** O stand não intermedeia crédito: encaminha para a AMCO.
- * É isso, e só isso, que aqui se diz. Falta o número de registo da AMCO no
- * Banco de Portugal, que devia constar.
- *
- * **Entidade de resolução de litígios.** O CICAP é a entidade territorialmente
- * competente para o Porto. O cliente percebeu a pergunta mas não confirmou o
- * nome com quem lhe trata do jurídico.
+ * **Financiamento.** O stand não intermedeia crédito: encaminha para a AMCO,
+ * que é a registada no Banco de Portugal. É isso, e só isso, que aqui se diz.
  */
 export const metadata: Metadata = {
   title: "Termos e Condições",
   description:
     "Condições de utilização do site do Império Auto Concept e informação sobre preços, reservas, garantia e entrega das viaturas.",
   alternates: { canonical: "/termos" },
-  // Enquanto for rascunho, fora do índice. Também não está no sitemap.
-  robots: { index: false, follow: true },
 };
-
-const POR_CONFIRMAR = "[POR CONFIRMAR]";
 
 function Seccao({
   titulo,
@@ -65,15 +47,7 @@ function Seccao({
 export default function TermosPage() {
   return (
     <div className="mx-auto max-w-3xl px-4 pb-24 pt-28 sm:px-6">
-      <div className="rounded-2xl border border-gold/40 bg-raised px-5 py-4">
-        <p className="text-xs uppercase tracking-[0.2em] text-gold">Rascunho</p>
-        <p className="mt-2 text-sm leading-relaxed text-muted">
-          Este texto ainda não foi aprovado pelo stand. Não tem valor legal
-          enquanto estiver com este aviso.
-        </p>
-      </div>
-
-      <header className="mt-10">
+      <header>
         <h1 className="font-display h-section text-ink">
           Termos e <span className="italic text-gold">Condições</span>
         </h1>
@@ -184,11 +158,9 @@ export default function TermosPage() {
         <p>
           O stand não presta serviços de intermediação de crédito. Quem
           pretenda financiamento é encaminhado, com o seu acordo, para a AMCO
-          Intermediários de Crédito{" "}
-          <span className="text-muted/70">
-            ({POR_CONFIRMAR} número de registo no Banco de Portugal)
-          </span>
-          , que é quem trata do processo e com quem o cliente contrata.
+          Intermediários de Crédito, Lda., registada no Banco de Portugal sob
+          o n.º 0000759, na categoria de intermediário de crédito vinculado,
+          que é quem trata do processo e com quem o cliente contrata.
         </p>
         <p>
           A aprovação de crédito é decidida pela instituição financiadora e não
@@ -258,7 +230,7 @@ export default function TermosPage() {
       </Seccao>
 
       <p className="mt-12 text-xs text-muted">
-        Última atualização: {POR_CONFIRMAR} data de aprovação.
+        Última atualização: 26 de agosto de 2026.
       </p>
     </div>
   );

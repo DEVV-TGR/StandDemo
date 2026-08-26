@@ -74,9 +74,11 @@ pena a partir de ~20 viaturas em stock.
 preciso banner de consentimento. Se entrar alguma medição, atualizar
 `/privacidade` e avaliar a exigência de consentimento prévio.
 
-**Política de Privacidade.** A página existe em `/privacidade`, com `noindex`,
-fora do sitemap e sem link no rodapé. É um esqueleto: o texto tem de ser
-validado juridicamente antes de publicar. Instruções no cabeçalho do ficheiro.
+**Páginas legais.** `/privacidade` e `/termos` estão publicadas desde
+26/08/2026: no índice, no sitemap com a data de aprovação como `lastmod`, e
+ligadas no rodapé. O texto foi aprovado por escrito pelo cliente, sem validação
+jurídica — dispensou-a. O contexto de cada cláusula está no cabeçalho dos
+respectivos ficheiros e na #32.
 
 **`w=3840` nas miniaturas.** Não se confirmou. O único pedido de 3840px na
 página é o hero, que usa `sizes="100vw"` e é a imagem de LCP — está correto.
