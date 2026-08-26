@@ -5,6 +5,7 @@ const LOGOS: Record<string, string> = {
   porsche: "/logo/marcas/porsche.svg",
   jaguar: "/logo/marcas/jaguar.webp",
   "mercedes-benz": "/logo/marcas/mercedes-benz.webp",
+  renault: "/logo/marcas/renault.svg",
 };
 
 /** Caminho do logótipo da marca, ou null se não houver (fallback ao nome). */

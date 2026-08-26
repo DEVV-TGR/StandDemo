@@ -42,4 +42,14 @@ export interface Viatura {
   estadoVenda: EstadoVenda;
   ivaDedutivel: boolean;
   descricao: string;
+  /*
+    Quando o anúncio foi publicado e quando foi alterado pela última vez.
+
+    Opcionais porque só existem para quem vem da base. O inventário estático
+    de `src/data/viaturas.ts` — que também é um `Viatura[]` e serve de recurso
+    quando a base não responde — não as tem, e datas escritas à mão num
+    ficheiro seriam datas inventadas a dizer ao Google que a página mudou.
+  */
+  criadoEm?: Date;
+  atualizadoEm?: Date;
 }

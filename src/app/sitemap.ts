@@ -7,28 +7,53 @@ import { getViaturas } from "@/lib/viaturas";
  * Gera `/sitemap.xml`. Sem isto o Google dependia exclusivamente de links
  * externos para descobrir o site — e existe um único.
  *
- * Sem `lastModified`: o inventário ainda não tem data de alteração por
- * viatura. Um `lastmod` com a data do build mudaria
- * a cada deploy sem o conteúdo mudar, o que o Google aprende a ignorar.
- * Quando o painel /admin trouxer `atualizadoEm`, passa a ser preenchido aqui.
+ * O `lastModified` sai do `atualizadoEm` de cada viatura, escrito pelo painel
+ * a cada edição. Nunca da data do build: um `lastmod` que muda a cada deploy
+ * sem o conteúdo mudar é um `lastmod` que o Google aprende a ignorar — e
+ * perde-se o sinal justamente no dia em que a página muda mesmo.
+ *
+ * Quando a base não responde, o site serve o inventário estático, que não tem
+ * datas. Nesse caso o campo fica de fora, que é melhor do que uma data errada.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const viaturas = await getViaturas();
 
+  /*
+    Para a home e o catálogo, a data mais recente do inventário. As duas
+    páginas são listas do que existe: mudam exactamente quando muda uma
+    viatura, e não têm data própria de onde a tirar.
+  */
+  const alteracoes = viaturas
+    .map((v) => v.atualizadoEm)
+    .filter((d): d is Date => d instanceof Date);
+
+  const maisRecente = alteracoes.length
+    ? new Date(Math.max(...alteracoes.map((d) => d.getTime())))
+    : undefined;
+
   return [
-    { url: SITE_URL, changeFrequency: "daily", priority: 1 },
+    {
+      url: SITE_URL,
+      lastModified: maisRecente,
+      changeFrequency: "daily",
+      priority: 1,
+    },
     {
       url: urlAbsoluto("/viaturas"),
+      lastModified: maisRecente,
       changeFrequency: "daily",
       priority: 0.9,
     },
     {
+      // Sem `lastModified`: a página de contactos não muda com o inventário, e
+      // dar-lhe a data dele era dizer ao Google que mudou quando não mudou.
       url: urlAbsoluto("/contactos"),
       changeFrequency: "yearly" as const,
       priority: 0.6,
     },
     ...viaturas.map((v) => ({
       url: urlAbsoluto(urlViatura(v)),
+      lastModified: v.atualizadoEm,
       changeFrequency: "weekly" as const,
       // Viaturas vendidas continuam no sitemap, com prioridade menor: a página
       // mantém-se útil (links partilhados no WhatsApp) e sinaliza SoldOut.
