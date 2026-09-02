@@ -64,8 +64,16 @@ export async function enviarPedido(
     return { enviado: true };
   }
 
+  /*
+    O campo tem de trazer um instante **positivo**. Um `Number("")` dá zero, e
+    zero é finito: sem esta exigência, apagar o campo passava por "o
+    formulário está aberto desde 1970" e atravessava a verificação toda. Era o
+    contrário do que se pretende — quem mexe no formulário é justamente quem
+    esta verificação existe para apanhar.
+  */
   const iniciado = Number(dados.get("iniciadoEm"));
-  const segundos = Number.isFinite(iniciado) ? (Date.now() - iniciado) / 1000 : -1;
+  const valido = Number.isFinite(iniciado) && iniciado > 0 && iniciado <= Date.now();
+  const segundos = valido ? (Date.now() - iniciado) / 1000 : -1;
 
   if (segundos < SEGUNDOS_MINIMOS) {
     return {
