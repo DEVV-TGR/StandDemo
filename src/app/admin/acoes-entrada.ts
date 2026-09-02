@@ -23,7 +23,8 @@ import {
   VALIDADE_MS as VALIDADE_DO_DESAFIO,
 } from "@/lib/painel/codigo";
 import { enviarCodigo, ErroAoEnviar } from "@/lib/painel/email";
-import { podePedirCodigo, emPortugues, anotar } from "@/lib/painel/limites";
+import { podePedirCodigo, anotar } from "@/lib/painel/limites";
+import { emPortugues } from "@/lib/tempo";
 import { exigirSessaoNaAccao } from "@/lib/painel/porta";
 
 /*
