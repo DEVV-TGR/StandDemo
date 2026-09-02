@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CompramosOSeuCarro } from "@/components/home/CompramosOSeuCarro";
 import { Destaques } from "@/components/home/Destaques";
 import { GrelhaMarcas } from "@/components/home/GrelhaMarcas";
 import { Hero } from "@/components/home/Hero";
@@ -33,6 +34,7 @@ export default async function Home() {
       <Hero viaturas={viaturas} />
       <Destaques destaques={getDestaques(viaturas)} />
       <GrelhaMarcas viaturas={viaturas} />
+      <CompramosOSeuCarro />
       <SobreContactos />
     </>
   );

@@ -55,6 +55,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
     },
     /*
+      As duas páginas de pedidos. Sem `lastModified` pela mesma razão que a de
+      contactos: são páginas de serviço, não mudam com o inventário.
+    */
+    ...["/compramos", "/importamos"].map((caminho) => ({
+      url: urlAbsoluto(caminho),
+      changeFrequency: "yearly" as const,
+      priority: 0.6,
+    })),
+    /*
       As legais. `lastModified` é a data da aprovação do cliente, escrita à
       mão: é a data em que o texto passou a ser o que é, e não muda enquanto o
       texto não mudar. Se um dia se alterar uma cláusula, muda-se aqui também.
