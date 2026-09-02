@@ -15,8 +15,14 @@ import { getViaturas } from "@/lib/viaturas";
  * Quando a base não responde, o site serve o inventário estático, que não tem
  * datas. Nesse caso o campo fica de fora, que é melhor do que uma data errada.
  */
-/** Data em que o cliente aprovou os Termos e a Política de Privacidade. */
-const LEGAIS_APROVADAS_EM = new Date("2026-08-26T00:00:00.000Z");
+/**
+ * Data em que o cliente aprovou os Termos e a Política de Privacidade.
+ *
+ * Passou de 26/08 para 02/09 quando os dois textos foram revistos para cobrir
+ * os formulários de «Compramos» e «Importamos» — a data é a do texto, não a
+ * do deploy, e por isso muda quando o texto muda.
+ */
+const LEGAIS_APROVADAS_EM = new Date("2026-09-02T00:00:00.000Z");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const viaturas = await getViaturas();

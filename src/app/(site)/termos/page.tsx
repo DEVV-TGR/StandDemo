@@ -10,6 +10,17 @@ import { enderecoLinha, stand } from "@/data/stand";
  * houve validação jurídica — dispensou-a por escrito, e é a aprovação dele que
  * sustenta esta página.
  *
+ * **Revista quando o site passou a aceitar pedidos** — «Compramos o seu
+ * carro» e «Importamos o seu carro» (#39, #40). A cláusula da retoma passou a
+ * cobrir também a compra a particulares e a procura por encomenda, e diz o
+ * essencial: um pedido enviado pelo site não vincula ninguém. Carece de nova
+ * aprovação do cliente, como a primeira versão.
+ *
+ * **O que a cláusula nova deliberadamente não diz:** prazos de entrega,
+ * valores de sinal, e quem suporta o ISV e a legalização de uma viatura
+ * importada. São condições contratuais que o cliente ainda não fechou (#40),
+ * e anunciá-las no site seria fechá-las por ele.
+ *
  * Duas cláusulas a tratar com cuidado se alguma vez forem mexidas:
  *
  * **Garantia.** O que o stand dá (18 meses, motor e caixa) está em cláusula
@@ -70,7 +81,9 @@ export default function TermosPage() {
 
       <Seccao titulo="O que este site é">
         <p>
-          Este site mostra as viaturas disponíveis no stand.{" "}
+          Este site mostra as viaturas disponíveis no stand e permite enviar
+          pedidos de avaliação de uma viatura para venda ou retoma e pedidos de
+          viatura por encomenda.{" "}
           <strong className="text-ink">Não vende online</strong>: não há
           carrinho de compras, nem pagamento, nem contrato celebrado à
           distância. A compra faz-se presencialmente, no stand.
@@ -111,11 +124,30 @@ export default function TermosPage() {
         </p>
       </Seccao>
 
-      <Seccao titulo="Retoma">
+      <Seccao titulo="Compra, retoma e viaturas por encomenda">
         <p>
-          O stand aceita viaturas em retoma. O valor é apurado por avaliação
-          feita pelo stand, tendo em conta o estado da viatura e o mercado à
-          data, e é comunicado antes de qualquer compromisso.
+          O stand aceita viaturas em retoma e compra viaturas a particulares. O
+          valor é apurado por avaliação feita pelo stand, tendo em conta o
+          estado da viatura e o mercado à data, e é comunicado antes de
+          qualquer compromisso.
+        </p>
+        <p>
+          O stand procura ainda viaturas por encomenda, a pedido de quem não
+          encontra no stand o que procura.
+        </p>
+        <p>
+          <strong className="text-ink">
+            Um pedido enviado pelo site não cria compromisso para nenhuma das
+            partes.
+          </strong>{" "}
+          A avaliação de uma viatura e as condições de uma procura por
+          encomenda — preço, eventuais custos de importação e legalização,
+          sinal e prazos — são comunicadas por escrito antes de qualquer
+          acordo, e é esse acordo, e só ele, que vincula as partes.
+        </p>
+        <p>
+          A avaliação feita a partir da descrição enviada pelo site é
+          provisória e depende de confirmação com a viatura à frente.
         </p>
       </Seccao>
 
@@ -230,7 +262,7 @@ export default function TermosPage() {
       </Seccao>
 
       <p className="mt-12 text-xs text-muted">
-        Última atualização: 26 de agosto de 2026.
+        Última atualização: 2 de setembro de 2026.
       </p>
     </div>
   );
