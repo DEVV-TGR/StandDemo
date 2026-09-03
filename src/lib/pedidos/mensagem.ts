@@ -185,32 +185,33 @@ export function assuntoEmail(tipo: TipoDePedido, valores: Valores): string {
     .slice(0, 120);
 }
 
-export function textoEmail(
+/*
+  O conteúdo do email de um pedido, na forma que o molde entende.
+
+  As mesmas secções que a mensagem do WhatsApp, mais o cabeçalho e o rodapé
+  que só fazem sentido num email — nomeadamente o lembrete de que responder
+  fala com o cliente, que é a acção seguinte em quase todos os pedidos.
+*/
+export function conteudoEmail(
   tipo: TipoDePedido,
   valores: Valores,
   { fotos, quando }: { fotos: number; quando: Date },
-): string {
-  const cabecalho =
-    tipo === "compra"
-      ? "Pedido de avaliação enviado pelo site — Compramos o seu carro."
-      : "Pedido de viatura por encomenda enviado pelo site — Importamos o seu carro.";
-
-  const blocos = linhas(tipo, valores).map((s) =>
-    [
-      s.titulo.toUpperCase(),
-      ...s.linhas.map(([rotulo, valor]) => `${rotulo}: ${valor}`),
-    ].join("\n"),
-  );
-
-  const rodape = [
+) {
+  const anexos =
     fotos > 0
       ? fotos === 1
-        ? "Segue 1 fotografia em anexo."
-        : `Seguem ${fotos} fotografias em anexo.`
-      : "Sem fotografias.",
-    `Recebido a ${formatarData(quando)}.`,
-    "Responder a este email responde directamente a quem fez o pedido.",
-  ].join("\n");
+        ? " Segue 1 fotografia em anexo."
+        : ` Seguem ${fotos} fotografias em anexo.`
+      : "";
 
-  return [cabecalho, ...blocos, rodape].join("\n\n");
+  return {
+    etiqueta: tipo === "compra" ? "Compramos o seu carro" : "Importamos o seu carro",
+    titulo:
+      tipo === "compra"
+        ? "Pedido de avaliação"
+        : "Pedido de viatura por encomenda",
+    entrada: `Chegou pelo site a ${formatarData(quando)}.${anexos}`,
+    blocos: linhas(tipo, valores).map((s) => ({ titulo: s.titulo, linhas: s.linhas })),
+    nota: "Responder a este email fala directamente com quem fez o pedido.",
+  };
 }

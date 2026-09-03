@@ -2,7 +2,8 @@ import "server-only";
 import { createHash } from "node:crypto";
 import { enviarEmail, ErroAoEnviar } from "@/lib/email";
 import { stand } from "@/data/stand";
-import { assuntoEmail, textoEmail, type Valores } from "@/lib/pedidos/mensagem";
+import { anexoDoLogo, moldeHtml, moldeTexto } from "@/lib/email-molde";
+import { assuntoEmail, conteudoEmail, type Valores } from "@/lib/pedidos/mensagem";
 import { anotarEnvio, podeEnviar } from "@/lib/pedidos/limites";
 import { prepararAnexos } from "@/lib/pedidos/anexos";
 import { ErroDeFotos } from "@/lib/pedidos/fotos";
@@ -99,9 +100,10 @@ export async function enviarPedido(
     const veredicto = SCHEMAS[tipo].safeParse(bruto);
     if (!veredicto.success) return { erro: primeiroErro(veredicto.error.issues) };
 
-    const anexos = await prepararAnexos(dados.getAll("fotos"));
+    const fotos = await prepararAnexos(dados.getAll("fotos"));
     const quando = new Date();
-    const texto = textoEmail(tipo, bruto, { fotos: anexos.length, quando });
+    const conteudo = conteudoEmail(tipo, bruto, { fotos: fotos.length, quando });
+    const texto = moldeTexto(conteudo);
 
     await enviarEmail({
       /*
@@ -113,12 +115,14 @@ export async function enviarPedido(
       responderA: veredicto.data.email,
       assunto: assuntoEmail(tipo, bruto),
       texto,
+      html: moldeHtml(conteudo),
       /* Dois cliques no mesmo pedido dão um email só. */
       chaveIdempotencia: `pedido-${createHash("sha256")
         .update(`${tipo}|${veredicto.data.email}|${texto}`)
         .digest("hex")
         .slice(0, 32)}`,
-      anexos,
+      /* O logótipo vai à frente das fotografias: é o que se desenha no rodapé. */
+      anexos: [anexoDoLogo, ...fotos],
     });
 
     await anotarEnvio();

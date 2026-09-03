@@ -84,12 +84,26 @@ export type Anexo = {
   tipo: string;
   /** O conteúdo em base64, tal como o Resend o quer. */
   conteudo: string;
+  /*
+    Com `id`, a imagem deixa de ser um anexo à parte e passa a desenhar-se
+    dentro da mensagem, onde o HTML lhe chamar `cid:<id>`. É assim que o
+    logótipo aparece sem depender de o cliente de email aceitar carregar
+    imagens de fora.
+  */
+  id?: string;
 };
 
 export type Email = {
   para: string;
   assunto: string;
+  /*
+    As duas versões saem sempre juntas. O `texto` não é um resto: é o que
+    aparece na pré-visualização das notificações, o que se lê quando o cliente
+    de email recusa HTML, e o que impede a mensagem de contar como só-imagem
+    para os filtros de spam.
+  */
   texto: string;
+  html?: string;
   /** Para onde vai a resposta. Por omissão, o remetente. */
   responderA?: string;
   /** Dois cliques no botão dão dois pedidos iguais; com esta chave sai um email só. */
@@ -153,12 +167,14 @@ export async function enviarEmail(email: Email): Promise<void> {
       reply_to: email.responderA ?? de,
       subject: email.assunto,
       text: email.texto,
+      ...(email.html ? { html: email.html } : {}),
       ...(email.anexos?.length
         ? {
             attachments: email.anexos.map((a) => ({
               filename: a.nome,
               content_type: a.tipo,
               content: a.conteudo,
+              ...(a.id ? { content_id: a.id } : {}),
             })),
           }
         : {}),
