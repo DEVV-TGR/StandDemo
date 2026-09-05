@@ -138,7 +138,7 @@ export function FormularioImportacao() {
               minimo={1000}
               exemplo="45000"
               sufixo="€"
-              nota="Um valor de referência chega. Serve para procurar no sítio certo, não é compromisso."
+              nota="Para a viatura — o serviço e o transporte são apresentados à parte. Um valor de referência chega; não é compromisso."
             />
             <CampoSelecao
               nome="prazo"

@@ -16,10 +16,14 @@ import { enderecoLinha, stand } from "@/data/stand";
  * essencial: um pedido enviado pelo site não vincula ninguém. Carece de nova
  * aprovação do cliente, como a primeira versão.
  *
- * **O que a cláusula nova deliberadamente não diz:** prazos de entrega,
- * valores de sinal, e quem suporta o ISV e a legalização de uma viatura
- * importada. São condições contratuais que o cliente ainda não fechou (#40),
- * e anunciá-las no site seria fechá-las por ele.
+ * **O que o cliente fechou a 05/09/2026** (#40), e que a cláusula passou a
+ * dizer: numa viatura por encomenda o valor indicado é o da viatura, com o
+ * serviço do stand e o transporte à parte — ao contrário das viaturas em
+ * stock, cujo preço anunciado é final —, e não há sinal, paga-se no fim.
+ *
+ * **O que continua deliberadamente por dizer:** prazos de entrega. O cliente
+ * respondeu que não quer nenhum no site, e uma frase como «entrega em seis
+ * semanas» seria uma condição contratual escrita por engano.
  *
  * Duas cláusulas a tratar com cuidado se alguma vez forem mexidas:
  *
@@ -141,9 +145,15 @@ export default function TermosPage() {
             partes.
           </strong>{" "}
           A avaliação de uma viatura e as condições de uma procura por
-          encomenda — preço, eventuais custos de importação e legalização,
-          sinal e prazos — são comunicadas por escrito antes de qualquer
-          acordo, e é esse acordo, e só ele, que vincula as partes.
+          encomenda são comunicadas por escrito antes de qualquer acordo, e é
+          esse acordo, e só ele, que vincula as partes.
+        </p>
+        <p>
+          Numa viatura por encomenda, e ao contrário das viaturas em stock, o
+          valor indicado é o da viatura. O serviço do stand, o transporte e os
+          restantes custos até à entrega são apresentados à parte, e o total é
+          comunicado por escrito antes de qualquer acordo. Não é pedido sinal
+          para o stand iniciar a procura: o pagamento é feito no fim.
         </p>
         <p>
           A avaliação feita a partir da descrição enviada pelo site é
@@ -262,7 +272,7 @@ export default function TermosPage() {
       </Seccao>
 
       <p className="mt-12 text-xs text-muted">
-        Última atualização: 2 de setembro de 2026.
+        Última atualização: 5 de setembro de 2026.
       </p>
     </div>
   );

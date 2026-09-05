@@ -12,9 +12,9 @@ import { openGraphRota, seoDescricao, seoTitulo } from "@/lib/seo";
   maioria. Esta página aproveita essa visita: em vez de a pessoa fechar o
   separador, diz o que procura e o stand vai buscá-lo.
 
-  Sobre o que se promete: **nada**. Prazos, sinal, ISV e legalização são
-  condições contratuais que o cliente ainda não fechou, e a página está
-  escrita para não as anunciar por acidente. Os Termos dizem o mesmo.
+  Sobre o que se promete: **nada**. Não há prazos — o cliente respondeu que
+  não quer nenhum —, e os custos ficam para os Termos, que dizem o essencial:
+  o valor indicado é o da viatura, e o serviço e o transporte vêm à parte.
 */
 
 const TITULO = seoTitulo("Importamos o seu carro por encomenda");

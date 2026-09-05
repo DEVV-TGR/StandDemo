@@ -19,10 +19,11 @@ import { getViaturas } from "@/lib/viaturas";
  * Data em que o cliente aprovou os Termos e a Política de Privacidade.
  *
  * Passou de 26/08 para 02/09 quando os dois textos foram revistos para cobrir
- * os formulários de «Compramos» e «Importamos» — a data é a do texto, não a
- * do deploy, e por isso muda quando o texto muda.
+ * os formulários de «Compramos» e «Importamos», e daí para 05/09 quando o
+ * cliente fechou os custos e o sinal das viaturas por encomenda — a data é a
+ * do texto mais recente, não a do deploy, e por isso muda quando o texto muda.
  */
-const LEGAIS_APROVADAS_EM = new Date("2026-09-02T00:00:00.000Z");
+const LEGAIS_APROVADAS_EM = new Date("2026-09-05T00:00:00.000Z");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const viaturas = await getViaturas();

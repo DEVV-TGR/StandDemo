@@ -7,10 +7,10 @@ import { stand, telHref } from "@/data/stand";
   processo, e quem está a pensar em vender o carro quer saber ao que se
   compromete antes de escrever a matrícula.
 
-  **Nenhum passo promete prazo.** Não é timidez: enquanto o cliente não
-  fechar o que promete quanto a prazos, sinal e legalização, uma frase como
-  "resposta em 24 horas" é uma condição contratual escrita por engano. Os
-  Termos dizem o mesmo, e é de propósito que dizem.
+  **Nenhum passo promete prazo.** Não é timidez: o cliente respondeu, a
+  05/09/2026, que não quer prazos no site, e uma frase como "resposta em 24
+  horas" seria uma condição contratual escrita por engano. Os Termos dizem o
+  mesmo, e é de propósito que dizem.
 */
 export function ComoFunciona({
   titulo,
