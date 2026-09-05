@@ -9,11 +9,22 @@ import { enderecoLinha, stand } from "@/data/stand";
  * para onde vão, que serviços de terceiros são carregados — e o resto veio das
  * respostas do cliente. Não houve validação jurídica: dispensou-a por escrito.
  *
+ * **Revista quando o site passou a ter formulários** — «Compramos o seu carro»
+ * e «Importamos o seu carro» (#39, #40). Até aí esta página dizia, por
+ * escrito, que o site não tinha formulários; deixou de ser verdade, e o que
+ * mudou está nas secções "Que dados", "Finalidades", "Prazos" e "Serviços de
+ * terceiros". Carece de nova aprovação do cliente, como a primeira versão.
+ *
  * Dois pontos a não perder de vista:
  *
  * **"Serviços de terceiros" diz que não há píxeis nem cookies de seguimento.**
  * É verdade hoje. Se algum dia entrar publicidade dirigida, esta secção muda e
  * passa a ser preciso consentimento prévio.
+ *
+ * **Os pedidos dos formulários não são guardados.** Vão por email para o
+ * stand e mais nada — sem base de dados, sem armazenamento de fotografias. É
+ * uma afirmação sobre o código (`src/lib/pedidos/enviar.ts`), e se um dia os
+ * pedidos passarem a ficar no painel, esta página muda outra vez.
  *
  * **O prazo dos documentos de venda não tem número, e é de propósito.** O
  * cliente disse "2 anos por aí", mas quem manda nesse prazo é a obrigação
@@ -72,15 +83,37 @@ export default function PrivacidadePage() {
 
       <Seccao titulo="Que dados são tratados">
         <p>
-          O site não tem formulários. Os dados que chegam ao stand são os que
-          cada pessoa decide enviar ao usar os contactos publicados — telefone,
+          O site tem dois formulários: «Compramos o seu carro» e «Importamos o
+          seu carro». Quem os preenche envia o nome, o telefone e o email, e a
+          descrição da viatura que quer vender ou dar de retoma — matrícula,
+          marca, modelo, ano, quilómetros e estado — ou da viatura que procura
+          — marca, modelo, características, orçamento e prazo. Pode juntar
+          fotografias, se quiser.
+        </p>
+        <p>
+          <strong className="text-ink">Os pedidos não ficam guardados neste
+          site.</strong> São enviados por email para o stand, fotografias
+          incluídas, e não são gravados em nenhuma base de dados nem em
+          nenhum armazenamento de ficheiros do site. A partir daí vivem na
+          caixa de correio do stand, como qualquer outra mensagem.
+        </p>
+        <p>
+          Os mesmos formulários permitem abrir uma conversa de WhatsApp com a
+          mensagem já escrita. Nesse caso os dados não passam por aqui: seguem
+          directamente para o WhatsApp, e é a pessoa que decide enviá-los.
+        </p>
+        <p>
+          Fora dos formulários, os dados que chegam ao stand são os que cada
+          pessoa decide enviar ao usar os contactos publicados — telefone,
           email ou WhatsApp — e resumem-se, tipicamente, a nome, contacto e ao
           conteúdo da mensagem.
         </p>
         <p>
           Como em qualquer site, o servidor regista dados técnicos de acesso
           (endereço IP, data e hora, tipo de dispositivo e navegador), por
-          motivos de segurança e funcionamento.
+          motivos de segurança e funcionamento. Ao enviar um formulário, o
+          endereço IP é ainda usado para limitar o número de envios seguidos,
+          de forma transitória e sem ficar registado em texto legível.
         </p>
       </Seccao>
 
@@ -90,6 +123,14 @@ export default function PrivacidadePage() {
           processo de compra, com fundamento nas diligências pré-contratuais
           solicitadas pelo próprio; e garantir o funcionamento e a segurança do
           site, com fundamento no interesse legítimo.
+        </p>
+        <p>
+          Avaliar viaturas propostas para venda ou retoma e procurar viaturas
+          por encomenda, respondendo ao pedido de quem preencheu o formulário —
+          com fundamento nas diligências pré-contratuais pedidas pelo próprio e
+          no consentimento dado ao enviar o formulário. Esse consentimento pode
+          ser retirado a qualquer momento, sem afetar o que já foi tratado até
+          aí.
         </p>
         <p>
           Quando um pedido de informação fica sem resposta durante algum tempo,
@@ -102,7 +143,9 @@ export default function PrivacidadePage() {
       <Seccao titulo="Prazos de conservação">
         <p>
           Os contactos de quem pediu informação e não chegou a comprar são
-          conservados durante dois anos a contar do último contacto.
+          conservados durante dois anos a contar do último contacto. Os pedidos
+          enviados pelos formulários seguem o mesmo prazo, contado da mesma
+          forma.
         </p>
         <p>
           Os documentos associados a uma venda são conservados durante o prazo
@@ -115,6 +158,13 @@ export default function PrivacidadePage() {
         <p>
           O site é alojado na Vercel, que trata dados técnicos de acesso em
           nome do stand.
+        </p>
+        <p>
+          Os pedidos enviados pelos formulários chegam ao stand por email
+          através da Resend, que os trata em nome do stand e apenas para os
+          entregar. O tratamento pode envolver servidores fora da União
+          Europeia, ao abrigo das garantias previstas no Regulamento Geral
+          sobre a Proteção de Dados.
         </p>
         <p>
           A página de contactos e a homepage embebem um mapa do Google Maps.
@@ -155,7 +205,7 @@ export default function PrivacidadePage() {
       </Seccao>
 
       <p className="mt-12 text-xs text-muted">
-        Última atualização: 26 de agosto de 2026.
+        Última atualização: 2 de setembro de 2026.
       </p>
     </div>
   );

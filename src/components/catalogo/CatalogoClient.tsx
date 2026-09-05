@@ -17,6 +17,7 @@ import {
   serializeFiltros,
   type Filtros,
 } from "@/lib/filtros";
+import { BotaoLink } from "@/components/ui/Botao";
 import { formatarKm, formatarPreco } from "@/lib/format";
 import type { Viatura } from "@/lib/types";
 
@@ -323,15 +324,25 @@ export function CatalogoClient({ viaturas }: { viaturas: Viatura[] }) {
             </p>
             <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-muted">
               Nenhuma viatura corresponde aos parâmetros escolhidos. Ajuste os
-              filtros ou fale connosco — encontramos a viatura certa para si.
+              filtros — ou diga-nos o que procura e importamos por encomenda.
             </p>
-            <button
-              type="button"
-              onClick={limpar}
-              className="press mt-6 rounded-full border border-gold/40 px-6 py-3 text-sm text-champagne hover:border-gold hover:text-gold-bright"
-            >
-              Limpar parâmetros
-            </button>
+            {/*
+              O segundo botão é o ponto de entrada da /importamos, e este é o
+              sítio onde faz mais sentido: quem chega aqui acabou de não
+              encontrar o que queria. É a diferença entre um beco e uma porta.
+            */}
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              <button
+                type="button"
+                onClick={limpar}
+                className="press rounded-full border border-gold/40 px-6 py-3 text-sm text-champagne hover:border-gold hover:text-gold-bright"
+              >
+                Limpar parâmetros
+              </button>
+              <BotaoLink href="/importamos" variante="contorno">
+                Pedir por encomenda →
+              </BotaoLink>
+            </div>
           </div>
         ) : (
           <div className="grid gap-6 sm:grid-cols-2">

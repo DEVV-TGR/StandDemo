@@ -9,6 +9,8 @@ import { stand, telHref } from "@/data/stand";
 const ligacoes = [
   { href: "/", rotulo: "Início" },
   { href: "/viaturas", rotulo: "Viaturas" },
+  { href: "/compramos", rotulo: "Compramos" },
+  { href: "/importamos", rotulo: "Importamos" },
   { href: "/contactos", rotulo: "Contactos" },
 ];
 
@@ -109,10 +111,17 @@ export function Header() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Principal">
+        <nav className="hidden items-center gap-6 md:flex lg:gap-8" aria-label="Principal">
           {ligacoes.map((l) => {
+            /*
+              A `/` só acende em `/`; as outras acendem também nas suas
+              subpáginas. Antes isto estava escrito com o `/viaturas` lá
+              dentro, e cada rota nova entrava sem realce nenhum.
+            */
             const ativo =
-              l.href === "/" ? pathname === "/" : pathname.startsWith("/viaturas") && l.href === "/viaturas";
+              l.href === "/"
+                ? pathname === "/"
+                : pathname === l.href || pathname.startsWith(`${l.href}/`);
             return (
               <Link
                 key={l.href}

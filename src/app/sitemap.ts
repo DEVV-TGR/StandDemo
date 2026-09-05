@@ -15,8 +15,15 @@ import { getViaturas } from "@/lib/viaturas";
  * Quando a base não responde, o site serve o inventário estático, que não tem
  * datas. Nesse caso o campo fica de fora, que é melhor do que uma data errada.
  */
-/** Data em que o cliente aprovou os Termos e a Política de Privacidade. */
-const LEGAIS_APROVADAS_EM = new Date("2026-08-26T00:00:00.000Z");
+/**
+ * Data em que o cliente aprovou os Termos e a Política de Privacidade.
+ *
+ * Passou de 26/08 para 02/09 quando os dois textos foram revistos para cobrir
+ * os formulários de «Compramos» e «Importamos», e daí para 05/09 quando o
+ * cliente fechou os custos e o sinal das viaturas por encomenda — a data é a
+ * do texto mais recente, não a do deploy, e por isso muda quando o texto muda.
+ */
+const LEGAIS_APROVADAS_EM = new Date("2026-09-05T00:00:00.000Z");
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const viaturas = await getViaturas();
@@ -54,6 +61,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "yearly" as const,
       priority: 0.6,
     },
+    /*
+      As duas páginas de pedidos. Sem `lastModified` pela mesma razão que a de
+      contactos: são páginas de serviço, não mudam com o inventário.
+    */
+    ...["/compramos", "/importamos"].map((caminho) => ({
+      url: urlAbsoluto(caminho),
+      changeFrequency: "yearly" as const,
+      priority: 0.6,
+    })),
     /*
       As legais. `lastModified` é a data da aprovação do cliente, escrita à
       mão: é a data em que o texto passou a ser o que é, e não muda enquanto o
