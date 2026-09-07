@@ -11,10 +11,34 @@ import type { ReactNode } from "react";
   Todos os campos são **controlados**. Não é preferência: depois de uma server
   action o React 19 faz reset ao `<form>`, e um erro de envio apagava tudo o
   que a pessoa tinha escrito. Com o valor em estado, o que ela escreveu fica.
+
+  ## O erro vive no campo, não só no fundo da página
+
+  Cada campo aceita um `erro` e um `aoSair`. Quem decide *quando* mostrar é o
+  `FormularioPedido` — aqui só se desenha o que ele mandar. A regra que ele
+  aplica é a que se espera de um formulário longo: nada aparece enquanto se
+  escreve, a frase surge ao sair do campo, e desaparece assim que o valor
+  passa a servir.
+
+  Os campos de escolha — `select`, pílulas — avisam ao mudar e não ao sair:
+  escolher uma opção já é uma decisão terminada, e esperar pelo `blur` para
+  dizer que falta escolher chega tarde de mais.
 */
 
+/*
+  A moldura sem cor de linha. A cor entra a seguir, e entra **uma só vez**:
+  duas utilitárias de `border-color` na mesma classe deixam a que ganha ao
+  acaso da ordem em que o Tailwind as escreve na folha.
+*/
 export const inputBase =
-  "w-full rounded-xl border border-line bg-background px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-muted/60 focus:border-gold disabled:opacity-60";
+  "w-full rounded-xl border bg-background px-4 py-3 text-sm text-ink outline-none transition-colors placeholder:text-muted/60 disabled:opacity-60";
+
+const LINHA_CALMA = "border-line focus:border-gold";
+const LINHA_ERRADA = "border-red-deep focus:border-red";
+
+function moldura(erro?: string, extra = "") {
+  return `${inputBase} ${erro ? LINHA_ERRADA : LINHA_CALMA} ${extra}`;
+}
 
 export const labelBase =
   "mb-1.5 block text-xs uppercase tracking-[0.2em] text-muted";
@@ -29,6 +53,10 @@ type Comum = {
   /** Ocupa a linha toda numa grelha de duas colunas. */
   largo?: boolean;
   nota?: string;
+  /** A frase que substitui a nota quando o que está escrito não serve. */
+  erro?: string;
+  /** O campo perdeu o foco: é o momento de o dar por preenchido. */
+  aoSair?: () => void;
 };
 
 function Envolvente({
@@ -36,12 +64,14 @@ function Envolvente({
   obrigatorio,
   largo,
   nota,
+  erro,
   children,
 }: {
   rotulo: string;
   obrigatorio?: boolean;
   largo?: boolean;
   nota?: string;
+  erro?: string;
   children: ReactNode;
 }) {
   return (
@@ -51,7 +81,16 @@ function Envolvente({
         {!obrigatorio && <span className="ml-1.5 normal-case tracking-normal">(opcional)</span>}
       </span>
       {children}
-      {nota && <span className="mt-1.5 block text-xs leading-relaxed text-muted">{nota}</span>}
+      {/*
+        O erro ocupa o lugar da nota em vez de se somar a ela: duas linhas de
+        letra pequena por baixo do mesmo campo lêem-se como ruído, e a que
+        interessa naquele momento é a que diz o que está mal.
+      */}
+      {erro ? (
+        <span className="mt-1.5 block text-xs leading-relaxed text-red-bright">{erro}</span>
+      ) : (
+        nota && <span className="mt-1.5 block text-xs leading-relaxed text-muted">{nota}</span>
+      )}
     </label>
   );
 }
@@ -75,12 +114,14 @@ export function Campo({
         name={p.nome}
         value={p.valor}
         onChange={(e) => p.aoMudar(e.target.value)}
+        onBlur={p.aoSair}
         required={p.obrigatorio}
         disabled={p.desativado}
         placeholder={exemplo}
         autoComplete={autoPreencher}
         maxLength={maximo}
-        className={inputBase}
+        aria-invalid={p.erro ? true : undefined}
+        className={moldura(p.erro)}
       />
     </Envolvente>
   );
@@ -107,12 +148,14 @@ export function CampoNumero({
           name={p.nome}
           value={p.valor}
           onChange={(e) => p.aoMudar(e.target.value.replace(/[^\d]/g, ""))}
+          onBlur={p.aoSair}
           required={p.obrigatorio}
           disabled={p.desativado}
           placeholder={exemplo}
           min={minimo}
           max={maximo}
-          className={`${inputBase} ${sufixo ? "pr-12" : ""}`}
+          aria-invalid={p.erro ? true : undefined}
+          className={moldura(p.erro, sufixo ? "pr-12" : "")}
         />
         {sufixo && (
           <span
@@ -143,10 +186,15 @@ export function CampoSelecao({
         <select
           name={p.nome}
           value={p.valor}
-          onChange={(e) => p.aoMudar(e.target.value)}
+          onChange={(e) => {
+            p.aoMudar(e.target.value);
+            p.aoSair?.();
+          }}
+          onBlur={p.aoSair}
           required={p.obrigatorio}
           disabled={p.desativado}
-          className={`${inputBase} appearance-none bg-surface/80 pr-10 [&>option]:bg-surface`}
+          aria-invalid={p.erro ? true : undefined}
+          className={moldura(p.erro, "appearance-none bg-surface/80 pr-10 [&>option]:bg-surface")}
         >
           {vazio !== undefined && <option value="">{vazio}</option>}
           {opcoes.map((o) => {
@@ -181,12 +229,14 @@ export function CampoArea({
         name={p.nome}
         value={p.valor}
         onChange={(e) => p.aoMudar(e.target.value)}
+        onBlur={p.aoSair}
         required={p.obrigatorio}
         disabled={p.desativado}
         placeholder={exemplo}
         rows={linhas}
         maxLength={maximo}
-        className={`${inputBase} resize-y leading-relaxed`}
+        aria-invalid={p.erro ? true : undefined}
+        className={moldura(p.erro, "resize-y leading-relaxed")}
       />
     </Envolvente>
   );
@@ -209,6 +259,8 @@ export function CampoEscolha({
   opcoes,
   desativado,
   largo,
+  erro,
+  aoSair,
 }: {
   nome: string;
   rotulo: string;
@@ -217,6 +269,8 @@ export function CampoEscolha({
   opcoes: readonly (readonly [string, string])[];
   desativado?: boolean;
   largo?: boolean;
+  erro?: string;
+  aoSair?: () => void;
 }) {
   return (
     <fieldset className={largo ? "sm:col-span-2" : ""}>
@@ -226,7 +280,11 @@ export function CampoEscolha({
           <label
             key={v}
             className={`press cursor-pointer rounded-full border px-4 py-2 text-sm transition-colors has-[:checked]:border-gold has-[:checked]:text-gold-bright has-[:focus-visible]:border-gold ${
-              valor === v ? "border-gold text-gold-bright" : "border-line text-muted"
+              valor === v
+                ? "border-gold text-gold-bright"
+                : erro
+                  ? "border-red-deep text-muted"
+                  : "border-line text-muted"
             } ${desativado ? "opacity-60" : ""}`}
           >
             <input
@@ -234,7 +292,10 @@ export function CampoEscolha({
               name={nome}
               value={v}
               checked={valor === v}
-              onChange={() => aoMudar(v)}
+              onChange={() => {
+                aoMudar(v);
+                aoSair?.();
+              }}
               disabled={desativado}
               className="sr-only"
             />
@@ -242,6 +303,7 @@ export function CampoEscolha({
           </label>
         ))}
       </div>
+      {erro && <p className="mt-1.5 text-xs leading-relaxed text-red-bright">{erro}</p>}
     </fieldset>
   );
 }
@@ -251,31 +313,37 @@ export function CampoConsentimento({
   marcado,
   aoMudar,
   desativado,
+  erro,
   children,
 }: {
   nome: string;
   marcado: boolean;
   aoMudar: (marcado: boolean) => void;
   desativado?: boolean;
+  erro?: string;
   children: ReactNode;
 }) {
   return (
-    <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-muted">
-      <input
-        type="checkbox"
-        name={nome}
-        checked={marcado}
-        onChange={(e) => aoMudar(e.target.checked)}
-        disabled={desativado}
-        /*
-          `accent-color` pinta a caixa nativa de dourado sem a substituir por
-          um desenho nosso — a caixa do sistema continua a ser a que o teclado
-          e os leitores de ecrã conhecem.
-        */
-        className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--gold)] disabled:opacity-60"
-      />
-      <span>{children}</span>
-    </label>
+    <div>
+      <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-muted">
+        <input
+          type="checkbox"
+          name={nome}
+          checked={marcado}
+          onChange={(e) => aoMudar(e.target.checked)}
+          disabled={desativado}
+          aria-invalid={erro ? true : undefined}
+          /*
+            `accent-color` pinta a caixa nativa de dourado sem a substituir por
+            um desenho nosso — a caixa do sistema continua a ser a que o teclado
+            e os leitores de ecrã conhecem.
+          */
+          className="mt-0.5 h-4 w-4 shrink-0 accent-[var(--gold)] disabled:opacity-60"
+        />
+        <span>{children}</span>
+      </label>
+      {erro && <p className="mt-1.5 text-xs leading-relaxed text-red-bright">{erro}</p>}
+    </div>
   );
 }
 

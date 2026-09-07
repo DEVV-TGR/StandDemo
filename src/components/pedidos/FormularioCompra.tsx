@@ -13,6 +13,11 @@ import { COMBUSTIVEIS, TRANSMISSOES } from "@/lib/viatura-schema";
   A ordem é a de quem responde de cabeça: primeiro o que está no documento
   único, depois o que se sabe do carro, depois o que só o dono sabe, e no
   fim a pergunta que muda a conversa toda — vender ou dar de retoma.
+
+  O `campo("matricula")` traz o valor, o `onChange`, a frase de erro e o
+  momento de a mostrar. A chave é a do schema, e é por aí que os três se
+  encontram: mudar o nome de um campo em `pedidos/schema.ts` sem o mudar
+  aqui deixa de compilar o pedido, e não passa em silêncio.
 */
 
 const ANO_ACTUAL = new Date().getFullYear();
@@ -32,14 +37,13 @@ export function FormularioCompra() {
           "Recebemos a descrição da sua viatura. Vemos o que temos de ver e entramos em contacto pelo telefone ou email que indicou. Se preferir adiantar, fale connosco no WhatsApp.",
       }}
     >
-      {({ valores, mudar, desativado, aoMudarFotos }) => (
+      {({ campo, desativado, aoMudarFotos }) => (
         <>
           <Bloco titulo="A sua" gold="viatura">
             <Campo
               nome="matricula"
               rotulo="Matrícula"
-              valor={valores.matricula ?? ""}
-              aoMudar={mudar("matricula")}
+              {...campo("matricula")}
               obrigatorio
               desativado={desativado}
               exemplo="AA-00-AA"
@@ -48,8 +52,7 @@ export function FormularioCompra() {
             <Campo
               nome="marca"
               rotulo="Marca"
-              valor={valores.marca ?? ""}
-              aoMudar={mudar("marca")}
+              {...campo("marca")}
               obrigatorio
               desativado={desativado}
               exemplo="BMW"
@@ -58,8 +61,7 @@ export function FormularioCompra() {
             <Campo
               nome="modelo"
               rotulo="Modelo e versão"
-              valor={valores.modelo ?? ""}
-              aoMudar={mudar("modelo")}
+              {...campo("modelo")}
               obrigatorio
               desativado={desativado}
               exemplo="Série 3 320d Pack M"
@@ -69,8 +71,7 @@ export function FormularioCompra() {
             <CampoSelecao
               nome="registoMes"
               rotulo="Mês da matrícula"
-              valor={valores.registoMes ?? ""}
-              aoMudar={mudar("registoMes")}
+              {...campo("registoMes")}
               obrigatorio
               desativado={desativado}
               vazio="Escolher"
@@ -79,8 +80,7 @@ export function FormularioCompra() {
             <CampoNumero
               nome="registoAno"
               rotulo="Ano da matrícula"
-              valor={valores.registoAno ?? ""}
-              aoMudar={mudar("registoAno")}
+              {...campo("registoAno")}
               obrigatorio
               desativado={desativado}
               minimo={1950}
@@ -90,8 +90,7 @@ export function FormularioCompra() {
             <CampoSelecao
               nome="combustivel"
               rotulo="Combustível"
-              valor={valores.combustivel ?? ""}
-              aoMudar={mudar("combustivel")}
+              {...campo("combustivel")}
               obrigatorio
               desativado={desativado}
               vazio="Escolher"
@@ -100,8 +99,7 @@ export function FormularioCompra() {
             <CampoSelecao
               nome="transmissao"
               rotulo="Caixa"
-              valor={valores.transmissao ?? ""}
-              aoMudar={mudar("transmissao")}
+              {...campo("transmissao")}
               obrigatorio
               desativado={desativado}
               vazio="Escolher"
@@ -110,8 +108,7 @@ export function FormularioCompra() {
             <CampoNumero
               nome="quilometros"
               rotulo="Quilómetros"
-              valor={valores.quilometros ?? ""}
-              aoMudar={mudar("quilometros")}
+              {...campo("quilometros")}
               obrigatorio
               desativado={desativado}
               minimo={0}
@@ -121,8 +118,7 @@ export function FormularioCompra() {
             <CampoSelecao
               nome="livroRevisoes"
               rotulo="Livro de revisões"
-              valor={valores.livroRevisoes ?? ""}
-              aoMudar={mudar("livroRevisoes")}
+              {...campo("livroRevisoes")}
               desativado={desativado}
               vazio="Não sei"
               opcoes={SIM_NAO.map((o) => [o.valor, o.rotulo] as const)}
@@ -130,8 +126,7 @@ export function FormularioCompra() {
             <CampoNumero
               nome="proprietarios"
               rotulo="Proprietários"
-              valor={valores.proprietarios ?? ""}
-              aoMudar={mudar("proprietarios")}
+              {...campo("proprietarios")}
               desativado={desativado}
               minimo={1}
               maximo={20}
@@ -140,8 +135,7 @@ export function FormularioCompra() {
             <CampoArea
               nome="estado"
               rotulo="Estado da viatura"
-              valor={valores.estado ?? ""}
-              aoMudar={mudar("estado")}
+              {...campo("estado")}
               desativado={desativado}
               maximo={2000}
               largo
@@ -160,8 +154,7 @@ export function FormularioCompra() {
             <CampoEscolha
               nome="intencao"
               rotulo="Venda directa ou retoma"
-              valor={valores.intencao ?? ""}
-              aoMudar={mudar("intencao")}
+              {...campo("intencao")}
               desativado={desativado}
               opcoes={INTENCOES.map((o) => [o.valor, o.rotulo] as const)}
               largo
@@ -172,8 +165,7 @@ export function FormularioCompra() {
             <Campo
               nome="nome"
               rotulo="Nome"
-              valor={valores.nome ?? ""}
-              aoMudar={mudar("nome")}
+              {...campo("nome")}
               obrigatorio
               desativado={desativado}
               autoPreencher="name"
@@ -183,8 +175,7 @@ export function FormularioCompra() {
               tipo="tel"
               nome="telefone"
               rotulo="Telefone"
-              valor={valores.telefone ?? ""}
-              aoMudar={mudar("telefone")}
+              {...campo("telefone")}
               obrigatorio
               desativado={desativado}
               autoPreencher="tel"
@@ -194,8 +185,7 @@ export function FormularioCompra() {
               tipo="email"
               nome="email"
               rotulo="Email"
-              valor={valores.email ?? ""}
-              aoMudar={mudar("email")}
+              {...campo("email")}
               obrigatorio
               desativado={desativado}
               autoPreencher="email"
