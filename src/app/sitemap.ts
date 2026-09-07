@@ -21,7 +21,8 @@ import { getViaturas } from "@/lib/viaturas";
  * Passou de 26/08 para 02/09 quando os dois textos foram revistos para cobrir
  * os formulários de «Compramos» e «Importamos», e daí para 05/09 quando o
  * cliente fechou os custos e o sinal das viaturas por encomenda — a data é a
- * do texto mais recente, não a do deploy, e por isso muda quando o texto muda.
+ * do texto mais recente, não a do deploy nem a da resposta do cliente (que
+ * aprovou esta versão a 07/09), e por isso muda quando o texto muda.
  */
 const LEGAIS_APROVADAS_EM = new Date("2026-09-05T00:00:00.000Z");
 

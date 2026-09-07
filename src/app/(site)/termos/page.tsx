@@ -13,8 +13,9 @@ import { enderecoLinha, stand } from "@/data/stand";
  * **Revista quando o site passou a aceitar pedidos** — «Compramos o seu
  * carro» e «Importamos o seu carro» (#39, #40). A cláusula da retoma passou a
  * cobrir também a compra a particulares e a procura por encomenda, e diz o
- * essencial: um pedido enviado pelo site não vincula ninguém. Carece de nova
- * aprovação do cliente, como a primeira versão.
+ * essencial: um pedido enviado pelo site não vincula ninguém. **Esta segunda
+ * versão foi aprovada pelo cliente a 07/09/2026**, por escrito, como a
+ * primeira.
  *
  * **O que o cliente fechou a 05/09/2026** (#40), e que a cláusula passou a
  * dizer: numa viatura por encomenda o valor indicado é o da viatura, com o

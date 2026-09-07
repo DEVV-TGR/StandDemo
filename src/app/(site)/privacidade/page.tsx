@@ -13,7 +13,8 @@ import { enderecoLinha, stand } from "@/data/stand";
  * e «Importamos o seu carro» (#39, #40). Até aí esta página dizia, por
  * escrito, que o site não tinha formulários; deixou de ser verdade, e o que
  * mudou está nas secções "Que dados", "Finalidades", "Prazos" e "Serviços de
- * terceiros". Carece de nova aprovação do cliente, como a primeira versão.
+ * terceiros". **Esta segunda versão foi aprovada pelo cliente a 07/09/2026**,
+ * por escrito, como a primeira.
  *
  * Dois pontos a não perder de vista:
  *
