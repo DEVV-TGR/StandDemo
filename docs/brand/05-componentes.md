@@ -116,21 +116,46 @@ Três detalhes que não se podem perder: `appearance-none` mata a seta nativa; `
 Os formulários públicos (`/compramos`, `/importamos`) usam estas primitivas: `Campo`, `CampoNumero`, `CampoSelecao`, `CampoArea`, `CampoEscolha`, `CampoConsentimento`, `Aviso`, `Sucesso`. As receitas:
 
 ```
-input/textarea  w-full rounded-xl border border-line bg-background px-4 py-3 text-sm
-                text-ink outline-none transition-colors placeholder:text-muted/60
-                focus:border-gold disabled:opacity-60
+input/textarea  w-full rounded-xl border bg-background px-4 py-3 text-sm text-ink
+                outline-none transition-colors placeholder:text-muted/60
+                disabled:opacity-60
+  linha calma   border-line focus:border-gold
+  linha errada  border-red-deep focus:border-red
 label           mb-1.5 block text-xs uppercase tracking-[0.2em] text-muted
+erro do campo   mt-1.5 block text-xs leading-relaxed text-red-bright
 select          o mesmo + appearance-none bg-surface/80 pr-10 [&>option]:bg-surface
                 com o `▾` dourado por cima (ver a receita acima)
 ```
+
+A cor da linha está **fora** do `inputBase` de propósito: duas utilitárias de
+`border-color` na mesma classe deixam a que ganha ao acaso da ordem em que o
+Tailwind as escreve na folha.
 
 **Público redondo, painel quadrado.** O `ViaturaForm` usa `inputBase` sem `rounded` porque é uma ferramenta de trabalho, preenchida todos os dias, onde a densidade vale mais; estes campos são para quem preenche um formulário uma vez na vida, e seguem o `rounded-xl` do resto do site. A divergência é deliberada — não é dívida.
 
 Três regras que não se podem perder:
 
-- **Os campos são controlados.** Depois de uma server action o React 19 faz reset ao `<form>`; sem valor em estado, um erro de validação apaga o que a pessoa escreveu. Ver `FormularioPedido.tsx`.
+- **Os campos são controlados.** Depois de uma server action o React 19 faz reset ao `<form>`; sem valor em estado, um erro de validação apaga o que a pessoa escreveu. Ver `FormularioPedido.tsx`. Pela mesma razão, **nada que precise de sobreviver ao envio pode viver num `<input>` escrito à mão** — foi o que aconteceu ao relógio anti-robô, que passou a viver numa referência.
 - **Cada bloco é um `<fieldset>` com `<legend>`** na assinatura da casa (última palavra em `italic text-gold`). Um grupo de campos sem `fieldset` é um grupo que um leitor de ecrã não anuncia.
 - **Opcional escreve-se, obrigatório não.** O rótulo leva `(opcional)` quando o campo o é; o asterisco é convenção de formulário de repartição, não de sítio premium.
+
+**Quando o erro aparece.** Um campo recebe `erro` e `aoSair`; quem decide é o `FormularioPedido`, que corre o mesmo schema zod do servidor a cada tecla. A regra:
+
+| Momento | O que acontece |
+|---|---|
+| A escrever pela primeira vez | Nada. Ninguém quer ler "indique o seu nome" à primeira letra. |
+| Ao sair do campo | A frase aparece, a linha fica `border-red-deep`, e a nota do campo dá o lugar ao erro. |
+| A corrigir | Desaparece assim que o valor serve, sem esperar por sair outra vez. |
+| Ao carregar em «Enviar» | Todos os campos passam a visitados de uma vez, e o ecrã salta ao primeiro por corrigir — `focus({preventScroll:true})` + `scrollIntoView({behavior:"instant"})`. |
+
+Os campos de escolha — `select`, pílulas de rádio — avisam **ao mudar** e não ao sair: escolher já é uma decisão terminada.
+
+Duas armadilhas que custaram a encontrar e não se devem repetir:
+
+- **Travar um envio incompleto faz-se no `onSubmit`, com `preventDefault`** — nunca desistindo a meio da action. Uma action que corre e desiste continua a ser uma action corrida, e o React faz reset ao `<form>` logo a seguir: os campos ficam visualmente vazios, com o estado ainda cheio, até haver um novo render que os reponha. Quem preencheu dezasseis campos vê o formulário esvaziar-se por ter falhado um.
+- **O salto para o campo errado é instantâneo, ao contrário do resto do site.** As frases de erro aparecem acima da vista, o browser reajusta a posição sozinho para compensar, e esse reajuste cancela uma rolagem suave a meio — a pessoa fica onde estava, a olhar para um botão que aparentemente não fez nada.
+
+O `<form>` leva `noValidate`. As bolhas nativas do browser chegam antes das nossas, dizem o mesmo noutra língua e não seguem a folha de estilos.
 
 Quantidade e estado: `Aviso` é `role="alert"`, `Sucesso` é `role="status"`, e os dois recebem foco depois do envio — sem isso, quem usa leitor de ecrã submete e fica no botão sem saber o que aconteceu.
 

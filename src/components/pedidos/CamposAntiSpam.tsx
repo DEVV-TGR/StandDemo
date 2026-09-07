@@ -1,11 +1,5 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-
 /*
-  Os dois campos que ninguém preenche de propósito.
-
-  ## O campo isco
+  O campo que ninguém preenche de propósito.
 
   Chama-se `website` porque é o nome que os preenchedores automáticos
   procuram, e está fora do ecrã, sem foco e escondido dos leitores de ecrã.
@@ -18,21 +12,14 @@ import { useEffect, useRef } from "react";
   fora do ecrã, que continua a apanhar os simples — que são a maioria do que
   bate num formulário destes.
 
-  ## O relógio
-
-  O momento em que a página ficou pronta, escrito **num efeito** e não no
-  render: no servidor o `Date.now()` daria outro valor e o HTML não batia
-  certo com o do browser. Quem submete em menos de quatro segundos não
-  preencheu nada — leu-se, ninguém escreve marca, modelo, quilómetros e
-  contacto nesse tempo.
+  O outro guarda, o relógio, **não vive aqui**. Esteve, escrito num `<input>`
+  por um efeito, e foi um erro: depois de uma server action o React 19 faz
+  reset ao `<form>`, o campo voltava a vazio, e a segunda tentativa de quem
+  se enganou num campo era recusada com "enviado depressa de mais" para
+  sempre. Passou para uma referência dentro do `FormularioPedido`, escrita no
+  `FormData` no momento do envio — fora do alcance do reset.
 */
 export function CamposAntiSpam() {
-  const relogio = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (relogio.current) relogio.current.value = String(Date.now());
-  }, []);
-
   return (
     <div aria-hidden className="absolute -left-[9999px] top-0 h-px w-px overflow-hidden">
       <label>
@@ -45,7 +32,6 @@ export function CamposAntiSpam() {
           defaultValue=""
         />
       </label>
-      <input ref={relogio} type="text" name="iniciadoEm" tabIndex={-1} defaultValue="" />
     </div>
   );
 }

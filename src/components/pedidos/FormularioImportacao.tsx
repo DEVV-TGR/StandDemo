@@ -36,14 +36,13 @@ export function FormularioImportacao() {
           "Já sabemos o que procura. Vamos ao mercado ver o que aparece dentro do que nos disse e entramos em contacto pelo telefone ou email que indicou. Se quiser acrescentar alguma coisa, fale connosco no WhatsApp.",
       }}
     >
-      {({ valores, mudar, desativado, aoMudarFotos }) => (
+      {({ campo, desativado, aoMudarFotos }) => (
         <>
           <Bloco titulo="O que" gold="procura">
             <Campo
               nome="marca"
               rotulo="Marca"
-              valor={valores.marca ?? ""}
-              aoMudar={mudar("marca")}
+              {...campo("marca")}
               obrigatorio
               desativado={desativado}
               exemplo="Porsche"
@@ -52,8 +51,7 @@ export function FormularioImportacao() {
             <Campo
               nome="modelo"
               rotulo="Modelo e versão"
-              valor={valores.modelo ?? ""}
-              aoMudar={mudar("modelo")}
+              {...campo("modelo")}
               obrigatorio
               desativado={desativado}
               exemplo="Macan S"
@@ -62,8 +60,7 @@ export function FormularioImportacao() {
             <CampoNumero
               nome="anoMinimo"
               rotulo="Ano mínimo"
-              valor={valores.anoMinimo ?? ""}
-              aoMudar={mudar("anoMinimo")}
+              {...campo("anoMinimo")}
               obrigatorio
               desativado={desativado}
               minimo={1990}
@@ -73,8 +70,7 @@ export function FormularioImportacao() {
             <CampoNumero
               nome="kmMaximos"
               rotulo="Quilómetros máximos"
-              valor={valores.kmMaximos ?? ""}
-              aoMudar={mudar("kmMaximos")}
+              {...campo("kmMaximos")}
               desativado={desativado}
               minimo={0}
               exemplo="100000"
@@ -83,8 +79,7 @@ export function FormularioImportacao() {
             <CampoSelecao
               nome="combustivel"
               rotulo="Combustível"
-              valor={valores.combustivel ?? ""}
-              aoMudar={mudar("combustivel")}
+              {...campo("combustivel")}
               desativado={desativado}
               vazio="Indiferente"
               opcoes={COMBUSTIVEIS}
@@ -92,8 +87,7 @@ export function FormularioImportacao() {
             <CampoSelecao
               nome="transmissao"
               rotulo="Caixa"
-              valor={valores.transmissao ?? ""}
-              aoMudar={mudar("transmissao")}
+              {...campo("transmissao")}
               desativado={desativado}
               vazio="Indiferente"
               opcoes={TRANSMISSOES}
@@ -101,8 +95,7 @@ export function FormularioImportacao() {
             <Campo
               nome="cor"
               rotulo="Cor"
-              valor={valores.cor ?? ""}
-              aoMudar={mudar("cor")}
+              {...campo("cor")}
               desativado={desativado}
               exemplo="Cinzento, preto — ou indiferente"
               maximo={60}
@@ -111,8 +104,7 @@ export function FormularioImportacao() {
             <CampoArea
               nome="extras"
               rotulo="Extras que não podem faltar"
-              valor={valores.extras ?? ""}
-              aoMudar={mudar("extras")}
+              {...campo("extras")}
               desativado={desativado}
               maximo={2000}
               largo
@@ -131,8 +123,7 @@ export function FormularioImportacao() {
             <CampoNumero
               nome="orcamento"
               rotulo="Orçamento"
-              valor={valores.orcamento ?? ""}
-              aoMudar={mudar("orcamento")}
+              {...campo("orcamento")}
               obrigatorio
               desativado={desativado}
               minimo={1000}
@@ -143,8 +134,7 @@ export function FormularioImportacao() {
             <CampoSelecao
               nome="prazo"
               rotulo="Para quando"
-              valor={valores.prazo ?? ""}
-              aoMudar={mudar("prazo")}
+              {...campo("prazo")}
               obrigatorio
               desativado={desativado}
               vazio="Escolher"
@@ -156,8 +146,7 @@ export function FormularioImportacao() {
             <Campo
               nome="nome"
               rotulo="Nome"
-              valor={valores.nome ?? ""}
-              aoMudar={mudar("nome")}
+              {...campo("nome")}
               obrigatorio
               desativado={desativado}
               autoPreencher="name"
@@ -167,8 +156,7 @@ export function FormularioImportacao() {
               tipo="tel"
               nome="telefone"
               rotulo="Telefone"
-              valor={valores.telefone ?? ""}
-              aoMudar={mudar("telefone")}
+              {...campo("telefone")}
               obrigatorio
               desativado={desativado}
               autoPreencher="tel"
@@ -178,8 +166,7 @@ export function FormularioImportacao() {
               tipo="email"
               nome="email"
               rotulo="Email"
-              valor={valores.email ?? ""}
-              aoMudar={mudar("email")}
+              {...campo("email")}
               obrigatorio
               desativado={desativado}
               autoPreencher="email"
