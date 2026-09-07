@@ -41,6 +41,22 @@ export function Footer() {
               </li>
               <li>
                 <Link
+                  href="/compramos"
+                  className="text-muted transition-colors hover:text-ink"
+                >
+                  Compramos o seu carro
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/importamos"
+                  className="text-muted transition-colors hover:text-ink"
+                >
+                  Importamos o seu carro
+                </Link>
+              </li>
+              <li>
+                <Link
                   href="/contactos"
                   className="text-muted transition-colors hover:text-ink"
                 >

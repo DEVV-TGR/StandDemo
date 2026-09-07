@@ -183,6 +183,13 @@ Três coisas decidem se funciona:
 - **`Challenge`, não `Deny`.** Quem se engana resolve um desafio e continua; um script não resolve.
 - **Começar com a acção `Log`** durante uns dias, ver quantos pedidos legítimos apanharia, e só depois passar a `Challenge`.
 
+**Os formulários do site precisam da mesma regra.** `/compramos` e `/importamos` são também server actions, e também enviam email pela Resend — partilham com o painel a quota de 100 envios por dia do plano gratuito, o que significa que um script a bater no formulário público pode deixar o cliente sem conseguir entrar no painel. Segunda regra, igual em forma:
+
+- **If:** `Request Path` *starts with* `/compramos` **OR** `/importamos`, **AND** `Request Method` *equals* `POST`
+- **Then:** Rate Limit, janela **60 s**, limite **5**, chave **IP Address**, acção **Challenge**
+
+O código tem um limite próprio (`src/lib/pedidos/limites.ts`: três por origem e trinta por instância, em quinze minutos), mas vive em memória e cada instância tem a sua. Apanha o uso normal e o script simples; volume distribuído é trabalho do Firewall, que corre antes de haver compute.
+
 ---
 
 ## Resumo — o que preciso de ti, e quando

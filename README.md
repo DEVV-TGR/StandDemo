@@ -1,6 +1,6 @@
 # Império Auto Concept
 
-Site do stand de automóveis [imperioautoconcept.com](https://www.imperioautoconcept.com) — catálogo de viaturas, fichas detalhadas e contactos. Conteúdo em português europeu.
+Site do stand de automóveis [imperioautoconcept.com](https://www.imperioautoconcept.com) — catálogo de viaturas, fichas detalhadas, contactos, e os pedidos de avaliação e de viatura por encomenda. Conteúdo em português europeu.
 
 ## Arrancar
 
@@ -9,7 +9,7 @@ npm install
 npm run dev          # http://localhost:3000
 ```
 
-Não é preciso configurar nada: as viaturas vivem em `src/data/viaturas.ts` e o site corre sem base de dados nem variáveis de ambiente.
+Não é preciso configurar nada: as viaturas vivem em `src/data/viaturas.ts` e o site corre sem base de dados nem variáveis de ambiente. Sem `RESEND_API_KEY`, os pedidos enviados por `/compramos` e `/importamos` saem no terminal em vez de irem por email — dá para percorrer o formulário todo sem configurar serviço nenhum.
 
 ## Comandos
 
@@ -31,7 +31,7 @@ Não há `tailwind.config.*` — o tema vive em `src/app/globals.css`.
 
 O sistema de design está documentado em [`docs/brand/`](docs/brand/), com valores literais e regras do que não fazer. As convenções de trabalho e o índice completo estão em [`AGENTS.md`](AGENTS.md).
 
-O painel de gestão ainda não existe; a especificação está em [`docs/admin/`](docs/admin/), incluindo as [tarefas de configuração e os custos](docs/admin/07-tarefas-e-custos.md).
+O painel de gestão está em [`docs/admin/`](docs/admin/), incluindo as [tarefas de configuração e os custos](docs/admin/07-tarefas-e-custos.md).
 
 ## Alojamento
 

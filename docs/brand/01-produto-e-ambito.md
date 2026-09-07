@@ -24,6 +24,8 @@ Sem backend. Sem base de dados. Sem autenticação. Os dados são mock em TypeSc
 
 Mais `src/app/not-found.tsx` e `src/app/viaturas/loading.tsx`.
 
+Além destas, as páginas de serviço (`/contactos`, `/compramos`, `/importamos`) e as legais (`/termos`, `/privacidade`).
+
 A página de detalhe é a **mais trabalhada das três** — é onde a demo se prova. Tem rotas estáticas geradas em build (`generateStaticParams`) e metadata dinâmica por viatura (`generateMetadata`, com Open Graph e a primeira foto).
 
 ## Inspirações
@@ -51,6 +53,15 @@ Omitir, ou deixar como navegação decorativa sem destino real:
 - Geração real de PDF (o botão "Imprimir" chama `window.print()`, e é suficiente)
 
 Se uma destas aparecer num pedido, confirmar antes de construir — muito provavelmente é âmbito a mais para uma demo.
+
+## O que entretanto entrou no âmbito
+
+Este documento chamou-se durante meses "sem backend, sem base de dados, sem autenticação". Deixou de ser verdade por pedido do cliente, e o que ficou é uma regra mais útil do que a anterior:
+
+- **O painel de gestão** (`/admin`) — entrada por código, viaturas na base, fotografias no R2. Ver [`docs/admin/`](../admin/).
+- **Os dois formulários públicos** — `/compramos` e `/importamos`, que enviam um pedido por email com fotografias em anexo. Não gravam nada.
+
+**A regra que substitui a antiga: o site público responde sem variáveis de ambiente.** Sem base de dados serve o inventário estático; sem chave de email o formulário diz o que se passa e encaminha para o WhatsApp. O CI compila, arranca e verifica o site sem uma única variável definida, e é isso que impede uma avaria no painel de levar a montra atrás.
 
 ## Estado atual do inventário
 

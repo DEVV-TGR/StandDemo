@@ -49,6 +49,15 @@ que de outro modo chegariam ao HTML como `&nbsp;`.
 razão de não haver `geo` (coordenadas não confirmadas) nem o Facebook no
 `sameAs` (o link é um shortlink `/share/`, instável).
 
+**Uma rota nova entra no sitemap na mesma alteração em que nasce.** O
+`check:seo` só verifica o que o sitemap declara — uma página fora dele passa
+despercebida a esta rede e ao Google. As páginas de serviço entram sem
+`lastModified` e com prioridade 0,6, como `/contactos`: não mudam com o
+inventário, e dar-lhes a data dele era dizer ao Google que mudaram quando não
+mudaram. As legais levam `LEGAIS_APROVADAS_EM`, que é a data do texto e muda
+quando o texto muda — mudou a 02/09/2026, quando os dois documentos passaram a
+cobrir os formulários de `/compramos` e `/importamos`.
+
 **O NAP vem sempre de `src/data/stand.ts`** — `enderecoLinha`, `telHref()`,
 `horasTexto()`. Nome, morada e telefone têm de ser idênticos ao Perfil de
 Empresa do Google, e cada cópia no código é uma oportunidade de divergir.

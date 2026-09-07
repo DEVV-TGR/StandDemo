@@ -111,6 +111,29 @@ Três detalhes que não se podem perder: `appearance-none` mata a seta nativa; `
 
 `SelectField` usa `rounded-xl` (campo de formulário); `SortSelect` usa `rounded-full` (controlo inline).
 
+### Campos de formulário — `src/components/ui/campos.tsx`
+
+Os formulários públicos (`/compramos`, `/importamos`) usam estas primitivas: `Campo`, `CampoNumero`, `CampoSelecao`, `CampoArea`, `CampoEscolha`, `CampoConsentimento`, `Aviso`, `Sucesso`. As receitas:
+
+```
+input/textarea  w-full rounded-xl border border-line bg-background px-4 py-3 text-sm
+                text-ink outline-none transition-colors placeholder:text-muted/60
+                focus:border-gold disabled:opacity-60
+label           mb-1.5 block text-xs uppercase tracking-[0.2em] text-muted
+select          o mesmo + appearance-none bg-surface/80 pr-10 [&>option]:bg-surface
+                com o `▾` dourado por cima (ver a receita acima)
+```
+
+**Público redondo, painel quadrado.** O `ViaturaForm` usa `inputBase` sem `rounded` porque é uma ferramenta de trabalho, preenchida todos os dias, onde a densidade vale mais; estes campos são para quem preenche um formulário uma vez na vida, e seguem o `rounded-xl` do resto do site. A divergência é deliberada — não é dívida.
+
+Três regras que não se podem perder:
+
+- **Os campos são controlados.** Depois de uma server action o React 19 faz reset ao `<form>`; sem valor em estado, um erro de validação apaga o que a pessoa escreveu. Ver `FormularioPedido.tsx`.
+- **Cada bloco é um `<fieldset>` com `<legend>`** na assinatura da casa (última palavra em `italic text-gold`). Um grupo de campos sem `fieldset` é um grupo que um leitor de ecrã não anuncia.
+- **Opcional escreve-se, obrigatório não.** O rótulo leva `(opcional)` quando o campo o é; o asterisco é convenção de formulário de repartição, não de sítio premium.
+
+Quantidade e estado: `Aviso` é `role="alert"`, `Sucesso` é `role="status"`, e os dois recebem foco depois do envio — sem isso, quem usa leitor de ecrã submete e fica no botão sem saber o que aconteceu.
+
 ### Glifos em vez de ícones
 
 O projeto usa caracteres de texto para quase toda a iconografia:

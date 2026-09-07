@@ -148,13 +148,6 @@ export async function podePedirCodigo(email: string): Promise<Orcamento> {
   return { pode: true };
 }
 
-/** `430` → `"7 minutos"`, `45` → `"menos de um minuto"`. */
-export function emPortugues(segundos: number): string {
-  if (segundos < 60) return "menos de um minuto";
-  const minutos = Math.ceil(segundos / 60);
-  return minutos === 1 ? "1 minuto" : `${minutos} minutos`;
-}
-
 /*
   Fica no registo de execução da Vercel. Se algum dia houver um ataque a sério,
   é a única forma de saber que houve — e de ver de onde veio.

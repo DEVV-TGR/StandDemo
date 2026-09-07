@@ -34,7 +34,9 @@ className={`${base} ${estilos[variante]} ${className}`}
 className={`h-1 w-4 rounded-full ${i === foto ? "bg-gold" : "bg-ink/30"}`}
 ```
 
-Também não há `zod` nem bibliotecas de componentes (Radix e afins). Tudo é escrito à mão. É uma demo pequena; as dependências pagam-se em peso e em risco.
+Há `zod` — entrou com o painel e serve agora também os formulários públicos (`src/lib/viatura-schema.ts`, `src/lib/pedidos/schema.ts`). Justifica-se onde há uma fronteira a validar no servidor: as mensagens em português vivem no schema e o mesmo ficheiro alimenta os selects do formulário, o que impede a lista de opções de divergir da validação.
+
+Não há bibliotecas de componentes (Radix e afins). Tudo o que é UI é escrito à mão. É um site pequeno; as dependências pagam-se em peso e em risco.
 
 ## Nomenclatura — mista, de propósito
 
@@ -126,7 +128,7 @@ Ao mexer em filtros: manter o padrão. `router.push` a cada alteração destrói
 
 - **Escrever código Next.js sem consultar `node_modules/next/dist/docs/`.**
 - **Criar `tailwind.config.ts`.** O tema vive no `globals.css`.
-- **Instalar `clsx`, `cva`, `tailwind-merge`, `zod` ou uma biblioteca de componentes.**
+- **Instalar `clsx`, `cva`, `tailwind-merge` ou uma biblioteca de componentes.**
 - **`useEffect` para carregar dados** — os dados são estáticos e importam-se diretamente. (Com o painel de gestão a regra mantém-se: a leitura passa a ser assíncrona em server components, nunca em `useEffect`. Ver [`docs/admin/01`](../admin/01-arquitetura.md).)
 - **`router.push()` numa mudança de filtro** — `window.history.replaceState`.
 - **Marcar um componente `"use client"`** sem estado, efeito ou evento.

@@ -10,7 +10,9 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 # StandDemo
 
-Site de demonstração de um **stand de automóveis**, para apresentar a um cliente. Qualidade visual de nível profissional, âmbito deliberadamente pequeno. Sem backend — dados mock em TypeScript. Conteúdo em **PT-PT**.
+Site de um **stand de automóveis**, o Império Auto Concept. Qualidade visual de nível profissional, âmbito pequeno e vigiado. Conteúdo em **PT-PT**.
+
+O site público responde **sem variáveis de ambiente** — sem base de dados serve o inventário estático de `src/data/viaturas.ts`, e sem chave do Resend os formulários de `/compramos` e `/importamos` imprimem o email no terminal (em desenvolvimento) ou encaminham para o WhatsApp (em produção). O CI compila e arranca sem nenhuma variável definida, e é essa a regra que mantém a montra de pé quando o painel avaria.
 
 ## Stack
 
